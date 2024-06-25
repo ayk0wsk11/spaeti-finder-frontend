@@ -1,35 +1,42 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import "./App.css";
+import { Routes, Route } from "react-router-dom";
+
+//***************** COMPONENTS ****************/
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+
+//***************** PAGES *****************/
+import Homepage from "./pages/Homepage/Homepage";
+import LoginPage from "./pages/LoginPage";
+import SignupPage from "./pages/SignupPage";
+import SpaetiCreatePage from "./pages/SpaetiCreatePage";
+import SpaetiDetailsPage from "./pages/SpaetiDetailsPage";
+import SpaetiEditPage from "./pages/SpaetiEditPage";
+import SpaetiListPage from "./pages/SpaetiListPage";
+import UserProfilePage from "./pages/UserProfilePage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    <Navbar/>
+      <Routes>
+        <Route path="/" element={<Homepage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/spaeti/create" element={<SpaetiCreatePage />} />
+        <Route
+          path="/spaeti/details/:spaetiId"
+          element={<SpaetiDetailsPage />}
+        />
+        <Route path="/spaeti/edit/:spaetiId" element={<SpaetiEditPage />} />
+        <Route path="/spaeti/list" element={<SpaetiListPage />} />
+        <Route path="/profile" element={<UserProfilePage />} />
+        <Route path="*" element={<NotFoundPage/>}/>
+      </Routes>
+      <Footer/>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
