@@ -1,6 +1,12 @@
+import SpatiMap from "../../components/SpatiMap"
+
+
+
 const Homepage = () => {
   return (
-    <div>Homepage</div>
+    <div>
+      <SpatiMap/>
+    </div>
   )
 }
 export default Homepage

@@ -6,15 +6,18 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 
 //***************** PAGES *****************/
-import Homepage from "./pages/Homepage/Homepage";
-import LoginPage from "./pages/LoginPage";
-import SignupPage from "./pages/SignupPage";
-import SpaetiCreatePage from "./pages/SpaetiCreatePage";
-import SpaetiDetailsPage from "./pages/SpaetiDetailsPage";
-import SpaetiEditPage from "./pages/SpaetiEditPage";
-import SpaetiListPage from "./pages/SpaetiListPage";
-import UserProfilePage from "./pages/UserProfilePage";
-import NotFoundPage from "./pages/NotFoundPage";
+import Homepage from "./pages/HomePage/Homepage";
+import LoginPage from "./pages/LoginPage/LoginPage";
+import SignupPage from "./pages/SignUpPage/SignUpPage";
+import SpaetiCreatePage from "./pages/SpaetiCreatePage/SpaetiCreatePage";
+import SpaetiDetailsPage from "./pages/SpaetiDetailsPage/SpaetiDetailsPage";
+import SpaetiEditPage from "./pages/SpaetiEditPage/SpaetiEditPage";
+import SpaetiListPage from "./pages/SpaetiListPage/SpaetiListPage";
+import UserProfilePage from "./pages/UserProfilePage/UserProfilePage";
+// import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
+
+const address = "1600 Amphitheatre Parkway, Mountain View, CA";
+
 
 function App() {
   return (
@@ -32,7 +35,7 @@ function App() {
         <Route path="/spaeti/edit/:spaetiId" element={<SpaetiEditPage />} />
         <Route path="/spaeti/list" element={<SpaetiListPage />} />
         <Route path="/profile" element={<UserProfilePage />} />
-        <Route path="*" element={<NotFoundPage/>}/>
+        {/* <Route path="*" element={<NotFoundPage />}/> */}
       </Routes>
       <Footer/>
     </>
