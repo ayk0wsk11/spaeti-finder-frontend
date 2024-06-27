@@ -13,9 +13,7 @@ import SpaetiDetailsPage from "./pages/SpaetiDetailsPage/SpaetiDetailsPage";
 import SpaetiEditPage from "./pages/SpaetiEditPage/SpaetiEditPage";
 import SpaetiListPage from "./pages/SpaetiListPage/SpaetiListPage";
 import UserProfilePage from "./pages/UserProfilePage/UserProfilePage";
-// import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
-
-const address = "1600 Amphitheatre Parkway, Mountain View, CA";
+import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
 
 function App() {
   return (
@@ -34,7 +32,7 @@ function App() {
           <Route path="/spaeti/edit/:spaetiId" element={<SpaetiEditPage />} />
           <Route path="/spaeti/list" element={<SpaetiListPage />} />
           <Route path="/profile" element={<UserProfilePage />} />
-          {/* <Route path="*" element={<NotFoundPage />}/> */}
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </div>
     </div>

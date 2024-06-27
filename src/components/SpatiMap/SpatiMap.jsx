@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import axios from "axios";
+import { API_URL } from "../../config";
 import "./SpatiMap.css";
 
 // Fixing marker icon issue with react-leaflet
@@ -28,12 +30,28 @@ const geocodeAddress = async (address) => {
 };
 
 const SpatiMap = () => {
-  const [spatis, setSpatis] = useState([
-    { name: "Späti 1", address: "Alexanderplatz, Berlin" },
-    { name: "Späti 2", address: "Brandenburger Tor, Berlin" },
-  ]);
-
+  const [spatis, setSpatis] = useState([]);
   const [markers, setMarkers] = useState([]);
+
+  useEffect(() => {
+    const fetchAllSpaetis = async () => {
+      try {
+        const { data } = await axios.get(`${API_URL}/spaetis`);
+        const arrOfSpaeti = data.data;
+        console.log("this is my arr of spaetis", arrOfSpaeti);
+        // Assuming data is an array of spaetis, update state accordingly
+        setSpatis(
+          arrOfSpaeti.map((spati) => ({
+            name: spati.name,
+            address: `${spati.street}, ${spati.zip} ${spati.city}`,
+          }))
+        );
+      } catch (error) {
+        console.error("Error fetching spaetis:", error);
+      }
+    };
+    fetchAllSpaetis();
+  }, []);
 
   useEffect(() => {
     const fetchCoordinates = async () => {
@@ -46,8 +64,10 @@ const SpatiMap = () => {
       }
       setMarkers(newMarkers);
     };
+
+    // Ensure fetchCoordinates is called whenever spatis changes
     fetchCoordinates();
-  }, [spatis]);
+  }, [spatis]); // Depend on spatis state here
 
   return (
     <MapContainer
