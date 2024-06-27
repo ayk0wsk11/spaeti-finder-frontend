@@ -1,0 +1,40 @@
+#navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #161616;
+  height: 5vh;
+  padding: 20px 40px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#navbar a {
+  color: white;
+}
+
+#login-button,
+#logout-button {
+  color: white;
+  border-radius: 20px;
+  font-size: medium;
+  padding: 10px 15px;
+}
+
+#login-button {
+  border: 1px solid white;
+  background-color: transparent;
+}
+
+#login-button:hover {
+  color: #161616;
+  background-color: white;
+}
+
+#logout-button {
+  border: 1px solid #751515;
+  background-color: #751515;
+}
+
+#logout-button:hover {
+  border-color: white;
+}
