@@ -1,6 +1,31 @@
+import { useEffect, useState } from "react";
+import SpaetiCard from "../../components/SpaetiCard";
+import axios from "axios";
+import { API_URL } from "../../config";
+
 const SpaetiListPage = () => {
+  const [spaetis, setSpaetis] = useState([]);
+
+  useEffect(() => {
+    const fetchSpaetis = async () => {
+      try {
+        const { data } = await axios.get(`${API_URL}/spaetis`);
+        console.log(data.data)
+        setSpaetis(data.data)
+
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchSpaetis();
+  }, []);
+
   return (
-    <div>SpaetiListPage</div>
-  )
-}
-export default SpaetiListPage
+    <div>
+      {spaetis.map(spaeti => (
+        <SpaetiCard key={spaeti._id} spaetis={spaeti} />
+      ))}
+    </div>
+  );
+};
+export default SpaetiListPage;

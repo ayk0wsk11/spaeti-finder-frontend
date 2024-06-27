@@ -55,8 +55,7 @@ const AuthContextWrapper = ({ children }) => {
         authenticateUser,
       }}
     >
-      {" "}
-      {children}{" "}
+      {children}
     </AuthContext.Provider>
   );
 };
