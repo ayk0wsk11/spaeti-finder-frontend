@@ -2,18 +2,20 @@ import { useContext, useState } from "react";
 import axios from "axios";
 import { API_URL } from "../../config";
 import { AuthContext } from "../../context/auth.context";
+import { useNavigate } from "react-router-dom";
 const SpaetiCreatePage = () => {
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
   const [street, setStreet] = useState("");
   const [zip, setZip] = useState(12345);
-  const [city, setCity] = useState("");
+  const [city, setCity] = useState("Berlin");
   const [seats, setSeats] = useState(false);
   const [wc, setWc] = useState(false);
   const [sterni, setSterni] = useState(1);
-  const [rating, setRating] = useState(null);
+  const [rating, setRating] = useState([]);
   const [approved, setApproved] = useState(false);
   const { currentUser } = useContext(AuthContext);
+  const nav = useNavigate()
 
   const newSpaeti = {
     name,
@@ -35,7 +37,16 @@ const SpaetiCreatePage = () => {
     event.preventDefault();
     try {
       const { data } = await axios.post(`${API_URL}/spaetis`, newSpaeti);
-      console.log("Spaeti added", data);
+      setName("");
+      setImage("");
+      setStreet("");
+      setZip(12345);
+      setCity("Berlin");
+      setSeats(false);
+      setWc(false);
+      setSterni(1);
+      nav("/")
+
     } catch (error) {
       console.log(error);
     }

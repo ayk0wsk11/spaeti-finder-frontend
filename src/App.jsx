@@ -5,7 +5,7 @@ import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
 
 //***************** PAGES *****************/
-import Homepage from "./pages/HomePage/HomePage";
+import Homepage from "./pages/HomePage/Homepage";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import SignupPage from "./pages/SignUpPage/SignUpPage";
 import SpaetiCreatePage from "./pages/SpaetiCreatePage/SpaetiCreatePage";

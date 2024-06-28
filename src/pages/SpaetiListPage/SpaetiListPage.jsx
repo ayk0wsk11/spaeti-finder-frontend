@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import SpaetiCard from "../../components/SpaetiCard";
+import SpaetiCard from "../../components/SpaetiCard/SpaetiCard";
 import axios from "axios";
 import { API_URL } from "../../config";
 
