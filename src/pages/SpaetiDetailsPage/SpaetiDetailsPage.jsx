@@ -19,6 +19,7 @@ const SpaetiDetailsPage = () => {
 
       try {
         const {data} = await axios.get(`${API_URL}/spaetis/${spaetiId}`)
+        console.log("inside detailspage:", data)
         setOneSpaeti(data.data)
 
       } catch (error) {
@@ -45,9 +46,9 @@ const SpaetiDetailsPage = () => {
           {oneSpaeti.zip}, {oneSpaeti.city}
           <br />
         </h4>
+        <h4>Created by: {oneSpaeti.creator.username}</h4>
         </div>
         <h4>Sterni-Index: {oneSpaeti.sterni}</h4>
-        <div>{oneSpaeti.rating ? <div>{oneSpaeti.rating}</div> : null}</div>
         <div>{oneSpaeti.seats ? <h4>Seats: Yes </h4> : <h4>Seats: No</h4>}</div>
         <div>{oneSpaeti.wc ? <h4>Toilet: Yes </h4> : <h4>Toilet: No</h4>}</div>
         <CreateRatingComp/>

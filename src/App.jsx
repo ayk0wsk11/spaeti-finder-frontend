@@ -14,6 +14,8 @@ import SpaetiEditPage from "./pages/SpaetiEditPage/SpaetiEditPage";
 import SpaetiListPage from "./pages/SpaetiListPage/SpaetiListPage";
 import UserProfilePage from "./pages/UserProfilePage/UserProfilePage";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
+import ApprovalPage from "./pages/ApprovalPage/ApprovalPage";
+import IsPrivate from "./components/IsPrivate/IsPrivate";
 
 function App() {
   return (
@@ -32,6 +34,14 @@ function App() {
           <Route path="/spaeti/edit/:spaetiId" element={<SpaetiEditPage />} />
           <Route path="/spaeti/list" element={<SpaetiListPage />} />
           <Route path="/profile" element={<UserProfilePage />} />
+          <Route
+            path="/approval"
+            element={
+              <IsPrivate>
+                <ApprovalPage />
+              </IsPrivate>
+            }
+          />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </div>

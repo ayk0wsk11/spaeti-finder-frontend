@@ -23,6 +23,7 @@ const RatingCard = () => {
   
 
   return <div key={spaetiId}>
+    
     {ratings.map((oneRating)=>{
         if(oneRating.spaeti === spaetiId)
         return(

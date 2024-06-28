@@ -28,6 +28,9 @@ const CreateRatingComp = () => {
       const newRating = await axios.post(`${API_URL}/ratings`, createRating);
       setStars(0);
       setComment("")
+    //   const {data} = await axios.get(`${API_URL}/spaetis/${spaetiId}`);
+    //   console.log("ayko:", data.data);
+    //   const updateSpaeti = await axios.patch(`${API_URL}/spaetis/update/${spaetiId}`, {...data.data, rating: data.data.rating.push})
 
     } catch (error) {
       console.log(error);
@@ -53,7 +56,7 @@ const CreateRatingComp = () => {
         </label>
         <button> Add Rating</button>
       </form>
-      <Rate allowHalf value={stars} onChange={(event)=>{
+      <Rate value={stars} onChange={(event)=>{
         setStars(event)
       }} />
       
