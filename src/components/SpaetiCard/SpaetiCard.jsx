@@ -5,7 +5,7 @@ const SpaetiCard = ({ spaetis }) => {
     <Link to={`/spaeti/details/${spaetis._id}`}>
       <h2>{spaetis.name}</h2>
       <img src={spaetis.image} alt={spaetis.name} />
-      <div>{spaetis.rating ? <h4>{spaetis.rating}</h4> : null}</div>
+      <div>{spaetis.rating ? <div>{spaetis.rating}</div> : null}</div>
       <h3>Address:</h3> <br />
       <div>
         <h4>

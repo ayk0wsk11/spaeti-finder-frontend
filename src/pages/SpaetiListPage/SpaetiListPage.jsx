@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import SpaetiCard from "../../components/SpaetiCard";
+import SpaetiCard from "../../components/SpaetiCard/SpaetiCard";
 import axios from "axios";
 import { API_URL } from "../../config";
 
@@ -10,7 +10,7 @@ const SpaetiListPage = () => {
     const fetchSpaetis = async () => {
       try {
         const { data } = await axios.get(`${API_URL}/spaetis`);
-        console.log(data.data)
+        console.log("data in allList", data.data)
         setSpaetis(data.data)
 
       } catch (error) {
@@ -22,9 +22,13 @@ const SpaetiListPage = () => {
 
   return (
     <div>
-      {spaetis.map(spaeti => (
+      {spaetis.map((spaeti) =>{ 
+        if(spaeti.approved){
+        return(
         <SpaetiCard key={spaeti._id} spaetis={spaeti} />
-      ))}
+      
+        
+      )}})}
     </div>
   );
 };

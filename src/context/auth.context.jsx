@@ -21,7 +21,6 @@ const AuthContextWrapper = ({ children }) => {
       const { data } = await axios.get(`${API_URL}/auth/verify`, {
         headers: { authorization: `Bearer ${tokenFromLocalStorage}` },
       });
-      console.log("response from verify ", data);
       setCurrentUser(data.user);
       setIsLoading(false);
       setIsLoggedIn(true);

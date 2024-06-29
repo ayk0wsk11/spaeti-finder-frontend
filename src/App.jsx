@@ -5,7 +5,7 @@ import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
 
 //***************** PAGES *****************/
-import Homepage from "./pages/HomePage/HomePage";
+import Homepage from "./pages/HomePage/Homepage";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import SignupPage from "./pages/SignUpPage/SignUpPage";
 import SpaetiCreatePage from "./pages/SpaetiCreatePage/SpaetiCreatePage";
@@ -15,6 +15,8 @@ import SpaetiListPage from "./pages/SpaetiListPage/SpaetiListPage";
 import UserProfilePage from "./pages/UserProfilePage/UserProfilePage";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
 import Sidebar from "./components/Sidebar/Sidebar";
+import ApprovalPage from "./pages/ApprovalPage/ApprovalPage";
+import IsPrivate from "./components/IsPrivate/IsPrivate";
 
 function App() {
   return (
@@ -34,6 +36,14 @@ function App() {
           <Route path="/spaeti/edit/:spaetiId" element={<SpaetiEditPage />} />
           <Route path="/spaeti/list" element={<SpaetiListPage />} />
           <Route path="/profile" element={<UserProfilePage />} />
+          <Route
+            path="/approval"
+            element={
+              <IsPrivate>
+                <ApprovalPage />
+              </IsPrivate>
+            }
+          />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </div>
