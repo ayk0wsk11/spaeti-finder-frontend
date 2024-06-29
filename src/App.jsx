@@ -14,12 +14,14 @@ import SpaetiEditPage from "./pages/SpaetiEditPage/SpaetiEditPage";
 import SpaetiListPage from "./pages/SpaetiListPage/SpaetiListPage";
 import UserProfilePage from "./pages/UserProfilePage/UserProfilePage";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
+import Sidebar from "./components/Sidebar/Sidebar";
 
 function App() {
   return (
     <div id="spa">
       <Navbar />
       <div id="main">
+        <Sidebar sidebarClosed={false} />
         <Routes>
           <Route path="/" element={<Homepage />} />
           <Route path="/login" element={<LoginPage />} />
