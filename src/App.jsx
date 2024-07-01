@@ -5,7 +5,7 @@ import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
 
 //***************** PAGES *****************/
-import Homepage from "./pages/HomePage/Homepage";
+import Homepage from "./pages/HomePage/HomePage";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import SignupPage from "./pages/SignUpPage/SignUpPage";
 import SpaetiCreatePage from "./pages/SpaetiCreatePage/SpaetiCreatePage";
@@ -14,7 +14,6 @@ import SpaetiEditPage from "./pages/SpaetiEditPage/SpaetiEditPage";
 import SpaetiListPage from "./pages/SpaetiListPage/SpaetiListPage";
 import UserProfilePage from "./pages/UserProfilePage/UserProfilePage";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
-import Sidebar from "./components/Sidebar/Sidebar";
 import ApprovalPage from "./pages/ApprovalPage/ApprovalPage";
 import IsPrivate from "./components/IsPrivate/IsPrivate";
 
@@ -23,7 +22,6 @@ function App() {
     <div id="spa">
       <Navbar />
       <div id="main">
-        <Sidebar sidebarClosed={false} />
         <Routes>
           <Route path="/" element={<Homepage />} />
           <Route path="/login" element={<LoginPage />} />

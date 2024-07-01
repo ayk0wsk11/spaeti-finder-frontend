@@ -1,5 +1,11 @@
 import { useContext } from "react";
 import { Link } from "react-router-dom";
+import {
+  SearchOutlined,
+  LoginOutlined,
+  LogoutOutlined,
+  InfoCircleOutlined,
+} from "@ant-design/icons";
 import { AuthContext } from "../../context/auth.context";
 import "./Navbar.css";
 
@@ -8,19 +14,26 @@ const Navbar = () => {
 
   return (
     <nav id="navbar">
-      <div>sidebar-icon</div>
       <Link to="/">
-        <div>lieber späti als nie</div>
+        <h3 id="app-icon">Spätify</h3>
       </Link>
-      {currentUser ? (
-        <button id="logout-button" onClick={handleLogout}>
-          logout
-        </button>
-      ) : (
-        <Link to="/login">
-          <button id="login-button">login</button>
+      <div id="navbar-right">
+        <Link to="/spaeti/list">
+          <SearchOutlined />
         </Link>
-      )}
+        <Link to="/about">
+          <InfoCircleOutlined />
+        </Link>
+        {currentUser ? (
+          <Link to="/" onClick={handleLogout}>
+            <LogoutOutlined id="logout-button" />
+          </Link>
+        ) : (
+          <Link to="/login">
+            <LoginOutlined id="login-button" />
+          </Link>
+        )}
+      </div>
     </nav>
   );
 };

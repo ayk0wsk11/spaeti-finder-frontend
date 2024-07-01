@@ -5,7 +5,7 @@ body {
   font-size: larger;
   line-height: 1.5;
   color: white;
-  background-color: #6c5a5a;
+  background-color: #aaaaaa;
 }
 
 a {
@@ -17,9 +17,9 @@ a {
 #spa {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100vh;
 }
 
 #main {
-  height: 95vh;
+  height: calc(100vh - 80px);
 }

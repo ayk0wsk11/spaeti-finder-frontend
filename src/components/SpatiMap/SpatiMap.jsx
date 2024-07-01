@@ -70,12 +70,7 @@ const SpatiMap = () => {
   }, [spatis]); // Depend on spatis state here
 
   return (
-    <MapContainer
-      center={[52.52, 13.405]}
-      zoom={12}
-      id="map"
-      style={{ height: "95vh", width: "100vw" }}
-    >
+    <MapContainer center={[52.52, 13.405]} zoom={12} id="map">
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution="&copy; OpenStreetMap contributors"
