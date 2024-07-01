@@ -6,7 +6,6 @@ import axios from "axios";
 import { API_URL } from "../../config";
 import "./SpatiMap.css";
 import { Link } from "react-router-dom";
-import Sterni from "../../assets/Sternideckel.png";
 
 // Fixing marker icon issue with react-leaflet
 delete L.Icon.Default.prototype._getIconUrl;
