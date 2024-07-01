@@ -15,10 +15,11 @@ const RatingCard = () => {
   useEffect(() => {
     const fetchRatings = async () => {
       try {
-        const { data } = await axios.get(`${API_URL}/ratings`);
-        setRatings(data.data);
-        console.log(data.data);
-        console.log("current user", currentUser);
+        const { data } = await axios.get(`${API_URL}/spaetis/ratings/${spaetiId}`);
+        console.log("data from the get request:", data)
+
+        setRatings(data.rating);
+        console.log(data.rating);
       } catch (error) {
         console.log(error);
       }
