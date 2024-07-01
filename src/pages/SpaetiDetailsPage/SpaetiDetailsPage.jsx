@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/auth.context";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../../config";
 import CreateRatingComp from "../../components/CreateRating/CreateRatingComp";
@@ -13,32 +13,42 @@ const SpaetiDetailsPage = () => {
   const { spaetiId } = useParams();
   const nav = useNavigate();
 
-  useEffect(()=>{
-
-    const fetchData = async ()=>{
-
+  useEffect(() => {
+    const fetchData = async () => {
       try {
-        const {data} = await axios.get(`${API_URL}/spaetis/${spaetiId}`)
-        console.log("inside detailspage:", data)
-        setOneSpaeti(data.data)
-
+        const { data } = await axios.get(`${API_URL}/spaetis/${spaetiId}`);
+        console.log("inside detailspage:", data);
+        setOneSpaeti(data.data);
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
-    }
+    };
     fetchData();
-  },[spaetiId])
+  }, [spaetiId]);
 
-  if(!oneSpaeti){
-    return <p>Loading...</p>
+  const handleDelete = async (e)=>{
+    e.preventDefault();
+
+    const deleteSpaeti = await axios.delete(`${API_URL}/spaetis/delete/${spaetiId}`)
+    console.log("Späti was deleted successfully!")
+    nav("/spaeti/list")
+  }
+
+  if (!oneSpaeti) {
+    return <p>Loading...</p>;
   }
 
   return (
-  
-  <div>
-<h1>{oneSpaeti.name}</h1>
-<img src={oneSpaeti.image}/>
-<h3>Address:</h3>
+    <div>
+      {currentUser._id == "668263216512af155244867e" || currentUser._id == "Aykos ID" ? (
+        <div>
+          <Link to={`/spaeti/edit/${spaetiId}`}><button>Edit Späti</button></Link>
+          <button onClick={handleDelete}>Delete Späti</button>
+        </div>
+      ) : null}
+      <h1>{oneSpaeti.name}</h1>
+      <img src={oneSpaeti.image} />
+      <h3>Address:</h3>
       <div>
         <h4>
           {oneSpaeti.street}
@@ -47,19 +57,13 @@ const SpaetiDetailsPage = () => {
           <br />
         </h4>
         <h4>Created by: {oneSpaeti.creator.username}</h4>
-        </div>
-        <h4>Sterni-Index: {oneSpaeti.sterni}</h4>
-        <div>{oneSpaeti.seats ? <h4>Seats: Yes </h4> : <h4>Seats: No</h4>}</div>
-        <div>{oneSpaeti.wc ? <h4>Toilet: Yes </h4> : <h4>Toilet: No</h4>}</div>
-        <CreateRatingComp/>
-        <RatingCard/>
-
-
-
-        
-
-
-
-  </div>);
+      </div>
+      <h4>Sterni-Index: {oneSpaeti.sterni}</h4>
+      <div>{oneSpaeti.seats ? <h4>Seats: Yes </h4> : <h4>Seats: No</h4>}</div>
+      <div>{oneSpaeti.wc ? <h4>Toilet: Yes </h4> : <h4>Toilet: No</h4>}</div>
+      <CreateRatingComp />
+      <RatingCard />
+    </div>
+  );
 };
 export default SpaetiDetailsPage;
