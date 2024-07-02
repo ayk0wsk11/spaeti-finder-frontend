@@ -11,7 +11,7 @@ const SpaetiCreatePage = () => {
   const [city, setCity] = useState("Berlin");
   const [seats, setSeats] = useState(false);
   const [wc, setWc] = useState(false);
-  const [sterni, setSterni] = useState(undefined);
+  const [sterni, setSterni] = useState(0);
   const [rating, setRating] = useState([]);
   const [approved, setApproved] = useState(false);
   const { currentUser } = useContext(AuthContext);
@@ -44,7 +44,7 @@ const SpaetiCreatePage = () => {
       setCity("Berlin");
       setSeats(false);
       setWc(false);
-      setSterni(1);
+      setSterni(0);
       nav("/")
 
     } catch (error) {

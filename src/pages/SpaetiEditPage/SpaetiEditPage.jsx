@@ -12,9 +12,8 @@ const SpaetiEditPage = () => {
   const [city, setCity] = useState("Berlin");
   const [seats, setSeats] = useState(false);
   const [wc, setWc] = useState(false);
-  const [sterni, setSterni] = useState(1);
+  const [sterni, setSterni] = useState(0);
   const [rating, setRating] = useState([]);
-  const [approved, setApproved] = useState(false);
   const { currentUser } = useContext(AuthContext);
   const nav = useNavigate();
   const { spaetiId } = useParams();
@@ -33,9 +32,6 @@ const SpaetiEditPage = () => {
         setWc(data.data.wc)
         setSterni(data.data.sterni)
         
-
-
-
       } catch (error) {
         console.log(error);
       }

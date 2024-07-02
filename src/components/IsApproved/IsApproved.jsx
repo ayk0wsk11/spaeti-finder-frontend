@@ -9,9 +9,19 @@ const IsApproved = ({ children }) => {
     return <p>Loading...</p>;
   }
 
-  const approvedIds = ["668263216512af155244867e", "aykosID"];
+  // const approvedIds = ["668263216512af155244867e", "aykosID"];
 
-  if (currentUser && approvedIds.includes(currentUser._id)) {
+  // if (currentUser && approvedIds.includes(currentUser._id)) {
+  //   return <div>{children}</div>;
+  // } else {
+  //   return <div><h2>No access to this page!</h2>
+  //   <Link to="/">Return to Home</Link>
+  //   </div>
+  // }
+
+
+
+  if (currentUser.admin) {
     return <div>{children}</div>;
   } else {
     return <div><h2>No access to this page!</h2>
