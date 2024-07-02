@@ -3,7 +3,6 @@ import { AuthContext } from "../../context/auth.context";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../../config";
-import CreateRatingComp from "../../components/CreateRating/CreateRatingComp";
 import RatingCard from "../../components/RatingCard/RatingCard";
 
 const SpaetiDetailsPage = () => {
@@ -40,12 +39,13 @@ const SpaetiDetailsPage = () => {
 
   return (
     <div>
-      {currentUser._id == "668263216512af155244867e" || currentUser._id == "Aykos ID" ? (
+      
+      {currentUser && (currentUser._id == "668263216512af155244867e" || currentUser._id == "Aykos ID") ? 
         <div>
           <Link to={`/spaeti/edit/${spaetiId}`}><button>Edit Späti</button></Link>
           <button onClick={handleDelete}>Delete Späti</button>
         </div>
-      ) : null}
+       : null}
       <h1>{oneSpaeti.name}</h1>
       <img src={oneSpaeti.image} />
       <h3>Address:</h3>
@@ -58,10 +58,11 @@ const SpaetiDetailsPage = () => {
         </h4>
         <h4>Created by: {oneSpaeti.creator.username}</h4>
       </div>
-      <h4>Sterni-Index: {oneSpaeti.sterni}</h4>
+      {oneSpaeti.sterni ? 
+      <h4>Sterni-Index: {oneSpaeti.sterni}</h4> : <h4>Sterni-Index: Not available</h4>}
       <div>{oneSpaeti.seats ? <h4>Seats: Yes </h4> : <h4>Seats: No</h4>}</div>
       <div>{oneSpaeti.wc ? <h4>Toilet: Yes </h4> : <h4>Toilet: No</h4>}</div>
-      <CreateRatingComp />
+      
       <RatingCard />
     </div>
   );

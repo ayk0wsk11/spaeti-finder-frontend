@@ -11,7 +11,7 @@ const SpaetiCreatePage = () => {
   const [city, setCity] = useState("Berlin");
   const [seats, setSeats] = useState(false);
   const [wc, setWc] = useState(false);
-  const [sterni, setSterni] = useState(1);
+  const [sterni, setSterni] = useState(undefined);
   const [rating, setRating] = useState([]);
   const [approved, setApproved] = useState(false);
   const { currentUser } = useContext(AuthContext);

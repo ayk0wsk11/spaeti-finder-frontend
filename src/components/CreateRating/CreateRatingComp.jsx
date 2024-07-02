@@ -29,6 +29,7 @@ const CreateRatingComp = () => {
       const newRating = await axios.post(`${API_URL}/ratings`, createRating);
       setStars(0);
       setComment("")
+
      
 
     } catch (error) {
