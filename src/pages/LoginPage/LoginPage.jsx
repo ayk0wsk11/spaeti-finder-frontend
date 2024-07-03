@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
@@ -8,8 +8,15 @@ import { AuthContext } from "../../context/auth.context";
 import "./LoginPage.css";
 
 const LoginPage = () => {
-  const { storeToken, authenticateUser } = useContext(AuthContext);
+  const { storeToken, authenticateUser, setIsOnProfile, isLoggedIn } =
+    useContext(AuthContext);
   const nav = useNavigate();
+
+  useEffect(() => {
+    setIsOnProfile(false);
+  }, []);
+
+  if (isLoggedIn) nav("/profile");
 
   const onFinish = ({ username, password }) => {
     console.log("username: ", username);
@@ -83,7 +90,6 @@ const LoginPage = () => {
             htmlType="submit"
             className="login-form-button"
           >
-            
             Log in
           </Button>
           Or <Link to="/signup">register now!</Link>

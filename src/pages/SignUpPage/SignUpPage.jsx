@@ -1,15 +1,21 @@
 import { useNavigate, Link } from "react-router-dom";
 import { API_URL } from "../../config";
-import { useState } from "react";
+import { useEffect, useContext, useState } from "react";
 import axios from "axios";
+import { AuthContext } from "../../context/auth.context";
 
 const SignupPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [errorMessage, setErrorMessage] = useState(undefined);
+  const { setIsOnProfile } = useContext(AuthContext);
 
   const nav = useNavigate();
+
+  useEffect(() => {
+    setIsOnProfile(false);
+  }, []);
 
   const handleSignupSubmit = (event) => {
     event.preventDefault();
@@ -24,7 +30,7 @@ const SignupPage = () => {
     axios
       .post(`${API_URL}/auth/signup`, myFormData)
       .then((res) => {
-        console.log("response from signup", res)
+        console.log("response from signup", res);
         nav("/login");
       })
       .catch((err) => console.log("error while creating new user", err));

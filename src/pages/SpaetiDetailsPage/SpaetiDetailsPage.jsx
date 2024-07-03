@@ -6,13 +6,17 @@ import { API_URL } from "../../config";
 import RatingCard from "../../components/RatingCard/RatingCard";
 
 const SpaetiDetailsPage = () => {
-  const { currentUser, isLoading } = useContext(AuthContext);
+  const { currentUser, isLoading, setIsOnProfile } = useContext(AuthContext);
   const [oneSpaeti, setOneSpaeti] = useState(undefined);
   const [averageRating, setAverageRating] = useState(null);
 
 
   const { spaetiId } = useParams();
   const nav = useNavigate();
+
+  useEffect(() => {
+    setIsOnProfile(false);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,7 +60,7 @@ const SpaetiDetailsPage = () => {
     return <p>Loading...</p>;
   }
 
-  if(isLoading){
+  if (isLoading) {
     return;
   }
 
@@ -88,7 +92,6 @@ const SpaetiDetailsPage = () => {
         <h4>Created by: {oneSpaeti.creator.username}</h4>
       </div>
       {console.log("sterni in detail:", oneSpaeti.sterni)}
-
 
       {oneSpaeti.sterni !== 0 ? (
         <h4>Sterni-Index: {oneSpaeti.sterni} €</h4>

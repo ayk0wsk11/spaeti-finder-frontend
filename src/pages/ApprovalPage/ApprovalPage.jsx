@@ -1,12 +1,15 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import SpaetiCard from "../../components/SpaetiCard/SpaetiCard";
 import axios from "axios";
 import { API_URL } from "../../config";
+import { AuthContext } from "../../context/auth.context";
 
 const ApprovalPage = () => {
+  const { setIsOnProfile } = useContext(AuthContext);
   const [spaetis, setSpaetis] = useState([]);
 
   useEffect(() => {
+    setIsOnProfile(false);
     const fetchSpaetis = async () => {
       try {
         const { data } = await axios.get(`${API_URL}/spaetis`);

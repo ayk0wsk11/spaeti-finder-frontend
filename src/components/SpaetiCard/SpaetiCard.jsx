@@ -18,6 +18,7 @@ const SpaetiCard = ({ spaetis }) => {
 
   return (
     <Link to={`/spaeti/details/${spaetis._id}`}>
+      {console.log(spaetis)}
       <h2>{spaetis.name}</h2>
       <img src={spaetis.image} alt={spaetis.name} />
       <div>{spaetis.rating ? <div>{spaetis.rating.stars}</div> : null}</div>

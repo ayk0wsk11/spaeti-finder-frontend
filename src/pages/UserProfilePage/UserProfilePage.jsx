@@ -7,10 +7,16 @@ import { AuthContext } from "../../context/auth.context";
 import { API_URL } from "../../config";
 
 const UserProfilePage = () => {
-  const { handleLogout, currentUser } = useContext(AuthContext);
+  const { currentUser, setIsOnProfile } = useContext(AuthContext);
   const [user, setUser] = useState(null);
 
+  function getCreationDate() {
+    const date = user.createdAt.split("T")[0].split("-");
+    return date[1] + "/" + date[0];
+  }
+
   useEffect(() => {
+    setIsOnProfile(true);
     const fetchSpaetis = async () => {
       try {
         const { data } = await axios.get(`${API_URL}/users/${currentUser._id}`);
@@ -23,15 +29,18 @@ const UserProfilePage = () => {
     fetchSpaetis();
   }, []);
 
+  if (!user) return;
+
   return (
     <div id="user-profile-page">
       <div id="user-infos">
         <Avatar size={64} icon={<UserOutlined />} />
-        <Link to="/" onClick={handleLogout}>
-          <LogoutOutlined id="logout-button" />
-        </Link>
+        {console.log("user in return:", user)}
+        <div>{user.username}</div>
+        <div>{user.xp}</div>
+        <div>joined {getCreationDate()}</div>
       </div>
-      <div id="user-ratungs"></div>
+      <div id="user-ratings"></div>
     </div>
   );
 };
