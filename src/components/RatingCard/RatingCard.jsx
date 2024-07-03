@@ -113,6 +113,12 @@ const RatingCard = () => {
     }
   };
 
+  const renderStars = (stars) => {
+    return "★".repeat(stars) + "☆".repeat(5 - stars); // Assuming a 5-star rating system
+  };
+
+
+
   return (
     <div key={spaetiId}>
       {currentUser && <CreateRatingComp />}
@@ -147,7 +153,7 @@ const RatingCard = () => {
               ) : (
                 <>
                   <h4> Comment: {oneRating.comment} </h4>
-                  <h4>Stars: {oneRating.stars}</h4>
+                  <h4>Rating: {renderStars(oneRating.stars)}</h4>
                   <h4>User: {oneRating.user.username}</h4>
                   <h4>Created: {oneRating.date}</h4>
                   <div>

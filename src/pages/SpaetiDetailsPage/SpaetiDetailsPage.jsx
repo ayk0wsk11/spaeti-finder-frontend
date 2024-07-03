@@ -8,6 +8,8 @@ import RatingCard from "../../components/RatingCard/RatingCard";
 const SpaetiDetailsPage = () => {
   const { currentUser, isLoading, setIsOnProfile } = useContext(AuthContext);
   const [oneSpaeti, setOneSpaeti] = useState(undefined);
+  const [averageRating, setAverageRating] = useState(null);
+
 
   const { spaetiId } = useParams();
   const nav = useNavigate();
@@ -22,12 +24,27 @@ const SpaetiDetailsPage = () => {
         const { data } = await axios.get(`${API_URL}/spaetis/${spaetiId}`);
         console.log("inside detailspage:", data);
         setOneSpaeti(data.data);
+
+        const ratingsResponse = await axios.get(`${API_URL}/spaetis/ratings/${spaetiId}`)
+        const ratings = ratingsResponse.data.rating;
+        const avgRating = calculateAverageRating(ratings);
+        setAverageRating(avgRating);
       } catch (error) {
         console.log(error);
       }
     };
     fetchData();
   }, [spaetiId]);
+
+  const calculateAverageRating = (ratings) => {
+    if (!ratings || ratings.length === 0) return null;
+    const totalStars = ratings.reduce((sum, rating) => sum + rating.stars, 0);
+    return (totalStars / ratings.length).toFixed(1); // Keeping one decimal place for the average
+  };
+
+  const renderStars = (stars) => {
+    return "★".repeat(stars) + "☆".repeat(5 - stars); // Assuming a 5-star rating system
+  };
 
   const handleDelete = async (e) => {
     e.preventDefault();
@@ -49,7 +66,7 @@ const SpaetiDetailsPage = () => {
 
   return (
     <div>
-      {currentUser.admin ? (
+      {currentUser && currentUser.admin  ? (
         <div>
           <Link to={`/spaeti/edit/${spaetiId}`}>
             <button>Edit Späti</button>
@@ -58,6 +75,11 @@ const SpaetiDetailsPage = () => {
         </div>
       ) : null}
       <h1>{oneSpaeti.name}</h1>
+      {averageRating !== null ? (
+        <h4>Average Rating: {renderStars(Math.round(averageRating))} ({averageRating})</h4>
+      ) : (
+        <h4>No ratings yet</h4>
+      )}
       <img src={oneSpaeti.image} />
       <h3>Address:</h3>
       <div>

@@ -2,7 +2,7 @@ import SpatiMap from "../../components/SpatiMap/SpatiMap";
 import { AuthContext } from "../../context/auth.context";
 import { useContext, useEffect } from "react";
 
-const Homepage = () => {
+const HomePage = () => {
   const { setIsOnProfile } = useContext(AuthContext);
 
   useEffect(() => {
@@ -15,4 +15,4 @@ const Homepage = () => {
     </div>
   );
 };
-export default Homepage;
+export default HomePage;
