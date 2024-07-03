@@ -1,0 +1,58 @@
+.not-found-container {
+    position: relative;
+    text-align: center;
+    color: #fff;
+  }
+  
+  .not-found-background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+  }
+  
+  .background-image {
+    width: 100%;
+    height: auto;
+    opacity: 0.6;
+  }
+  
+  .not-found-content {
+    padding: 50px;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
+    display: inline-block;
+  }
+  
+  .not-found-title {
+    font-family: 'Elvish', cursive; /* Ensure you have this font or a similar one */
+    font-size: 3em;
+    margin-bottom: 20px;
+  }
+  
+  .not-found-description {
+    font-family: 'Medieval', serif; /* Ensure you have this font or a similar one */
+    font-size: 1.5em;
+    margin-bottom: 30px;
+  }
+  
+  .not-found-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  .button-home {
+    text-decoration: none;
+    color: #fff;
+    background-color: #4CAF50; /* A green color like the Shire */
+    padding: 15px 25px;
+    border-radius: 5px;
+    font-size: 1.2em;
+    transition: background-color 0.3s;
+  }
+  
+  .button-home:hover {
+    background-color: #45a049;
+  }
+  
