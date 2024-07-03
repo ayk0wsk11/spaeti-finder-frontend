@@ -1,14 +1,36 @@
 import { useContext, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { Avatar } from "antd";
+import { Avatar, Card } from "antd";
 import { UserOutlined, LogoutOutlined } from "@ant-design/icons";
 import { AuthContext } from "../../context/auth.context";
 import { API_URL } from "../../config";
+import "./UserProfilePage.css";
+
+const tabList = [
+  {
+    key: "ratings",
+    label: "ratings",
+  },
+  {
+    key: "likes",
+    label: "likes",
+  },
+];
+
+const contentList = {
+  ratings: <p>ratings content</p>,
+  likes: <p>likes content</p>,
+};
 
 const UserProfilePage = () => {
   const { currentUser, setIsOnProfile } = useContext(AuthContext);
   const [user, setUser] = useState(null);
+  const [activeTabKey, setActiveTabKey] = useState("ratings");
+
+  const onTabChange = (key) => {
+    setActiveTabKey(key);
+  };
 
   function getCreationDate() {
     const date = user.createdAt.split("T")[0].split("-");
@@ -32,13 +54,28 @@ const UserProfilePage = () => {
 
   return (
     <div id="user-profile-page">
-      <div id="user-infos">
-        <Avatar size={64} icon={<UserOutlined />} />
-        <div>{user.username}</div>
-        <div>{user.xp}</div>
-        <div>joined {getCreationDate()}</div>
+      <Card>
+        <div id="user-profile">
+          <Avatar size={64} icon={<UserOutlined />} />
+          <div id="user-infos">
+            <div>{user.username}</div>
+            <div>{user.xp}xp</div>
+            <div>joined {getCreationDate()}</div>
+          </div>
+        </div>{" "}
+      </Card>
+      <div id="user-activity">
+        <Card
+          tabList={tabList}
+          activeTabKey={activeTabKey}
+          onTabChange={onTabChange}
+          tabProps={{
+            size: "middle",
+          }}
+        >
+          {contentList[activeTabKey]}
+        </Card>
       </div>
-      <div id="user-ratings"></div>
     </div>
   );
 };
