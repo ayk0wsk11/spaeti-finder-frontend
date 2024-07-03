@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { AuthContext } from "../../context/auth.context";
 import axios from "axios";
@@ -11,6 +11,7 @@ const CreateRatingComp = () => {
   const [stars, setStars] = useState(0);
   const [comment, setComment] = useState("");
   const {spaetiId} = useParams()
+  const nav = useNavigate()
 
 
   const createRating = {
@@ -28,9 +29,8 @@ const CreateRatingComp = () => {
       const newRating = await axios.post(`${API_URL}/ratings`, createRating);
       setStars(0);
       setComment("")
-    //   const {data} = await axios.get(`${API_URL}/spaetis/${spaetiId}`);
-    //   console.log("ayko:", data.data);
-    //   const updateSpaeti = await axios.patch(`${API_URL}/spaetis/update/${spaetiId}`, {...data.data, rating: data.data.rating.push})
+
+     
 
     } catch (error) {
       console.log(error);

@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Checkbox, Form, Input } from "antd";
@@ -83,9 +83,10 @@ const LoginPage = () => {
             htmlType="submit"
             className="login-form-button"
           >
+            
             Log in
           </Button>
-          Or <a href="">register now!</a>
+          Or <Link to="/signup">register now!</Link>
         </Form.Item>
       </Form>
     </div>

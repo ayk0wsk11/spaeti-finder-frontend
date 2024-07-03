@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import axios from "axios";
 import { API_URL } from "../../config";
 import "./SpatiMap.css";
+import { Link } from "react-router-dom";
+import Icon from "../../assets/Gollum.png"
 
 // Fixing marker icon issue with react-leaflet
 delete L.Icon.Default.prototype._getIconUrl;
@@ -32,17 +34,25 @@ const geocodeAddress = async (address) => {
 const SpatiMap = () => {
   const [spatis, setSpatis] = useState([]);
   const [markers, setMarkers] = useState([]);
+  const [userLocation, setUserLocation] = useState(null);
+
+  const userIcon = L.icon({
+    iconUrl: Icon, // Replace with the path to your custom marker image
+    iconSize: [100, 100], // Adjust the size of the icon
+    iconAnchor: [50, 50], // Point of the icon which will correspond to marker's location
+    popupAnchor: [0, -41], // Point from which the popup should open relative to the iconAnchor
+  });
 
   useEffect(() => {
     const fetchAllSpaetis = async () => {
       try {
         const { data } = await axios.get(`${API_URL}/spaetis`);
         const arrOfSpaeti = data.data;
-        console.log("this is my arr of spaetis", arrOfSpaeti);
-        // Assuming data is an array of spaetis, update state accordingly
         setSpatis(
           arrOfSpaeti.map((spati) => ({
+            _id: spati._id,
             name: spati.name,
+            approved: spati.approved,
             address: `${spati.street}, ${spati.zip} ${spati.city}`,
           }))
         );
@@ -50,6 +60,7 @@ const SpatiMap = () => {
         console.error("Error fetching spaetis:", error);
       }
     };
+
     fetchAllSpaetis();
   }, []);
 
@@ -59,15 +70,38 @@ const SpatiMap = () => {
       for (const spati of spatis) {
         const coords = await geocodeAddress(spati.address);
         if (coords) {
-          newMarkers.push({ ...spati, ...coords });
+          newMarkers.push({
+            ...spati,
+            ...coords,
+            _id: spati._id,
+            approved: spati.approved,
+          });
         }
       }
       setMarkers(newMarkers);
     };
 
-    // Ensure fetchCoordinates is called whenever spatis changes
+    // fetchCoordinates is called whenever spatis changes
     fetchCoordinates();
-  }, [spatis]); // Depend on spatis state here
+  }, [spatis]);
+
+  useEffect(() => {
+    const getUserLocation = () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            setUserLocation({ lat: latitude, lng: longitude });
+          },
+          (error) => {
+            console.error("Error getting user location:", error);
+          }
+        );
+      }
+    };
+
+    getUserLocation();
+  }, []);
 
   return (
     <MapContainer center={[52.52, 13.405]} zoom={12} id="map">
@@ -75,11 +109,21 @@ const SpatiMap = () => {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution="&copy; OpenStreetMap contributors"
       />
-      {markers.map((marker, idx) => (
-        <Marker key={idx} position={[marker.lat, marker.lng]}>
-          <Popup>{marker.name}</Popup>
+      {markers.map((marker, idx) => {
+        if (marker.approved)
+          return (
+            <Marker key={idx} position={[marker.lat, marker.lng]}>
+              <Popup>
+                <Link to={`/spaeti/details/${marker._id}`}>{marker.name}</Link>
+              </Popup>
+            </Marker>
+          );
+      })}
+      {userLocation && (
+        <Marker position={[userLocation.lat, userLocation.lng]} icon={userIcon}>
+          <Popup>Your Location</Popup>
         </Marker>
-      ))}
+      )}
     </MapContainer>
   );
 };
