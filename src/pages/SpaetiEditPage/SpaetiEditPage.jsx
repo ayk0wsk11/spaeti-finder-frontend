@@ -34,6 +34,7 @@ const SpaetiEditPage = () => {
         setSeats(data.data.seats);
         setWc(data.data.wc);
         setSterni(data.data.sterni);
+        setRating(data.data.rating)
       } catch (error) {
         console.log(error);
       }
