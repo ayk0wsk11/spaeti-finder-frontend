@@ -88,7 +88,6 @@ const SpaetiDetailsPage = () => {
           {oneSpaeti.zip}, {oneSpaeti.city}
           <br />
         </h4>
-        <h4>Created by: {oneSpaeti.creator.username}</h4>
       </div>
       {oneSpaeti.sterni !== 0 ? (
         <h4>Sterni-Index: {oneSpaeti.sterni} €</h4>

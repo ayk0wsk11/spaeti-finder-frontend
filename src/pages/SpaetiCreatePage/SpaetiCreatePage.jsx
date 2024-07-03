@@ -18,6 +18,8 @@ const SpaetiCreatePage = () => {
   const { currentUser, setIsOnProfile } = useContext(AuthContext);
   const nav = useNavigate();
 
+  
+
   useEffect(() => {
     setIsOnProfile(false);
   }, []);
