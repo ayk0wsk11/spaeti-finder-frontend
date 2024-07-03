@@ -24,7 +24,6 @@ const RatingCard = () => {
           `${API_URL}/spaetis/ratings/${spaetiId}`
         );
         setRatings(data.rating);
-        console.log("ratings in rating card", data.rating);
 
         const initialLikes = data.rating.reduce((acc, rating) => {
           acc[rating._id] = rating.likes.length;
@@ -43,7 +42,6 @@ const RatingCard = () => {
   const handleLike = async (id) => {
     try {
       const response = await axios.get(`${API_URL}/ratings/${id}`);
-      console.log("Response inside Rating Card from get request:", response);
 
       if (!(response.data && response.data.data))
         throw "response.data or response.data.data is undefined";

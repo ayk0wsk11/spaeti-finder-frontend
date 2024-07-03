@@ -26,7 +26,6 @@ const SpaetiEditPage = () => {
     const fetchData = async () => {
       try {
         const { data } = await axios.get(`${API_URL}/spaetis/${spaetiId}`);
-        console.log("data from req ", data.data);
         setName(data.data.name);
         setImage(data.data.image);
         setStreet(data.data.street);

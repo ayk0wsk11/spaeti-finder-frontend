@@ -20,7 +20,6 @@ const UserProfilePage = () => {
     const fetchSpaetis = async () => {
       try {
         const { data } = await axios.get(`${API_URL}/users/${currentUser._id}`);
-        console.log("fetch", data.data);
         setUser(data.data);
       } catch (error) {
         console.log(error);
@@ -35,7 +34,6 @@ const UserProfilePage = () => {
     <div id="user-profile-page">
       <div id="user-infos">
         <Avatar size={64} icon={<UserOutlined />} />
-        {console.log("user in return:", user)}
         <div>{user.username}</div>
         <div>{user.xp}</div>
         <div>joined {getCreationDate()}</div>
