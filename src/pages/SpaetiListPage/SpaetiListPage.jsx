@@ -1,18 +1,23 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import SpaetiCard from "../../components/SpaetiCard/SpaetiCard";
 import axios from "axios";
 import { API_URL } from "../../config";
+import { AuthContext } from "../../context/auth.context";
 
 const SpaetiListPage = () => {
+  const { setIsOnProfile } = useContext(AuthContext);
   const [spaetis, setSpaetis] = useState([]);
+
+  useEffect(() => {
+    setIsOnProfile(false);
+  }, []);
 
   useEffect(() => {
     const fetchSpaetis = async () => {
       try {
         const { data } = await axios.get(`${API_URL}/spaetis`);
-        console.log("data in allList", data.data)
-        setSpaetis(data.data)
-
+        console.log("data in allList", data.data);
+        setSpaetis(data.data);
       } catch (error) {
         console.log(error);
       }
@@ -22,13 +27,11 @@ const SpaetiListPage = () => {
 
   return (
     <div>
-      {spaetis.map((spaeti) =>{ 
-        if(spaeti.approved){
-        return(
-        <SpaetiCard key={spaeti._id} spaetis={spaeti} />
-      
-        
-      )}})}
+      {spaetis.map((spaeti) => {
+        if (spaeti.approved) {
+          return <SpaetiCard key={spaeti._id} spaetis={spaeti} />;
+        }
+      })}
     </div>
   );
 };

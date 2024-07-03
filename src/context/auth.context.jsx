@@ -9,6 +9,7 @@ const AuthContextWrapper = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isOnProfile, setIsOnProfile] = useState(false);
   const nav = useNavigate();
 
   function storeToken(token) {
@@ -24,7 +25,7 @@ const AuthContextWrapper = ({ children }) => {
       setCurrentUser(data.user);
       setIsLoading(false);
       setIsLoggedIn(true);
-      console.log("user in auth.context", data.user)
+      console.log("user in auth.context", data.user);
     } catch (error) {
       console.log("error authenticating user", error);
       setCurrentUser(null);
@@ -52,6 +53,8 @@ const AuthContextWrapper = ({ children }) => {
         currentUser,
         isLoading,
         isLoggedIn,
+        isOnProfile,
+        setIsOnProfile,
         authenticateUser,
       }}
     >

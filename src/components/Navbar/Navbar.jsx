@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import {
   SearchOutlined,
   LoginOutlined,
+  LogoutOutlined,
   InfoCircleOutlined,
   UserOutlined,
 } from "@ant-design/icons";
@@ -10,7 +11,7 @@ import { AuthContext } from "../../context/auth.context";
 import "./Navbar.css";
 
 const Navbar = () => {
-  const { handleLogout, currentUser } = useContext(AuthContext);
+  const { handleLogout, currentUser, isOnProfile } = useContext(AuthContext);
 
   return (
     <nav id="navbar">
@@ -25,9 +26,15 @@ const Navbar = () => {
           <InfoCircleOutlined />
         </Link>
         {currentUser ? (
-          <Link to="/profile">
-            <UserOutlined />
-          </Link>
+          isOnProfile ? (
+            <Link to="/" onClick={handleLogout}>
+              <LogoutOutlined id="logout-button" />
+            </Link>
+          ) : (
+            <Link to="/profile">
+              <UserOutlined />
+            </Link>
+          )
         ) : (
           <Link to="/login">
             <LoginOutlined id="login-button" />

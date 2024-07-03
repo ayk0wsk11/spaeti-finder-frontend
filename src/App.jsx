@@ -6,7 +6,7 @@ import Navbar from "./components/Navbar/Navbar";
 import IsPrivate from "./components/IsPrivate/IsPrivate";
 
 //***************** PAGES *****************/
-import Homepage from "./pages/HomePage/Homepage";
+import Homepage from "./pages/HomePage/HomePage";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import SignupPage from "./pages/SignUpPage/SignUpPage";
 import SpaetiCreatePage from "./pages/SpaetiCreatePage/SpaetiCreatePage";

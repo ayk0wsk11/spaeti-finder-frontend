@@ -3,6 +3,7 @@ import axios from "axios";
 import { API_URL } from "../../config";
 import { AuthContext } from "../../context/auth.context";
 import { useNavigate } from "react-router-dom";
+
 const SpaetiCreatePage = () => {
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
@@ -14,8 +15,12 @@ const SpaetiCreatePage = () => {
   const [sterni, setSterni] = useState(0);
   const [rating, setRating] = useState([]);
   const [approved, setApproved] = useState(false);
-  const { currentUser } = useContext(AuthContext);
-  const nav = useNavigate()
+  const { currentUser, setIsOnProfile } = useContext(AuthContext);
+  const nav = useNavigate();
+
+  useEffect(() => {
+    setIsOnProfile(false);
+  }, []);
 
   const newSpaeti = {
     name,
@@ -31,8 +36,6 @@ const SpaetiCreatePage = () => {
     approved,
   };
 
-
-
   const handleAddSpaeti = async (event) => {
     event.preventDefault();
     try {
@@ -45,8 +48,7 @@ const SpaetiCreatePage = () => {
       setSeats(false);
       setWc(false);
       setSterni(0);
-      nav("/")
-
+      nav("/");
     } catch (error) {
       console.log(error);
     }

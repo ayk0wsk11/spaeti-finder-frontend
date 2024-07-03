@@ -14,24 +14,27 @@ const SpaetiEditPage = () => {
   const [wc, setWc] = useState(false);
   const [sterni, setSterni] = useState(0);
   const [rating, setRating] = useState([]);
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser, setIsOnProfile } = useContext(AuthContext);
   const nav = useNavigate();
   const { spaetiId } = useParams();
+
+  useEffect(() => {
+    setIsOnProfile(false);
+  });
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const { data } = await axios.get(`${API_URL}/spaetis/${spaetiId}`);
         console.log("data from req ", data.data);
-        setName(data.data.name)
-        setImage(data.data.image)
-        setStreet(data.data.street)
-        setZip(data.data.zip)
-        setCity(data.data.city)
-        setSeats(data.data.seats)
-        setWc(data.data.wc)
-        setSterni(data.data.sterni)
-        
+        setName(data.data.name);
+        setImage(data.data.image);
+        setStreet(data.data.street);
+        setZip(data.data.zip);
+        setCity(data.data.city);
+        setSeats(data.data.seats);
+        setWc(data.data.wc);
+        setSterni(data.data.sterni);
       } catch (error) {
         console.log(error);
       }
@@ -57,10 +60,12 @@ const SpaetiEditPage = () => {
   const handleEditSpaeti = async (event) => {
     event.preventDefault();
     try {
-      const { data } = await axios.patch(`${API_URL}/spaetis/update/${spaetiId}`, updatedSpaeti);
+      const { data } = await axios.patch(
+        `${API_URL}/spaetis/update/${spaetiId}`,
+        updatedSpaeti
+      );
 
-      nav(`/spaeti/details/${spaetiId}`)
-      
+      nav(`/spaeti/details/${spaetiId}`);
     } catch (error) {
       console.log(error);
     }
