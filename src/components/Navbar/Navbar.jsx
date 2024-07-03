@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import {
   SearchOutlined,
   LoginOutlined,
-  LogoutOutlined,
   InfoCircleOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
 import { AuthContext } from "../../context/auth.context";
 import "./Navbar.css";
@@ -25,8 +25,8 @@ const Navbar = () => {
           <InfoCircleOutlined />
         </Link>
         {currentUser ? (
-          <Link to="/" onClick={handleLogout}>
-            <LogoutOutlined id="logout-button" />
+          <Link to="/profile">
+            <UserOutlined />
           </Link>
         ) : (
           <Link to="/login">

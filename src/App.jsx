@@ -33,7 +33,14 @@ function App() {
           />
           <Route path="/spaeti/edit/:spaetiId" element={<SpaetiEditPage />} />
           <Route path="/spaeti/list" element={<SpaetiListPage />} />
-          <Route path="/profile" element={<UserProfilePage />} />
+          <Route
+            path="/profile"
+            element={
+              <IsPrivate>
+                <UserProfilePage />
+              </IsPrivate>
+            }
+          />
           <Route
             path="/approval"
             element={
