@@ -1,10 +1,10 @@
 import SpatiMap from "../../components/SpatiMap/SpatiMap";
 
-const Homepage = () => {
+const HomePage = () => {
   return (
     <div>
       <SpatiMap />
     </div>
   );
 };
-export default Homepage;
+export default HomePage;

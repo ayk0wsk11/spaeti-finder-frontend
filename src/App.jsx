@@ -6,7 +6,7 @@ import Navbar from "./components/Navbar/Navbar";
 import IsPrivate from "./components/IsPrivate/IsPrivate";
 
 //***************** PAGES *****************/
-import Homepage from "./pages/HomePage/Homepage";
+import HomePage from "./pages/HomePage/HomePage";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import SignupPage from "./pages/SignUpPage/SignUpPage";
 import SpaetiCreatePage from "./pages/SpaetiCreatePage/SpaetiCreatePage";
@@ -24,7 +24,7 @@ function App() {
       <Navbar />
       <div id="main">
         <Routes>
-          <Route path="/" element={<Homepage />} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/spaeti/create" element={<SpaetiCreatePage />} />
