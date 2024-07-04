@@ -24,7 +24,7 @@ Welcome to Spätify! <br/>
 
 ## Backlog Functionalities
 
-- **Rating-filter** - currently we filter for our "Sterni-Index", if a Späti has seats and if is has a toilet. For the future we wan't to implement the filter for the average rating
+
 - **XP and Batch system** - we already have a system in mind. Adding Spätis, leaving ratings will earn you xp-points. Depending on your xp, you will gain a batch
 - **Pictures for Spätis** - for now we decided against, since we only using the free version of cloudinary and rather have a profile picture for the user. In the future we wan't to add the possibility to add pictures to your ratings
 
@@ -166,12 +166,13 @@ user: {
 ## Collaborators
 
 [Ayko](https://github.com/ayk0wsk11)
+
 [Jonathan](https://github.com/Senfjo)
 
 ### Project
 
 - [Frontend](https://github.com/ayk0wsk11/spaeti-finder-frontend)
-- [Backend] (https://github.com/Senfjo/spaeti-finder-backend)
+- [Backend](https://github.com/Senfjo/spaeti-finder-backend)
 - [Deployed Page](https://spaetify.netlify.app/)
 
 
