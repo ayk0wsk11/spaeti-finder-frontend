@@ -18,6 +18,7 @@ const SpaetiListPage = () => {
     const fetchSpaetis = async () => {
       try {
         const { data } = await axios.get(`${API_URL}/spaetis`);
+        console.log(data.data);
         setSpaetis(data.data);
         setFilteredSpaetis(data.data);
       } catch (error) {
@@ -27,19 +28,23 @@ const SpaetiListPage = () => {
     fetchSpaetis();
   }, []);
 
-  const applyFilter = ({ sterniMin, sterniMax, wc, seats, sortOrder }) => {
+  const applyFilter = ({ sterniMax, wc, seats, starsMin, sortOrder, ratingSortOrder }) => {
     let filtered = spaetis;
 
-    if (sterniMin !== "") {
-      filtered = filtered.filter(
-        (spaeti) => spaeti.sterni >= parseFloat(sterniMin)
-      );
-    }
     if (sterniMax !== "") {
       filtered = filtered.filter(
         (spaeti) => spaeti.sterni <= parseFloat(sterniMax)
       );
     }
+    if (starsMin !== 0) {
+      filtered = filtered.filter((spaeti) => {
+        const totalStars = spaeti.rating.reduce((sum, rating) => sum + Number(rating.stars), 0);
+        const averageRating = totalStars / spaeti.rating.length;
+        
+        return averageRating >= starsMin;
+      });
+    }
+
     if (wc !== "any") {
       filtered = filtered.filter((spaeti) =>
         wc === "yes" ? spaeti.wc : !spaeti.wc
@@ -57,6 +62,20 @@ const SpaetiListPage = () => {
       filtered = filtered.sort((a, b) => b.sterni - a.sterni);
     }
 
+    if (ratingSortOrder !== 'none') {
+      filtered = filtered.sort((a, b) => {
+        const averageRatingA = a.rating.reduce((sum, rating) => sum + Number(rating.stars), 0) / a.rating.length;
+        const averageRatingB = b.rating.reduce((sum, rating) => sum + Number(rating.stars), 0) / b.rating.length;
+  
+        if (ratingSortOrder === 'asc') {
+          return averageRatingA - averageRatingB; 
+        } else if (ratingSortOrder === 'desc') {
+          return averageRatingB - averageRatingA; 
+        }
+        return 0; 
+      });
+    }
+
     setFilteredSpaetis(filtered);
   };
 
@@ -65,7 +84,7 @@ const SpaetiListPage = () => {
       <FilterComponent applyFilter={applyFilter} />
       {filteredSpaetis.map((spaeti) => {
         if (spaeti.approved) {
-          return <SpaetiCard key={spaeti._id} spaetis={spaeti}/>;
+          return <SpaetiCard key={spaeti._id} spaetis={spaeti} />;
         }
       })}
     </div>

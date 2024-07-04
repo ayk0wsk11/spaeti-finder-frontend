@@ -2,14 +2,16 @@ import React, { useState } from "react";
 import { Col, InputNumber, Row, Slider } from 'antd';
 
 const FilterComponent = ({ applyFilter }) => {
-  const [sterniMin, setSterniMin] = useState(0);
-  const [sterniMax, setSterniMax] = useState(1);
+  const [sterniMax, setSterniMax] = useState(2);
   const [wc, setWc] = useState("any");
   const [seats, setSeats] = useState("any");
+  const [starsMin, setStarsMin] = useState(0)
   const [sortOrder, setSortOrder] = useState("none");
+  const [ratingSortOrder, setRatingSortOrder] = useState('none'); // New state for rating sort order
+
 
   const handleFilter = () => {
-    applyFilter({ sterniMin, sterniMax, wc, seats, sortOrder });
+    applyFilter({sterniMax, wc, seats, starsMin, sortOrder, ratingSortOrder });
   };
 
   return (
@@ -26,6 +28,19 @@ const FilterComponent = ({ applyFilter }) => {
           <option value="desc">Highest to Lowest</option>
         </select>
       </div>
+
+      <div>
+        <label>Sort by Rating:</label>
+        <select
+          value={ratingSortOrder}
+          onChange={(e) => setRatingSortOrder(e.target.value)}
+        >
+          <option value="none">None</option>
+          <option value="asc">Lowest to Highest</option>
+          <option value="desc">Highest to Lowest</option>
+        </select>
+      </div>
+
       <div>
         <label>Sterni-Index Max:</label>
         <Row>
@@ -48,6 +63,32 @@ const FilterComponent = ({ applyFilter }) => {
               step={0.1}
               value={sterniMax}
               onChange={setSterniMax}
+            />
+          </Col>
+        </Row>
+      </div>
+      <div>
+        <label>Min Rating:</label>
+        <Row>
+          <Col span={12}>
+            <Slider
+              min={0}
+              max={5} 
+              onChange={setStarsMin}
+              value={starsMin}
+              step={0.1}
+            />
+          </Col>
+          <Col span={4}>
+            <InputNumber
+              min={0}
+              max={5} 
+              style={{
+                margin: '0 16px',
+              }}
+              step={0.1}
+              value={starsMin}
+              onChange={setStarsMin}
             />
           </Col>
         </Row>
