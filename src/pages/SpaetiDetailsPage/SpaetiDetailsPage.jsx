@@ -18,6 +18,12 @@ const SpaetiDetailsPage = () => {
     setIsOnProfile(false);
   }, []);
 
+  const calculateAverageRating = (ratings) => {
+    if (!ratings || ratings.length === 0) return 0;
+    const totalStars = ratings.reduce((sum, rating) => sum + Number(rating.stars), 0);
+    return (totalStars / ratings.length).toFixed(1); 
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -37,11 +43,7 @@ const SpaetiDetailsPage = () => {
     fetchData();
   }, [spaetiId]);
 
-  const calculateAverageRating = (ratings) => {
-    if (!ratings || ratings.length === 0) return 0;
-    const totalStars = ratings.reduce((sum, rating) => sum + rating.stars, 0);
-    return (totalStars / ratings.length).toFixed(1); 
-  };
+  
 
   const renderStars = (stars) => {
     return "★".repeat(stars) + "☆".repeat(5 - stars); 
