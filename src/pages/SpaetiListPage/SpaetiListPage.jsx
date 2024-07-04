@@ -5,6 +5,8 @@ import { API_URL } from "../../config";
 import { AuthContext } from "../../context/auth.context";
 import FilterComponent from "../../components/FilterComponent/FilterComponent";
 import { Link } from "react-router-dom";
+import "./SpaetiListPage.css";
+
 
 const SpaetiListPage = () => {
   const { setIsOnProfile, currentUser } = useContext(AuthContext);
@@ -19,7 +21,6 @@ const SpaetiListPage = () => {
     const fetchSpaetis = async () => {
       try {
         const { data } = await axios.get(`${API_URL}/spaetis`);
-        console.log(data.data);
         setSpaetis(data.data);
         setFilteredSpaetis(data.data);
       } catch (error) {
@@ -29,7 +30,14 @@ const SpaetiListPage = () => {
     fetchSpaetis();
   }, []);
 
-  const applyFilter = ({ sterniMax, wc, seats, starsMin, sortOrder, ratingSortOrder }) => {
+  const applyFilter = ({
+    sterniMax,
+    wc,
+    seats,
+    starsMin,
+    sortOrder,
+    ratingSortOrder,
+  }) => {
     let filtered = spaetis;
 
     if (sterniMax !== "") {
@@ -39,9 +47,12 @@ const SpaetiListPage = () => {
     }
     if (starsMin !== 0) {
       filtered = filtered.filter((spaeti) => {
-        const totalStars = spaeti.rating.reduce((sum, rating) => sum + Number(rating.stars), 0);
+        const totalStars = spaeti.rating.reduce(
+          (sum, rating) => sum + Number(rating.stars),
+          0
+        );
         const averageRating = totalStars / spaeti.rating.length;
-        
+
         return averageRating >= starsMin;
       });
     }
@@ -63,17 +74,21 @@ const SpaetiListPage = () => {
       filtered = filtered.sort((a, b) => b.sterni - a.sterni);
     }
 
-    if (ratingSortOrder !== 'none') {
+    if (ratingSortOrder !== "none") {
       filtered = filtered.sort((a, b) => {
-        const averageRatingA = a.rating.reduce((sum, rating) => sum + Number(rating.stars), 0) / a.rating.length;
-        const averageRatingB = b.rating.reduce((sum, rating) => sum + Number(rating.stars), 0) / b.rating.length;
-  
-        if (ratingSortOrder === 'asc') {
-          return averageRatingA - averageRatingB; 
-        } else if (ratingSortOrder === 'desc') {
-          return averageRatingB - averageRatingA; 
+        const averageRatingA =
+          a.rating.reduce((sum, rating) => sum + Number(rating.stars), 0) /
+          a.rating.length;
+        const averageRatingB =
+          b.rating.reduce((sum, rating) => sum + Number(rating.stars), 0) /
+          b.rating.length;
+
+        if (ratingSortOrder === "asc") {
+          return averageRatingA - averageRatingB;
+        } else if (ratingSortOrder === "desc") {
+          return averageRatingB - averageRatingA;
         }
-        return 0; 
+        return 0;
       });
     }
 
@@ -82,25 +97,30 @@ const SpaetiListPage = () => {
 
   return (
     <>
+    
     {currentUser && currentUser.admin  ? (
   <div>
     <Link to={`/approval`}>
       <button>Link to approval page</button>
     </Link>
-   
   </div>
 ) : null}
-    <div>
+
+    <div id="spaeti-list-page">
       <FilterComponent applyFilter={applyFilter} />
-      {filteredSpaetis.map((spaeti) => {
-        if (spaeti.approved) {
-          return <SpaetiCard key={spaeti._id} spaetis={spaeti} />;
-        }
-      })}
+      <br />
+      <div id="spaeti-cards">
+        {filteredSpaetis.map((spaeti) => {
+          if (spaeti.approved) {
+            return <SpaetiCard key={spaeti._id} spaetis={spaeti} />;
+          }
+        })}
+      </div>
     </div>
+    </>
 
 
-</>
+
   );
 };
 export default SpaetiListPage;

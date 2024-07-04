@@ -30,7 +30,6 @@ const SignupPage = () => {
     axios
       .post(`${API_URL}/auth/signup`, myFormData)
       .then((res) => {
-        console.log("response from signup", res);
         nav("/login");
       })
       .catch((err) => console.log("error while creating new user", err));

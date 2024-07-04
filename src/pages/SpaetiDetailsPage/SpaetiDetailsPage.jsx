@@ -10,7 +10,6 @@ const SpaetiDetailsPage = () => {
   const [oneSpaeti, setOneSpaeti] = useState(undefined);
   const [averageRating, setAverageRating] = useState(null);
 
-
   const { spaetiId } = useParams();
   const nav = useNavigate();
 
@@ -20,8 +19,11 @@ const SpaetiDetailsPage = () => {
 
   const calculateAverageRating = (ratings) => {
     if (!ratings || ratings.length === 0) return 0;
-    const totalStars = ratings.reduce((sum, rating) => sum + Number(rating.stars), 0);
-    return (totalStars / ratings.length).toFixed(1); 
+    const totalStars = ratings.reduce(
+      (sum, rating) => sum + Number(rating.stars),
+      0
+    );
+    return (totalStars / ratings.length).toFixed(1);
   };
 
   useEffect(() => {
@@ -29,12 +31,11 @@ const SpaetiDetailsPage = () => {
       try {
         const { data } = await axios.get(`${API_URL}/spaetis/${spaetiId}`);
         setOneSpaeti(data.data);
-
-        const ratingsResponse = await axios.get(`${API_URL}/spaetis/ratings/${spaetiId}`)
+        const ratingsResponse = await axios.get(
+          `${API_URL}/spaetis/ratings/${spaetiId}`
+        );
         const ratings = ratingsResponse.data.rating;
-        console.log("ratings inside details:", ratings)
         const avgRating = calculateAverageRating(ratings);
-        console.log("average ratings:", avgRating)
         setAverageRating(avgRating);
       } catch (error) {
         console.log(error);
@@ -43,10 +44,8 @@ const SpaetiDetailsPage = () => {
     fetchData();
   }, [spaetiId]);
 
-  
-
   const renderStars = (stars) => {
-    return "★".repeat(stars) + "☆".repeat(5 - stars); 
+    return "★".repeat(stars) + "☆".repeat(5 - stars);
   };
 
   const handleDelete = async (e) => {
@@ -55,7 +54,6 @@ const SpaetiDetailsPage = () => {
     const deleteSpaeti = await axios.delete(
       `${API_URL}/spaetis/delete/${spaetiId}`
     );
-    console.log("Späti was deleted successfully!");
     nav("/spaeti/list");
   };
 
@@ -69,7 +67,7 @@ const SpaetiDetailsPage = () => {
 
   return (
     <div>
-      {currentUser && currentUser.admin  ? (
+      {currentUser && currentUser.admin ? (
         <div>
           <Link to={`/spaeti/edit/${spaetiId}`}>
             <button>Edit Späti</button>
@@ -79,7 +77,10 @@ const SpaetiDetailsPage = () => {
       ) : null}
       <h1>{oneSpaeti.name}</h1>
       {averageRating !== null ? (
-        <h4>Average Rating: {renderStars(Math.round(averageRating))} ({averageRating})</h4>
+        <h4>
+          Average Rating: {renderStars(Math.round(averageRating))} (
+          {averageRating})
+        </h4>
       ) : (
         <h4>No ratings yet</h4>
       )}
