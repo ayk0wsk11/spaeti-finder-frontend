@@ -27,7 +27,14 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
-          <Route path="/spaeti/create" element={<SpaetiCreatePage />} />
+          <Route
+            path="/spaeti/create"
+            element={
+              <IsPrivate>
+                <SpaetiCreatePage />
+              </IsPrivate>
+            }
+          />
           <Route
             path="/spaeti/details/:spaetiId"
             element={<SpaetiDetailsPage />}

@@ -22,7 +22,6 @@ const SpaetiDetailsPage = () => {
     const fetchData = async () => {
       try {
         const { data } = await axios.get(`${API_URL}/spaetis/${spaetiId}`);
-        console.log("inside detailspage:", data);
         setOneSpaeti(data.data);
 
         const ratingsResponse = await axios.get(`${API_URL}/spaetis/ratings/${spaetiId}`)
@@ -89,10 +88,7 @@ const SpaetiDetailsPage = () => {
           {oneSpaeti.zip}, {oneSpaeti.city}
           <br />
         </h4>
-        <h4>Created by: {oneSpaeti.creator.username}</h4>
       </div>
-      {console.log("sterni in detail:", oneSpaeti.sterni)}
-
       {oneSpaeti.sterni !== 0 ? (
         <h4>Sterni-Index: {oneSpaeti.sterni} €</h4>
       ) : (

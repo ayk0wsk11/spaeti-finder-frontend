@@ -1,0 +1,17 @@
+#user-profile-page {
+  padding: 20px;
+}
+
+#user-profile {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#user-infos {
+  width: 70%;
+}
+
+#user-activity {
+  margin-top: 20px;
+}

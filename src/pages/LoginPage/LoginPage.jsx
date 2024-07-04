@@ -19,17 +19,13 @@ const LoginPage = () => {
   if (isLoggedIn) nav("/profile");
 
   const onFinish = ({ username, password }) => {
-    console.log("username: ", username);
-    console.log("password: ", password);
     axios
       .post(`${API_URL}/auth/login`, { username, password })
       .then(({ data }) => {
-        console.log("then 1");
         storeToken(data.authToken);
         return authenticateUser();
       })
       .then(() => {
-        console.log("then 2");
         nav("/");
       })
       .catch((err) => console.log("error logging in", err));
