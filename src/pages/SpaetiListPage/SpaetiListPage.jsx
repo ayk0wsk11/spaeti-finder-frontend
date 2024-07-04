@@ -65,7 +65,7 @@ const SpaetiListPage = () => {
       <FilterComponent applyFilter={applyFilter} />
       {filteredSpaetis.map((spaeti) => {
         if (spaeti.approved) {
-          return <SpaetiCard key={spaeti._id} spaetis={spaeti} />;
+          return <SpaetiCard key={spaeti._id}/>;
         }
       })}
     </div>

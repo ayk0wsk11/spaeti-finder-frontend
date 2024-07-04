@@ -1,7 +1,26 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { API_URL } from "../../config";
 
-const SpaetiCard = ({ spaetis }) => {
-  console.log("Spaetis in Card:", spaetis )
+const SpaetiCard = () => {
+  const [spaetis, setSpaetis] = useState([])
+
+  useEffect(()=>{
+
+    const fetchData = async ()=>{
+    try {
+      const {data} = await axios.get(`${API_URL}/spaetis`)
+      setSpaetis(data.data)
+    } catch (error) {
+      console.log(error)
+    }}
+    fetchData()
+  }, [])
+
+
+console.log("spaetis in card", spaetis)
+
 
   const calculateAverageRating = (ratings) => {
     
@@ -11,8 +30,7 @@ const SpaetiCard = ({ spaetis }) => {
   };
 
   const averageRating = calculateAverageRating(spaetis.rating);
-  console.log("spaetis rating in card:", spaetis.rating)
-  console.log("average rating in card:", averageRating)
+  
 
   
 
