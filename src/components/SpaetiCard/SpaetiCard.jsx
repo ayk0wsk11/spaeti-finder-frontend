@@ -19,7 +19,7 @@ const SpaetiCard = () => {
   }, [])
 
 
-console.log("spaetis in card", spaetis)
+console.log("spaetis in card", spaetis[0])
 
 
   const calculateAverageRating = (ratings) => {
