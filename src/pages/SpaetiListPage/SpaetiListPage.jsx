@@ -19,7 +19,6 @@ const SpaetiListPage = () => {
     const fetchSpaetis = async () => {
       try {
         const { data } = await axios.get(`${API_URL}/spaetis`);
-        console.log(data.data);
         setSpaetis(data.data);
         setFilteredSpaetis(data.data);
       } catch (error) {
@@ -29,7 +28,14 @@ const SpaetiListPage = () => {
     fetchSpaetis();
   }, []);
 
-  const applyFilter = ({ sterniMax, wc, seats, starsMin, sortOrder, ratingSortOrder }) => {
+  const applyFilter = ({
+    sterniMax,
+    wc,
+    seats,
+    starsMin,
+    sortOrder,
+    ratingSortOrder,
+  }) => {
     let filtered = spaetis;
 
     if (sterniMax !== "") {
@@ -39,9 +45,12 @@ const SpaetiListPage = () => {
     }
     if (starsMin !== 0) {
       filtered = filtered.filter((spaeti) => {
-        const totalStars = spaeti.rating.reduce((sum, rating) => sum + Number(rating.stars), 0);
+        const totalStars = spaeti.rating.reduce(
+          (sum, rating) => sum + Number(rating.stars),
+          0
+        );
         const averageRating = totalStars / spaeti.rating.length;
-        
+
         return averageRating >= starsMin;
       });
     }
@@ -63,17 +72,21 @@ const SpaetiListPage = () => {
       filtered = filtered.sort((a, b) => b.sterni - a.sterni);
     }
 
-    if (ratingSortOrder !== 'none') {
+    if (ratingSortOrder !== "none") {
       filtered = filtered.sort((a, b) => {
-        const averageRatingA = a.rating.reduce((sum, rating) => sum + Number(rating.stars), 0) / a.rating.length;
-        const averageRatingB = b.rating.reduce((sum, rating) => sum + Number(rating.stars), 0) / b.rating.length;
-  
-        if (ratingSortOrder === 'asc') {
-          return averageRatingA - averageRatingB; 
-        } else if (ratingSortOrder === 'desc') {
-          return averageRatingB - averageRatingA; 
+        const averageRatingA =
+          a.rating.reduce((sum, rating) => sum + Number(rating.stars), 0) /
+          a.rating.length;
+        const averageRatingB =
+          b.rating.reduce((sum, rating) => sum + Number(rating.stars), 0) /
+          b.rating.length;
+
+        if (ratingSortOrder === "asc") {
+          return averageRatingA - averageRatingB;
+        } else if (ratingSortOrder === "desc") {
+          return averageRatingB - averageRatingA;
         }
-        return 0; 
+        return 0;
       });
     }
 

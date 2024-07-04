@@ -57,9 +57,6 @@ const UserProfilePage = () => {
         const allRatings = data.data.filter(
           (r) => r.user._id === currentUser._id
         );
-        console.log(data);
-        console.log(allRatings);
-        console.log(currentUser);
       } catch (error) {
         console.log(error);
       }

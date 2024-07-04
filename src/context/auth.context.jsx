@@ -37,7 +37,6 @@ const AuthContextWrapper = ({ children }) => {
     localStorage.removeItem("authToken");
     nav("/login");
     setCurrentUser(null);
-    console.log("user was logged out successfully");
   };
 
   useEffect(() => {
