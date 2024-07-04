@@ -4,6 +4,7 @@ import axios from "axios";
 import { API_URL } from "../../config";
 import { AuthContext } from "../../context/auth.context";
 import FilterComponent from "../../components/FilterComponent/FilterComponent";
+import "./SpaetiListPage.css";
 
 const SpaetiListPage = () => {
   const { setIsOnProfile } = useContext(AuthContext);
@@ -61,13 +62,16 @@ const SpaetiListPage = () => {
   };
 
   return (
-    <div>
+    <div id="spaeti-list-page">
       <FilterComponent applyFilter={applyFilter} />
-      {filteredSpaetis.map((spaeti) => {
-        if (spaeti.approved) {
-          return <SpaetiCard key={spaeti._id} spaetis={spaeti} />;
-        }
-      })}
+      <br />
+      <div id="spaeti-cards">
+        {filteredSpaetis.map((spaeti) => {
+          if (spaeti.approved) {
+            return <SpaetiCard key={spaeti._id} spaetis={spaeti} />;
+          }
+        })}
+      </div>
     </div>
   );
 };
