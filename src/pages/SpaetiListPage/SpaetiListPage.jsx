@@ -62,6 +62,8 @@ const SpaetiListPage = () => {
 
   return (
     <div>
+      {        console.log("spaetis in list:", spaetis)
+      }
       <FilterComponent applyFilter={applyFilter} />
       {filteredSpaetis.map((spaeti) => {
         if (spaeti.approved) {

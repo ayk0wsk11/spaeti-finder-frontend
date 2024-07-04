@@ -12,6 +12,8 @@ const SpaetiCard = () => {
     try {
       const {data} = await axios.get(`${API_URL}/spaetis`)
       setSpaetis(data.data)
+      console.log("spaetis in card", data.data)
+
     } catch (error) {
       console.log(error)
     }}
@@ -19,7 +21,7 @@ const SpaetiCard = () => {
   }, [])
 
 
-console.log("spaetis in card", spaetis[0])
+if(!spaetis)return
 
 
   const calculateAverageRating = (ratings) => {
