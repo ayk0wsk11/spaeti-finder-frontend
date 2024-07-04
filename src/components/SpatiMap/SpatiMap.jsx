@@ -38,8 +38,8 @@ const SpatiMap = () => {
 
   const userIcon = L.icon({
     iconUrl: Icon, // Replace with the path to your custom marker image
-    iconSize: [100, 100], // Adjust the size of the icon
-    iconAnchor: [50, 50], // Point of the icon which will correspond to marker's location
+    iconSize: [60, 60], // Adjust the size of the icon
+    iconAnchor: [30, 30], // Point of the icon which will correspond to marker's location
     popupAnchor: [0, -41], // Point from which the popup should open relative to the iconAnchor
   });
 
@@ -121,7 +121,7 @@ const SpatiMap = () => {
       })}
       {userLocation && (
         <Marker position={[userLocation.lat, userLocation.lng]} icon={userIcon}>
-          <Popup>Your Location</Popup>
+          <Popup>My precious</Popup>
         </Marker>
       )}
     </MapContainer>
