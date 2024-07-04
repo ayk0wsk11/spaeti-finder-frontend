@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 
 const SpaetiCard = ({ spaetis }) => {
+  console.log("Spaetis in Card:", spaetis )
 
   const calculateAverageRating = (ratings) => {
     
