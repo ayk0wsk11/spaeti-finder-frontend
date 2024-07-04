@@ -39,7 +39,7 @@ const UserProfilePage = () => {
 
   useEffect(() => {
     setIsOnProfile(true);
-    const fetchSpaetis = async () => {
+    const fetchUser = async () => {
       try {
         const { data } = await axios.get(`${API_URL}/users/${currentUser._id}`);
         setUser(data.data);
@@ -47,7 +47,24 @@ const UserProfilePage = () => {
         console.log(error);
       }
     };
-    fetchSpaetis();
+    fetchUser();
+  }, []);
+
+  useEffect(() => {
+    const fetchRatings = async () => {
+      try {
+        const { data } = await axios.get(`${API_URL}/ratings`);
+        const allRatings = data.data.filter(
+          (r) => r.user._id === currentUser._id
+        );
+        console.log(data);
+        console.log(allRatings);
+        console.log(currentUser);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchRatings();
   }, []);
 
   if (!user) return;
