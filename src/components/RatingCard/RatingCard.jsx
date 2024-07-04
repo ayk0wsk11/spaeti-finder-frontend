@@ -124,7 +124,7 @@ const RatingCard = () => {
         if (oneRating.spaeti === spaetiId)
           return (
             <div key={oneRating._id} id="rating">
-              {currentUser._id === oneRating.user._id ? (
+              {currentUser  && currentUser._id === oneRating.user._id ? (
                 <>
                   <button onClick={() => handleDeleteComment(oneRating._id)}>
                     Delete

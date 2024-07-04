@@ -26,7 +26,9 @@ const SpaetiDetailsPage = () => {
 
         const ratingsResponse = await axios.get(`${API_URL}/spaetis/ratings/${spaetiId}`)
         const ratings = ratingsResponse.data.rating;
+        console.log("ratings inside details:", ratings)
         const avgRating = calculateAverageRating(ratings);
+        console.log("average ratings:", avgRating)
         setAverageRating(avgRating);
       } catch (error) {
         console.log(error);
@@ -36,13 +38,13 @@ const SpaetiDetailsPage = () => {
   }, [spaetiId]);
 
   const calculateAverageRating = (ratings) => {
-    if (!ratings || ratings.length === 0) return null;
+    if (!ratings || ratings.length === 0) return 0;
     const totalStars = ratings.reduce((sum, rating) => sum + rating.stars, 0);
-    return (totalStars / ratings.length).toFixed(1); // Keeping one decimal place for the average
+    return (totalStars / ratings.length).toFixed(1); 
   };
 
   const renderStars = (stars) => {
-    return "★".repeat(stars) + "☆".repeat(5 - stars); // Assuming a 5-star rating system
+    return "★".repeat(stars) + "☆".repeat(5 - stars); 
   };
 
   const handleDelete = async (e) => {

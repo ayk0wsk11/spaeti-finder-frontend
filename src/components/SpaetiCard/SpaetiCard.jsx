@@ -4,11 +4,9 @@ const SpaetiCard = ({ spaetis }) => {
 
   const calculateAverageRating = (ratings) => {
     
-
-
     if (!ratings || ratings.length === 0) return null;
     const totalStars = ratings.reduce((sum, rating) => sum + rating.stars, 0);
-    return (totalStars / ratings.length).toFixed(1); // Keeping one decimal place for the average
+    return (totalStars / ratings.length).toFixed(1); 
   };
 
   const averageRating = calculateAverageRating(spaetis.rating);
