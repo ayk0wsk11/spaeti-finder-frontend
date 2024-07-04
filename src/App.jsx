@@ -4,6 +4,7 @@ import { Routes, Route } from "react-router-dom";
 //***************** COMPONENTS ****************/
 import Navbar from "./components/Navbar/Navbar";
 import IsPrivate from "./components/IsPrivate/IsPrivate";
+import IsApproved from "./components/IsApproved/IsApproved";
 
 //***************** PAGES *****************/
 import HomePage from "./pages/HomePage/HomePage";
@@ -16,7 +17,7 @@ import SpaetiListPage from "./pages/SpaetiListPage/SpaetiListPage";
 import UserProfilePage from "./pages/UserProfilePage/UserProfilePage";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
 import ApprovalPage from "./pages/ApprovalPage/ApprovalPage";
-import IsApproved from "./components/IsApproved/IsApproved";
+import AboutPage from "./pages/AboutPage/AboutPage";
 
 function App() {
   return (
@@ -65,6 +66,7 @@ function App() {
             }
           />
           <Route path="*" element={<NotFoundPage />} />
+          <Route path="/about" element={<AboutPage/>}/>
         </Routes>
       </div>
     </div>
