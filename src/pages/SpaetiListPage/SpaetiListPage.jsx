@@ -4,10 +4,12 @@ import axios from "axios";
 import { API_URL } from "../../config";
 import { AuthContext } from "../../context/auth.context";
 import FilterComponent from "../../components/FilterComponent/FilterComponent";
+import { Link } from "react-router-dom";
 import "./SpaetiListPage.css";
 
+
 const SpaetiListPage = () => {
-  const { setIsOnProfile } = useContext(AuthContext);
+  const { setIsOnProfile, currentUser } = useContext(AuthContext);
   const [spaetis, setSpaetis] = useState([]);
   const [filteredSpaetis, setFilteredSpaetis] = useState([]);
 
@@ -94,6 +96,16 @@ const SpaetiListPage = () => {
   };
 
   return (
+    <>
+    
+    {currentUser && currentUser.admin  ? (
+  <div>
+    <Link to={`/approval`}>
+      <button>Link to approval page</button>
+    </Link>
+  </div>
+) : null}
+
     <div id="spaeti-list-page">
       <FilterComponent applyFilter={applyFilter} />
       <br />
@@ -105,6 +117,10 @@ const SpaetiListPage = () => {
         })}
       </div>
     </div>
+    </>
+
+
+
   );
 };
 export default SpaetiListPage;

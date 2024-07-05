@@ -15,7 +15,7 @@ const LoginPage = () => {
   useEffect(() => {
     setIsOnProfile(false);
   }, []);
-
+  
   if (isLoggedIn) nav("/profile");
 
   const onFinish = ({ username, password }) => {
