@@ -9,7 +9,7 @@ const IsApproved = ({ children }) => {
     return <p>Loading...</p>;
   }
 
-  if (currentUser.admin) {
+  if (currentUser && currentUser.admin) {
     return <div>{children}</div>;
   } else {
     return <div><h2>No access to this page!</h2>
