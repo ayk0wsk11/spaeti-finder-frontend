@@ -36,9 +36,9 @@ const LoginPage = () => {
       <Form
         name="normal_login"
         className="login-form"
-        initialValues={{
-          remember: true,
-        }}
+        // initialValues={{
+        //   remember: true,
+        // }}
         onFinish={onFinish}
       >
         <Form.Item
@@ -55,6 +55,7 @@ const LoginPage = () => {
             placeholder="Username"
           />
         </Form.Item>
+
         <Form.Item
           name="password"
           rules={[
@@ -70,7 +71,8 @@ const LoginPage = () => {
             placeholder="Password"
           />
         </Form.Item>
-        <Form.Item>
+
+        {/* <Form.Item>
           <Form.Item name="remember" valuePropName="checked" noStyle>
             <Checkbox>Remember me</Checkbox>
           </Form.Item>
@@ -78,7 +80,7 @@ const LoginPage = () => {
           <a className="login-form-forgot" href="">
             Forgot password
           </a>
-        </Form.Item>
+        </Form.Item> */}
 
         <Form.Item>
           <Button

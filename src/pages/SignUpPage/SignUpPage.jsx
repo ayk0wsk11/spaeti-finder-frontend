@@ -1,15 +1,14 @@
 import { useNavigate, Link } from "react-router-dom";
 import { API_URL } from "../../config";
 import { useEffect, useContext, useState } from "react";
+import { LockOutlined, UserOutlined, MailOutlined } from "@ant-design/icons";
+import { Button, Form, Input } from "antd";
 import axios from "axios";
 import { AuthContext } from "../../context/auth.context";
+import "./SignUpPage.css";
 
 const SignupPage = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [username, setUsername] = useState("");
-  const [errorMessage, setErrorMessage] = useState(undefined);
-  const { setIsOnProfile } = useContext(AuthContext);
+  const { setIsOnProfile, isLoggedIn } = useContext(AuthContext);
 
   const nav = useNavigate();
 
@@ -17,12 +16,14 @@ const SignupPage = () => {
     setIsOnProfile(false);
   }, []);
 
-  const handleSignupSubmit = (event) => {
-    event.preventDefault();
+  if (isLoggedIn) nav("/profile");
 
-    const image = event.target.image.files[0];
+  const onFinish = ({ username, email, password, passwordRepeat }) => {
+    if (password !== passwordRepeat) {
+      console.log("passwords are not equal");
+      return;
+    }
     const myFormData = new FormData();
-    myFormData.append("image", image); //myFormData is like an object {imageUrl: image}
     myFormData.append("username", username);
     myFormData.append("email", email);
     myFormData.append("password", password);
@@ -36,48 +37,82 @@ const SignupPage = () => {
   };
 
   return (
-    <div className="SignupPage">
-      <h1>Sign Up</h1>
-      <form onSubmit={handleSignupSubmit}>
-        <label>Username:</label>
-        <input
-          type="text"
-          name="name"
-          value={username}
-          onChange={(event) => {
-            setUsername(event.target.value);
-          }}
-        />
+    <div id="signup-page">
+      <Form name="normal_login" className="signup-form" onFinish={onFinish}>
+        <Form.Item
+          name="username"
+          rules={[
+            {
+              required: true,
+              message: "Please input your Username!",
+            },
+          ]}
+        >
+          <Input
+            prefix={<UserOutlined className="site-form-item-icon" />}
+            placeholder="Username"
+          />
+        </Form.Item>
 
-        <label>Email:</label>
-        <input
-          type="email"
+        <Form.Item
           name="email"
-          value={email}
-          onChange={(event) => {
-            setEmail(event.target.value);
-          }}
-        />
+          rules={[
+            {
+              required: true,
+              message: "Please input your Email!",
+            },
+          ]}
+        >
+          <Input
+            prefix={<MailOutlined className="site-form-item-icon" />}
+            tyoe="email"
+            placeholder="Email"
+          />
+        </Form.Item>
 
-        <label>Password:</label>
-        <input
-          type="password"
+        <Form.Item
           name="password"
-          value={password}
-          onChange={(event) => {
-            setPassword(event.target.value);
-          }}
-        />
-        <label>User Image:</label>
-        <input type="file" name="image" />
+          rules={[
+            {
+              required: true,
+              message: "Please input your Password!",
+            },
+          ]}
+        >
+          <Input
+            prefix={<LockOutlined className="site-form-item-icon" />}
+            type="password"
+            placeholder="Password"
+          />
+        </Form.Item>
 
-        <button type="submit">Sign Up</button>
-      </form>
+        <Form.Item
+          name="passwordRepeat"
+          rules={[
+            {
+              required: true,
+              message: "Please input your Password!",
+            },
+          ]}
+        >
+          <Input
+            prefix={<LockOutlined className="site-form-item-icon" />}
+            type="password"
+            placeholder="Password"
+          />
+        </Form.Item>
 
-      {errorMessage && <p className="error-message">{errorMessage}</p>}
-
-      <p>Already have account?</p>
-      <Link to={"/login"}> Login</Link>
+        <Form.Item>
+          <Button
+            type="primary"
+            htmlType="submit"
+            className="signup-form-button"
+          >
+            Sign up
+          </Button>
+          Signed up already? <Link to="/login">Log in!</Link>
+        </Form.Item>
+      </Form>
     </div>
   );
 };

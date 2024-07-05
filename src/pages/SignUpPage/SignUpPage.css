@@ -1,0 +1,14 @@
+#signup-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 80px;
+}
+
+.signup-form {
+  max-width: 300px;
+}
+
+.signup-form-button {
+  width: 100%;
+}

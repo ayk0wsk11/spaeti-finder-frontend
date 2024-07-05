@@ -1,4 +1,79 @@
 #spaeti-card {
   width: 100%;
+  text-decoration: none;
+  color: black;
+  background-color: white;
+  width: 100%;
   margin-bottom: 10px;
+  display: flex;
+  flex-direction: row;
+  border-radius: 10px;
+}
+
+#s-c-rating {
+  margin-bottom: 10px;
+}
+
+#labels {
+  font-size: 12px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#labels > * {
+  padding: 3px 6px 4px;
+  margin-right: 4px;
+  border-radius: 8px;
+}
+
+#sterni {
+  background-color: black;
+  color: white;
+  align-self: baseline;
+}
+
+#wc {
+  background-color: cornflowerblue;
+  color: white;
+}
+
+#seats {
+  background-color: khaki;
+  color: black;
+}
+
+#sterni img {
+  width: 14px;
+  vertical-align: middle;
+}
+
+#s-c-img-box {
+  margin: 5px;
+  background-color: rgba(0, 0, 0, 0.076);
+  border-radius: 10px;
+  width: 100px;
+  height: 100px;
+  max-width: 100px;
+  max-height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#s-c-img-box img {
+  border-radius: 10px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+#s-c-text-box {
+  max-height: 100%;
+  max-width: calc(100% - 100px);
+  padding: 10px;
+}
+
+#s-c-text-box h3 {
+  margin-top: 0;
+  margin-bottom: 2px;
 }

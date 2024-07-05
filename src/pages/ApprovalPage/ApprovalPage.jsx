@@ -3,6 +3,7 @@ import SpaetiCard from "../../components/SpaetiCard/SpaetiCard";
 import axios from "axios";
 import { API_URL } from "../../config";
 import { AuthContext } from "../../context/auth.context";
+import "./ApprovalPage.css";
 
 const ApprovalPage = () => {
   const { setIsOnProfile } = useContext(AuthContext);
@@ -29,23 +30,25 @@ const ApprovalPage = () => {
   };
 
   return (
-    <div>
-      {spaetis.map((spaeti) => {
-        if (!spaeti.approved) {
-          return (
-            <div key={spaeti._id}>
-              <SpaetiCard spaetis={spaeti} />
-              <button
-                onClick={() => {
-                  handleApproval(spaeti._id);
-                }}
-              >
-                Approve spaeti
-              </button>
-            </div>
-          );
-        }
-      })}
+    <div id="approval-page">
+      <div id="spaeti-cards">
+        {spaetis.map((spaeti) => {
+          if (!spaeti.approved) {
+            return (
+              <div key={spaeti._id}>
+                <SpaetiCard spaeti={spaeti} />
+                <button
+                  onClick={() => {
+                    handleApproval(spaeti._id);
+                  }}
+                >
+                  Approve spaeti
+                </button>
+              </div>
+            );
+          }
+        })}
+      </div>
     </div>
   );
 };

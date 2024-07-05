@@ -72,11 +72,10 @@ const UserProfilePage = () => {
         <div id="user-profile">
           <Avatar size={64} icon={<UserOutlined />} />
           <div id="user-infos">
-            <div>{user.username}</div>
-            <div>{user.xp}xp</div>
+            <h3>{user.username}</h3>
             <div>joined {getCreationDate()}</div>
           </div>
-        </div>{" "}
+        </div>
       </Card>
       <div id="user-activity">
         <Card
