@@ -7,7 +7,6 @@ import FilterComponent from "../../components/FilterComponent/FilterComponent";
 import { Link } from "react-router-dom";
 import "./SpaetiListPage.css";
 
-
 const SpaetiListPage = () => {
   const { setIsOnProfile, currentUser } = useContext(AuthContext);
   const [spaetis, setSpaetis] = useState([]);
@@ -96,31 +95,38 @@ const SpaetiListPage = () => {
   };
 
   return (
-    <>
-    
-    {currentUser && currentUser.admin  ? (
-  <div>
-    <Link to={`/approval`}>
-      <button>Link to approval page</button>
-    </Link>
-  </div>
-) : null}
+    <div>
+      <div id="btn-container">
+        {currentUser && currentUser.admin ? (
+          <div>
+            <Link to={`/approval`}>
+              <button id="approval-btn">Approval page</button>
+            </Link>
+          </div>
+        ) : null}
+        <div>
+          {currentUser ? (
+            <div>
+              <Link to="/spaeti/create">
+                <button id="create-spaeti-btn">Add a new Späti here! </button>
+              </Link>
+            </div>
+          ) : null}
+        </div>
+      </div>
 
-    <div id="spaeti-list-page">
-      <FilterComponent applyFilter={applyFilter} />
-      <br />
-      <div id="spaeti-cards">
-        {filteredSpaetis.map((spaeti) => {
-          if (spaeti.approved) {
-            return <SpaetiCard key={spaeti._id} spaeti={spaeti} />;
-          }
-        })}
+      <div id="spaeti-list-page">
+        <FilterComponent applyFilter={applyFilter} />
+        <br />
+        <div id="spaeti-cards">
+          {filteredSpaetis.map((spaeti) => {
+            if (spaeti.approved) {
+              return <SpaetiCard key={spaeti._id} spaeti={spaeti} />;
+            }
+          })}
+        </div>
       </div>
     </div>
-    </>
-
-
-
   );
 };
 export default SpaetiListPage;

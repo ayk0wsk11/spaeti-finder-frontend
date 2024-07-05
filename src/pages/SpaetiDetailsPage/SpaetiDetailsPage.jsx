@@ -4,6 +4,8 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../../config";
 import RatingCard from "../../components/RatingCard/RatingCard";
+import "./SpaetiDetailsPage.css";
+import sterniImg from "../../assets/icon.png";
 
 const SpaetiDetailsPage = () => {
   const { currentUser, isLoading, setIsOnProfile } = useContext(AuthContext);
@@ -66,43 +68,76 @@ const SpaetiDetailsPage = () => {
   }
 
   return (
-    <div>
+    <div id="spaeti-list-container">
       {currentUser && currentUser.admin ? (
-        <div>
+        <div id="detail-list-btn">
           <Link to={`/spaeti/edit/${spaetiId}`}>
             <button>Edit Späti</button>
           </Link>
           <button onClick={handleDelete}>Delete Späti</button>
         </div>
       ) : null}
-      <h1>{oneSpaeti.name}</h1>
-      {averageRating !== null ? (
-        <h4>
-          Average Rating: {renderStars(Math.round(averageRating))} (
-          {averageRating})
-        </h4>
-      ) : (
-        <h4>No ratings yet</h4>
-      )}
-      <img src={oneSpaeti.image} />
-      <h3>Address:</h3>
-      <div>
-        <h4>
-          {oneSpaeti.street}
-          <br />
-          {oneSpaeti.zip}, {oneSpaeti.city}
-          <br />
-        </h4>
+      <div id="header-container">
+        <h1>{oneSpaeti.name}</h1>
+        {averageRating !== null ? (
+          <h3>
+            Average Rating: {renderStars(Math.round(averageRating))} (
+            {averageRating})
+          </h3>
+        ) : (
+          <h4>No ratings yet</h4>
+        )}
+        <img id="detail-img" src={oneSpaeti.image} alt="Spaeti img" />
       </div>
-      {oneSpaeti.sterni !== 0 ? (
-        <h4>Sterni-Index: {oneSpaeti.sterni} €</h4>
-      ) : (
-        <h4>Sterni-Index: Not available</h4>
-      )}
-      <div>{oneSpaeti.seats ? <h4>Seats: Yes </h4> : <h4>Seats: No</h4>}</div>
-      <div>{oneSpaeti.wc ? <h4>Toilet: Yes </h4> : <h4>Toilet: No</h4>}</div>
-
-      <RatingCard />
+      <div id="middle-container">
+        <div id="label-container">
+          {oneSpaeti.sterni !== 0 ? (
+            <label className="sterni-idx">
+              <h4>Sterni-Index: {oneSpaeti.sterni} €</h4>
+            </label>
+          ) : (
+            <label className="sterni-idx">
+              <h4>Sterni-Index: Not available</h4>
+            </label>
+          )}
+          <div>
+            {oneSpaeti.seats ? (
+              <label className="seats-label">
+                <h4>Seats: Yes </h4>{" "}
+              </label>
+            ) : (
+              <label className="seats-label">
+                <h4>Seats: No</h4>
+              </label>
+            )}
+          </div>
+          <div>
+            {oneSpaeti.wc ? (
+              <label className="wc-label">
+                <h4>Toilet: Yes </h4>
+              </label>
+            ) : (
+              <label className="wc-label">
+                <h4>Toilet: No</h4>
+              </label>
+            )}
+          </div>
+        </div>
+        <div id="address">
+          <h3>Address:</h3>
+          <div>
+            <h4>
+              {oneSpaeti.street}
+              <br />
+              {oneSpaeti.zip}, {oneSpaeti.city}
+              <br />
+            </h4>
+          </div>
+        </div>
+      </div>
+      <div id="rating-card">
+        <RatingCard />
+      </div>
     </div>
   );
 };

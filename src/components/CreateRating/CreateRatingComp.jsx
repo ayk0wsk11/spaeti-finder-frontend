@@ -5,6 +5,7 @@ import axios from "axios";
 import { Rate } from "antd";
 import React from "react";
 import { API_URL } from "../../config";
+import './CreateRatingComponent.css'
 
 const CreateRatingComp = () => {
   const { currentUser } = useContext(AuthContext);
@@ -41,11 +42,12 @@ const CreateRatingComp = () => {
 
   
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <label>
+    <div id="form-container">
+      <form id="form" onSubmit={handleSubmit}>
+        <label id="comment">
           Comment:
-          <input
+          <input    
+            id="input"     
             type="text"
             value={comment}
             placeholder="Please leave a comment"
@@ -54,11 +56,11 @@ const CreateRatingComp = () => {
             }}
           ></input>
         </label>
-        <button> Add Rating</button>
-      </form>
       <Rate value={stars} onChange={(event)=>{
         setStars(event)
       }} />
+        <button id="rating-btn"> Add Rating</button>
+      </form>
       
     </div>
   );

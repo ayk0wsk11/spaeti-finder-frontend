@@ -78,6 +78,11 @@ const RatingCard = () => {
     setRatings(ratings.filter((e) => e._id !== id));
   };
 
+  function getCreationDate(date) {
+    const newDate = date.split("T");
+    return newDate[0];
+  }
+
   // ******************* HANDLE EDIT ********************
 
   const handleEdit = (rating) => {
@@ -115,60 +120,78 @@ const RatingCard = () => {
     return "★".repeat(stars) + "☆".repeat(5 - stars); // Assuming a 5-star rating system
   };
 
-
-
   return (
-    <div key={spaetiId}>
-      {currentUser && <CreateRatingComp />}
-      {ratings.map((oneRating) => {
-        if (oneRating.spaeti === spaetiId)
-          return (
-            <div key={oneRating._id} id="rating">
-              {currentUser  && currentUser._id === oneRating.user._id ? (
-                <>
-                  <button onClick={() => handleDeleteComment(oneRating._id)}>
-                    Delete
-                  </button>
-                  <button onClick={() => handleEdit(oneRating)}>Edit</button>
-                </>
-              ) : null}
-
-              {editMode === oneRating._id ? (
-                <>
-                  <input
-                    type="text"
-                    value={editComment}
-                    onChange={(e) => setEditComment(e.target.value)}
-                  />
-                  <Rate
-                    value={editStars}
-                    onChange={(value) => setEditStars(value)}
-                  />
-                  <button onClick={() => handleUpdate(oneRating._id)}>
-                    Update
-                  </button>
-                </>
-              ) : (
-                <>
-                  <h4> Comment: {oneRating.comment} </h4>
-                  <h4>Rating: {renderStars(oneRating.stars)}</h4>
-                  <h4>User: {oneRating.user.username}</h4>
-                  <h4>Created: {oneRating.date}</h4>
-                  <div>
-                    {currentUser && (
-                      <>
-                        <LikeOutlined
-                          onClick={() => handleLike(oneRating._id)}
-                        />
-                        <h4>Likes on the comment: {likes[oneRating._id]}</h4>
-                      </>
-                    )}
+    <div key={spaetiId} id="rating-container">
+      <div id="create-container">{currentUser && <CreateRatingComp />}</div>
+      <div>
+        {ratings.map((oneRating) => {
+          if (oneRating.spaeti === spaetiId)
+            return (
+              <div key={oneRating._id} id="rating">
+                {currentUser && currentUser._id === oneRating.user._id ? (
+                  <div id="rc-btn">
+                    <div>
+                      <button
+                        id="r-c-dlt-btn"
+                        onClick={() => handleDeleteComment(oneRating._id)}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                    <div>
+                      <button
+                        id="r-c-edt-btn"
+                        onClick={() => handleEdit(oneRating)}
+                      >
+                        Edit
+                      </button>
+                    </div>
                   </div>
-                </>
-              )}
-            </div>
-          );
-      })}
+                ) : null}
+
+                {editMode === oneRating._id ? (
+                  <>
+                    <input
+                      type="text"
+                      value={editComment}
+                      onChange={(e) => setEditComment(e.target.value)}
+                    />
+                    <Rate
+                      value={editStars}
+                      onChange={(value) => setEditStars(value)}
+                    />
+                    <button onClick={() => handleUpdate(oneRating._id)}>
+                      Update
+                    </button>
+                  </>
+                ) : (
+                  <div id="rating-content">
+                    <h4>User: {oneRating.user.username}</h4>
+                    <h4>Rating: {renderStars(oneRating.stars)}</h4>
+                    <h4>Created: {getCreationDate(oneRating.date)}</h4>
+                    <div>
+                      {currentUser && (
+                        <div id="likes">
+                          <div>
+                            <LikeOutlined
+                              onClick={() => handleLike(oneRating._id)}
+                            />
+                          </div>
+                          <div id="likes-num">
+                            <h4> {likes[oneRating._id]}</h4>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+                <div id="rating-comment">
+                  <h4> Comment: {oneRating.comment} </h4>
+                </div>
+              </div>
+            );
+        })}
+      </div>
     </div>
   );
 };

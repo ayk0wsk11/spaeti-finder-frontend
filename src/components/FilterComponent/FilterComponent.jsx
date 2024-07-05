@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Col, InputNumber, Row, Slider } from 'antd';
+import './FilterComponent.css'
 
 const FilterComponent = ({ applyFilter }) => {
   const [sterniMax, setSterniMax] = useState(2);
@@ -15,7 +16,7 @@ const FilterComponent = ({ applyFilter }) => {
   };
 
   return (
-    <div>
+    <div id="filter-container">
       <h3>Filter Spätis</h3>
       <div>
         <label>Sort by Sterni-Index:</label>
@@ -109,7 +110,7 @@ const FilterComponent = ({ applyFilter }) => {
           <option value="no">No</option>
         </select>
       </div>
-      <button onClick={handleFilter}>Apply Filter</button>
+      <button id="apply-btn" onClick={handleFilter}>Apply Filter</button>
     </div>
   );
 };

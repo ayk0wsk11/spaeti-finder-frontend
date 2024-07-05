@@ -87,7 +87,7 @@ const SpaetiCreatePage = () => {
           Address:
           <input
             value={street}
-            placeholder="Street"
+            placeholder="Street and Number"
             type="text"
             onChange={(event) => {
               setStreet(event.target.value);
