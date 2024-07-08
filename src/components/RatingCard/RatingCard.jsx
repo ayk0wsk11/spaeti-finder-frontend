@@ -117,7 +117,7 @@ const RatingCard = () => {
   };
 
   const renderStars = (stars) => {
-    return "★".repeat(stars) + "☆".repeat(5 - stars); // Assuming a 5-star rating system
+    return "★".repeat(stars) + "☆".repeat(5 - stars);
   };
 
   return (
