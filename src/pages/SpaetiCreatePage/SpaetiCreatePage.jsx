@@ -24,24 +24,48 @@ const SpaetiCreatePage = () => {
     setIsOnProfile(false);
   }, []);
 
-  const newSpaeti = {
-    name,
-    image,
-    street,
-    zip,
-    city,
-    rating,
-    sterni,
-    seats,
-    wc,
-    creator: currentUser,
-    approved,
+  const geocodeAddress = async (address) => {
+    const response = await fetch(
+      `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+        address
+      )}`
+    );
+    const data = await response.json();
+    if (data.length > 0) {
+      return { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
+    }
+    return null;
   };
 
   const handleAddSpaeti = async (event) => {
     event.preventDefault();
+
+    const address = `${street}, ${zip} ${city}`;
+    const coords = await geocodeAddress(address);
+
+    if (!coords) {
+      console.log("Failed to get coordinates for the address.");
+      return;
+    }
+
+    const newSpaeti = {
+      name,
+      image,
+      street,
+      zip,
+      city,
+      rating,
+      sterni,
+      seats,
+      wc,
+      creator: currentUser,
+      approved,
+      lat: coords.lat,
+      lng: coords.lng,
+    };
+
     try {
-      const { data } = await axios.post(`${API_URL}/spaetis`, newSpaeti);
+      await axios.post(`${API_URL}/spaetis`, newSpaeti);
       setName("");
       setImage("");
       setStreet("");
@@ -55,6 +79,7 @@ const SpaetiCreatePage = () => {
       console.log(error);
     }
   };
+
 
   return (
     <div>

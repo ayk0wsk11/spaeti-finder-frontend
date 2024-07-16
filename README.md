@@ -5,7 +5,7 @@
 ## Description
 
 Welcome to Spätify! <br/>
-            We are two web developers working on an exciting project called "Spätify." Our web app aims to help Berlin residents and visitors easily find and rate Spätis, the beloved late-night convenience stores unique to the city. With Spätify, users can discover the best Spätis based on community reviews, ensuring they always find the perfect spot for their late-night needs.
+            We are two web developers, Ayko and Jonathan, working on an exciting project called "Spätify", for our final project of our Ironhack bootcamp. Our web app aims to help Berlin residents and visitors easily find and rate Spätis, the beloved late-night convenience stores unique to the city. With Spätify, users can discover the best Spätis based on community reviews, ensuring they always find the perfect spot for their late-night needs.
 
 ## User Stories
 

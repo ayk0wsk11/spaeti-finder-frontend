@@ -8,6 +8,8 @@ const IsApproved = ({ children }) => {
   if (isLoading) {
     return <p>Loading...</p>;
   }
+  console.log(currentUser)
+
 
   if (currentUser && currentUser.admin) {
     return <div>{children}</div>;
