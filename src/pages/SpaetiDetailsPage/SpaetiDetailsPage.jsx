@@ -5,7 +5,6 @@ import axios from "axios";
 import { API_URL } from "../../config";
 import RatingCard from "../../components/RatingCard/RatingCard";
 import "./SpaetiDetailsPage.css";
-import sterniImg from "../../assets/icon.png";
 
 const SpaetiDetailsPage = () => {
   const { currentUser, isLoading, setIsOnProfile } = useContext(AuthContext);
@@ -138,7 +137,14 @@ const SpaetiDetailsPage = () => {
       <div id="rating-card">
         <RatingCard />
       </div>
+      {/* Add button to navigate to the ChangeRequestForm */}
+      <div id="change-request-btn">
+        <Link to={`/spaeti/change-request/${spaetiId}`}>
+          <button>Request a Change</button>
+        </Link>
+      </div>
     </div>
   );
 };
+
 export default SpaetiDetailsPage;

@@ -18,6 +18,8 @@ import UserProfilePage from "./pages/UserProfilePage/UserProfilePage";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
 import ApprovalPage from "./pages/ApprovalPage/ApprovalPage";
 import AboutPage from "./pages/AboutPage/AboutPage";
+import AdminDashboard from "./pages/AdminDashboard/AdminDashboard";
+import ChangeRequestForm from "./components/ChangeRequestForm/ChangeRequestForm";
 
 function App() {
   return (
@@ -58,6 +60,14 @@ function App() {
             }
           />
           <Route
+            path="/spaeti/change-request/:spaetiId"
+            element={
+              <IsPrivate>
+                <ChangeRequestForm />
+              </IsPrivate>
+            }
+          />
+          <Route
             path="/approval"
             element={
               <IsApproved>
@@ -65,8 +75,9 @@ function App() {
               </IsApproved>
             }
           />
+          <Route path="/admin" element={<AdminDashboard />} />
           <Route path="*" element={<NotFoundPage />} />
-          <Route path="/about" element={<AboutPage/>}/>
+          <Route path="/about" element={<AboutPage />} />
         </Routes>
       </div>
     </div>
