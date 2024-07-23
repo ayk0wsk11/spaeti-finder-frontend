@@ -5,21 +5,20 @@ import axios from "axios";
 import { Rate } from "antd";
 import React from "react";
 import { API_URL } from "../../config";
-import './CreateRatingComponent.css'
+import './CreateRatingComponent.css';
 
-const CreateRatingComp = () => {
+const CreateRatingComp = ({ onNewRating }) => {
   const { currentUser } = useContext(AuthContext);
   const [stars, setStars] = useState(0);
   const [comment, setComment] = useState("");
-  const {spaetiId} = useParams()
-  const nav = useNavigate()
-
+  const { spaetiId } = useParams();
+  const nav = useNavigate();
 
   const createRating = {
     stars,
     user: currentUser,
     comment,
-    date: Date.now,
+    date: Date.now(),
     spaeti: spaetiId,
   };
 
@@ -27,27 +26,23 @@ const CreateRatingComp = () => {
     event.preventDefault();
 
     try {
-      const newRating = await axios.post(`${API_URL}/ratings`, createRating);
+      await axios.post(`${API_URL}/ratings`, createRating);
       setStars(0);
-      setComment("")
-
-     
+      setComment("");
+      onNewRating(); // Call the callback to refresh the ratings
 
     } catch (error) {
       console.log(error);
     }
   };
 
-  
-
-  
   return (
     <div id="form-container">
       <form id="form" onSubmit={handleSubmit}>
         <label id="comment">
           Comment:
-          <input    
-            id="input"     
+          <input
+            id="input"
             type="text"
             value={comment}
             placeholder="Please leave a comment"
@@ -56,13 +51,11 @@ const CreateRatingComp = () => {
             }}
           ></input>
         </label>
-      <Rate value={stars} onChange={(event)=>{
-        setStars(event)
-      }} />
+        <Rate value={stars} onChange={(value) => setStars(value)} />
         <button id="rating-btn"> Add Rating</button>
       </form>
-      
     </div>
   );
 };
+
 export default CreateRatingComp;

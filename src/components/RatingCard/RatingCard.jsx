@@ -8,7 +8,7 @@ import { AuthContext } from "../../context/auth.context";
 import "./RatingCard.css";
 import { Rate } from "antd";
 
-const RatingCard = () => {
+const RatingCard = ({ onNewRating }) => {
   const { spaetiId } = useParams();
   const [ratings, setRatings] = useState([]);
   const [likes, setLikes] = useState({});
@@ -37,7 +37,7 @@ const RatingCard = () => {
     };
 
     fetchRatings();
-  }, [spaetiId]);
+  }, [spaetiId, onNewRating]);
 
   const handleLike = async (id) => {
     try {
@@ -48,7 +48,7 @@ const RatingCard = () => {
       const data = response.data.data;
 
       if (!data.likes.includes(currentUser._id)) {
-        const addLike = await axios.put(`${API_URL}/ratings/add-like/${id}`, {
+        await axios.put(`${API_URL}/ratings/add-like/${id}`, {
           user: currentUser._id,
         });
 
@@ -57,12 +57,9 @@ const RatingCard = () => {
           [id]: prevLikes[id] + 1,
         }));
       } else {
-        const removeLike = await axios.put(
-          `${API_URL}/ratings/remove-like/${id}`,
-          {
-            user: currentUser._id,
-          }
-        );
+        await axios.put(`${API_URL}/ratings/remove-like/${id}`, {
+          user: currentUser._id,
+        });
         setLikes((prevLikes) => ({
           ...prevLikes,
           [id]: prevLikes[id] - 1,
@@ -74,16 +71,14 @@ const RatingCard = () => {
   };
 
   const handleDeleteComment = async (id) => {
-    const deleteComment = await axios.delete(`${API_URL}/ratings/delete/${id}`);
+    await axios.delete(`${API_URL}/ratings/delete/${id}`);
     setRatings(ratings.filter((e) => e._id !== id));
   };
 
-  function getCreationDate(date) {
+  const getCreationDate = (date) => {
     const newDate = date.split("T");
     return newDate[0];
-  }
-
-  // ******************* HANDLE EDIT ********************
+  };
 
   const handleEdit = (rating) => {
     setEditMode(rating._id);
@@ -122,7 +117,9 @@ const RatingCard = () => {
 
   return (
     <div key={spaetiId} id="rating-container">
-      <div id="create-container">{currentUser && <CreateRatingComp />}</div>
+      <div id="create-container">
+        {currentUser && <CreateRatingComp onNewRating={onNewRating} />}
+      </div>
       <div>
         {ratings.map((oneRating) => {
           if (oneRating.spaeti === spaetiId)
@@ -195,4 +192,5 @@ const RatingCard = () => {
     </div>
   );
 };
+
 export default RatingCard;

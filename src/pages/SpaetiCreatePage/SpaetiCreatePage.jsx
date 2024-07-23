@@ -3,6 +3,7 @@ import axios from "axios";
 import { API_URL } from "../../config";
 import { AuthContext } from "../../context/auth.context";
 import { useNavigate } from "react-router-dom";
+import './SpaetiCreatePage.css'
 
 const SpaetiCreatePage = () => {
   const [name, setName] = useState("");
@@ -82,7 +83,7 @@ const SpaetiCreatePage = () => {
 
 
   return (
-    <div>
+    <div id="test">
       <form id="add-form" onSubmit={handleAddSpaeti}>
         <label>
           Name:
@@ -112,7 +113,7 @@ const SpaetiCreatePage = () => {
           Address:
           <input
             value={street}
-            placeholder="Street and Number"
+            placeholder="Street + Number"
             type="text"
             onChange={(event) => {
               setStreet(event.target.value);

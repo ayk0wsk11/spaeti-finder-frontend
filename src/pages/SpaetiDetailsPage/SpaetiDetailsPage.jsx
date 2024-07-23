@@ -29,21 +29,22 @@ const SpaetiDetailsPage = () => {
     return (totalStars / ratings.length).toFixed(1);
   };
 
+  const fetchData = async () => {
+    try {
+      const { data } = await axios.get(`${API_URL}/spaetis/${spaetiId}`);
+      setOneSpaeti(data.data);
+      const ratingsResponse = await axios.get(
+        `${API_URL}/spaetis/ratings/${spaetiId}`
+      );
+      const ratings = ratingsResponse.data.rating;
+      const avgRating = calculateAverageRating(ratings);
+      setAverageRating(avgRating);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { data } = await axios.get(`${API_URL}/spaetis/${spaetiId}`);
-        setOneSpaeti(data.data);
-        const ratingsResponse = await axios.get(
-          `${API_URL}/spaetis/ratings/${spaetiId}`
-        );
-        const ratings = ratingsResponse.data.rating;
-        const avgRating = calculateAverageRating(ratings);
-        setAverageRating(avgRating);
-      } catch (error) {
-        console.log(error);
-      }
-    };
     fetchData();
   }, [spaetiId]);
 
@@ -54,9 +55,7 @@ const SpaetiDetailsPage = () => {
   const handleDelete = async (e) => {
     e.preventDefault();
 
-    const deleteSpaeti = await axios.delete(
-      `${API_URL}/spaetis/delete/${spaetiId}`
-    );
+    await axios.delete(`${API_URL}/spaetis/delete/${spaetiId}`);
     nav("/spaeti/list");
   };
 
@@ -121,7 +120,7 @@ const SpaetiDetailsPage = () => {
       </div>
 
       <div id="rating-card">
-        <RatingCard />
+        <RatingCard onNewRating={fetchData} />
       </div>
     </div>
   );

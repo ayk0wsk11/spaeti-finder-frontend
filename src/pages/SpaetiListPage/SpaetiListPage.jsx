@@ -6,8 +6,7 @@ import { AuthContext } from "../../context/auth.context";
 import FilterComponent from "../../components/FilterComponent/FilterComponent";
 import { Link } from "react-router-dom";
 import "./SpaetiListPage.css";
-import { Button, Flex, Tooltip } from "antd";
-import { SearchOutlined } from '@ant-design/icons';
+import { Button, Flex } from "antd";
 
 
 const SpaetiListPage = () => {
@@ -41,7 +40,8 @@ const SpaetiListPage = () => {
     ratingSortOrder,
   }) => {
     let filtered = spaetis;
-
+  
+    // Filter logic remains unchanged
     if (sterniMax !== "") {
       filtered = filtered.filter(
         (spaeti) => spaeti.sterni <= parseFloat(sterniMax)
@@ -53,12 +53,11 @@ const SpaetiListPage = () => {
           (sum, rating) => sum + Number(rating.stars),
           0
         );
-        const averageRating = totalStars / spaeti.rating.length;
-
+        const averageRating = totalStars / spaeti.rating.length || 0;
         return averageRating >= starsMin;
       });
     }
-
+  
     if (wc !== "any") {
       filtered = filtered.filter((spaeti) =>
         wc === "yes" ? spaeti.wc : !spaeti.wc
@@ -69,33 +68,40 @@ const SpaetiListPage = () => {
         seats === "yes" ? spaeti.seats : !spaeti.seats
       );
     }
-
+  
+    // Sorting by Sterni-Index
     if (sortOrder === "asc") {
       filtered = filtered.sort((a, b) => a.sterni - b.sterni);
     } else if (sortOrder === "desc") {
       filtered = filtered.sort((a, b) => b.sterni - a.sterni);
     }
-
+  
+    // Sorting by Rating
     if (ratingSortOrder !== "none") {
       filtered = filtered.sort((a, b) => {
         const averageRatingA =
-          a.rating.reduce((sum, rating) => sum + Number(rating.stars), 0) /
-          a.rating.length;
+          a.rating.length > 0
+            ? a.rating.reduce((sum, rating) => sum + Number(rating.stars), 0) /
+              a.rating.length
+            : 0;
         const averageRatingB =
-          b.rating.reduce((sum, rating) => sum + Number(rating.stars), 0) /
-          b.rating.length;
-
+          b.rating.length > 0
+            ? b.rating.reduce((sum, rating) => sum + Number(rating.stars), 0) /
+              b.rating.length
+            : 0;
+  
         if (ratingSortOrder === "asc") {
-          return averageRatingA - averageRatingB;
+          return averageRatingA - averageRatingB || (averageRatingB === 0 ? -1 : 0);
         } else if (ratingSortOrder === "desc") {
-          return averageRatingB - averageRatingA;
+          return averageRatingB - averageRatingA || (averageRatingA === 0 ? -1 : 0);
         }
         return 0;
       });
     }
-
+  
     setFilteredSpaetis(filtered);
   };
+  
 
   return (
     <div>
