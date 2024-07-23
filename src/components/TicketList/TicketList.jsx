@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { API_URL } from '../../config';
 import { Link } from 'react-router-dom';
+import './TicketList.css';  // Ensure this path is correct
 
 const TicketList = () => {
   const [tickets, setTickets] = useState([]);
 
   useEffect(() => {
     const fetchTickets = async () => {
-      const token = localStorage.getItem('authToken'); 
+      const token = localStorage.getItem('authToken');
       const res = await axios.get(`${API_URL}/tickets`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -19,7 +20,7 @@ const TicketList = () => {
 
   const handleApprove = async (id) => {
     try {
-      const token = localStorage.getItem('authToken'); 
+      const token = localStorage.getItem('authToken');
       await axios.post(`${API_URL}/tickets/${id}/approve`, {}, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -31,7 +32,7 @@ const TicketList = () => {
 
   const handleReject = async (id) => {
     try {
-      const token = localStorage.getItem('authToken'); 
+      const token = localStorage.getItem('authToken');
       await axios.post(`${API_URL}/tickets/${id}/reject`, {}, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -42,14 +43,14 @@ const TicketList = () => {
   };
 
   return (
-    <div>
+    <div className="ticket-list">
       <h2>Pending Tickets</h2>
       <ul>
         {tickets.map(ticket => (
           <li key={ticket._id}>
             <p>User: {ticket.userId.username}</p>
             <Link to={`/spaeti/details/${ticket.spaetiId._id}`}>
-            <p>Späti: {ticket.spaetiId.name}</p>
+              <p>Späti: {ticket.spaetiId.name}</p>
             </Link>
             <p>Changes: {JSON.stringify(ticket.changes)}</p>
             <button onClick={() => handleApprove(ticket._id)}>Approve</button>

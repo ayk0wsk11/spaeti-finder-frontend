@@ -10,7 +10,7 @@ const HomePage = () => {
 
   useEffect(() => {
     setIsOnProfile(false);
-    triggerAlert("Spätify is not finished yet. We are still working on features and design. If you want to test the webpage without creating an account, use following credentials: Username: Test ; Password: 12345");
+    triggerAlert("Spätify is not finished yet. We are still working on features and design. If you want to test the webpage without creating an account, ask us for credentials to login.");
   }, []);
 
   const triggerAlert = (message) => {

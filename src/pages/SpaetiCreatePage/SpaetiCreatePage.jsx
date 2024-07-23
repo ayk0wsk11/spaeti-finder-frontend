@@ -3,23 +3,22 @@ import axios from "axios";
 import { API_URL } from "../../config";
 import { AuthContext } from "../../context/auth.context";
 import { useNavigate } from "react-router-dom";
-import './SpaetiCreatePage.css'
+import './SpaetiCreatePage.css';
 
 const SpaetiCreatePage = () => {
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
   const [street, setStreet] = useState("");
-  const [zip, setZip] = useState(12345);
+  const [zip, setZip] = useState(undefined);
   const [city, setCity] = useState("Berlin");
   const [seats, setSeats] = useState(false);
   const [wc, setWc] = useState(false);
   const [sterni, setSterni] = useState(0);
   const [rating, setRating] = useState([]);
   const [approved, setApproved] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
   const { currentUser, setIsOnProfile } = useContext(AuthContext);
   const nav = useNavigate();
-
-  
 
   useEffect(() => {
     setIsOnProfile(false);
@@ -67,20 +66,15 @@ const SpaetiCreatePage = () => {
 
     try {
       await axios.post(`${API_URL}/spaetis`, newSpaeti);
-      setName("");
-      setImage("");
-      setStreet("");
-      setZip(12345);
-      setCity("Berlin");
-      setSeats(false);
-      setWc(false);
-      setSterni(0);
-      nav("/");
+      setShowAlert(true);
     } catch (error) {
       console.log(error);
     }
   };
 
+  const handleHome = () => {
+    nav("/");
+  };
 
   return (
     <div id="add-container">
@@ -120,8 +114,8 @@ const SpaetiCreatePage = () => {
             }}
           ></input>
           <input
-            value={zip}
             placeholder="Zipcode"
+            value={zip}
             type="number"
             onChange={(event) => {
               setZip(event.target.value);
@@ -144,13 +138,13 @@ const SpaetiCreatePage = () => {
             name="wc"
             value={wc}
             onChange={(event) => {
-              setWc(event.target.value);
+              setWc(event.target.value === "true");
             }}
           >
             <option value="">-- Select an option --</option>
             <option value={true}>Yes</option>
             <option value={false}>No</option>
-            <option value={false}>Unknown</option>
+            <option value="">Unknown</option>
           </select>
         </label>
 
@@ -160,13 +154,13 @@ const SpaetiCreatePage = () => {
             name="seats"
             value={seats}
             onChange={(event) => {
-              setSeats(event.target.value);
+              setSeats(event.target.value === "true");
             }}
           >
             <option value="">-- Select an option --</option>
             <option value={true}>Yes</option>
             <option value={false}>No</option>
-            <option value={false}>Unknown</option>
+            <option value="">Unknown</option>
           </select>
         </label>
 
@@ -184,6 +178,15 @@ const SpaetiCreatePage = () => {
 
         <button id="add-spaeti-btn">Add Späti</button>
       </form>
+
+      {showAlert && (
+        <div id="alert-overlay">
+          <div id="alert-box">
+            <p>Späti created successfully! After approval your Späti will be added to our map and list! 😃 </p>
+            <button id="home-btn" onClick={handleHome}>Home</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

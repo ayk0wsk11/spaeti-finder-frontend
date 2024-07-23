@@ -41,7 +41,6 @@ const SpaetiListPage = () => {
   }) => {
     let filtered = spaetis;
   
-    // Filter logic remains unchanged
     if (sterniMax !== "") {
       filtered = filtered.filter(
         (spaeti) => spaeti.sterni <= parseFloat(sterniMax)

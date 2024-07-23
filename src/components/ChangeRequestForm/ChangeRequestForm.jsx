@@ -3,14 +3,15 @@ import axios from 'axios';
 import { API_URL } from '../../config';
 import { useParams } from 'react-router-dom';
 import { AuthContext } from '../../context/auth.context';
+import './ChangeRequestForm.css';
 
 const ChangeRequestForm = () => {
   const [changes, setChanges] = useState({});
-  const {spaetiId} = useParams()
-  const {currentUser} = useContext(AuthContext)
+  const { spaetiId } = useParams();
+  const { currentUser } = useContext(AuthContext);
 
-  if(!currentUser){
-    return <p>Loading...</p>
+  if (!currentUser) {
+    return <p>Loading...</p>;
   }
 
   const handleChange = (e) => {
@@ -24,7 +25,7 @@ const ChangeRequestForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const token = localStorage.getItem('authToken'); 
+      const token = localStorage.getItem('authToken');
       await axios.post(`${API_URL}/tickets`, { spaetiId, changes, userId: currentUser._id }, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -35,23 +36,23 @@ const ChangeRequestForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="change-request-form" onSubmit={handleSubmit}>
+      <h2>Change Request</h2>
       <label>
         Name:
         <input type="text" name="name" onChange={handleChange} />
       </label>
-      
       <label>
         Sterni:
-        <input type="number" name="sterni" step={"0.1"} onChange={handleChange} />
+        <input type="number" name="sterni" step="0.1" onChange={handleChange} />
       </label>
       <label>
-        Seats:
         <input type="checkbox" name="seats" onChange={handleChange} />
+        Seats
       </label>
       <label>
-        WC:
         <input type="checkbox" name="wc" onChange={handleChange} />
+        WC
       </label>
       <button type="submit">Submit</button>
     </form>

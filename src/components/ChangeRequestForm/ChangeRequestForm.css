@@ -1,0 +1,44 @@
+/* ChangeRequestForm.css */
+
+.change-request-form {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+  }
+  
+  .change-request-form label {
+    display: block;
+    margin-bottom: 15px;
+    font-size: 16px;
+    color: #333;
+  }
+  
+  .change-request-form input[type="text"],
+  .change-request-form input[type="number"],
+  .change-request-form select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  .change-request-form button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .change-request-form button:hover {
+    background-color: #0056b3;
+  }
+  

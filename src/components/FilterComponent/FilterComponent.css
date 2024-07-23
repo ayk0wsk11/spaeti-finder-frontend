@@ -1,27 +1,91 @@
+/* FilterComponent.css */
+
+/* Basic container styling */
+#filter-container {
+  padding: 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+  max-width: 300px;
+}
+
+/* Basic button styling */
+#toggle-menu-btn {
+  width: 100%;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #1890ff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px;
+  cursor: pointer;
+}
+
+/* Button hover effect */
+#toggle-menu-btn:hover {
+  background-color: #40a9ff;
+}
+
+/* Label styling */
+#filter-container label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Select and input styling */
+#filter-container select,
+#filter-container .ant-input-number {
+  width: 100%;
+  margin-bottom: 16px;
+  padding: 4px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+/* Slider styling */
+#filter-container .ant-slider {
+  margin-bottom: 16px;
+}
+
+/* Button container styling */
+#flt-btn-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Apply button styling */
 #apply-btn {
-  margin-top: 10px;
-  width: 120px;
-  align-items: center;
-  justify-content: center;
-  font-weight: 520;
-  border: 0.7px solid black;
+  background-color: #1890ff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px;
+  cursor: pointer;
+  margin-right: 8px;
 }
 
-#filter-container{
-    font-weight: bold;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    width: 50%;
-    padding: 10px;
-  }
-#filter-header{
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* Apply button hover effect */
+#apply-btn:hover {
+  background-color: #40a9ff;
 }
 
-#flt-btn-container{
-  display: flex;
-  justify-content: center;
+/* Reset button styling */
+#reset-btn {
+  background-color: #ff4d4f;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px;
+  cursor: pointer;
+}
+
+/* Reset button hover effect */
+#reset-btn:hover {
+  background-color: #ff7875;
 }

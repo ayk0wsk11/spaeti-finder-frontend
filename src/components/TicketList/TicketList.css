@@ -1,0 +1,56 @@
+/* TicketList.css */
+
+.ticket-list {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+.ticket-list h2 {
+  margin-bottom: 20px;
+  color: #333;
+  text-align: center;
+}
+
+.ticket-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.ticket-list li {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.ticket-list li p {
+  margin: 5px 0;
+  color: #555;
+}
+
+.ticket-list button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  margin-right: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.ticket-list button:hover {
+  background-color: #0056b3;
+}
+
+.ticket-list a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.ticket-list a:hover {
+  text-decoration: underline;
+}

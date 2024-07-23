@@ -1,7 +1,57 @@
+/* Overall container for the approval page */
 #approval-page {
   padding: 20px;
+  background-color: #f9f9f9;
+}
+
+/* Container for the Späti cards */
+#spaeti-cards {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+/* Container for each Späti card and buttons */
+.spaeti-card-container {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: calc(50% - 20px); /* Adjust width based on layout */
+}
+
+/* Action buttons container */
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+/* Style for approve button */
+.approve-btn {
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.approve-btn:hover {
+  background-color: #218838;
+}
+
+/* Style for reject button */
+.reject-btn {
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.reject-btn:hover {
+  background-color: #c82333;
 }
