@@ -25,7 +25,9 @@ const HomePage = () => {
 
   return (
     <div>
+      <div id="alert-message">
       {showAlert && <Alert message={alertMessage} onClose={closeAlert}/>}
+      </div>
       <SpatiMap />
     </div>
   );

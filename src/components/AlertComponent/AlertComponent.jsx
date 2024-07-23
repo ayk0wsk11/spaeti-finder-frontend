@@ -14,10 +14,10 @@ const Alert = ({ message, onClose }) => {
 const styles = {
   alertContainer: {
     position: 'fixed',
-    top: 0,
+    top: 100,
     left: 0,
     width: '100%',
-    height: '20%',
+    height: '30%',
     display: 'flex',
     justifyContent: 'center',
     zIndex: 1000,
