@@ -76,6 +76,11 @@ const SpaetiDetailsPage = () => {
           <button onClick={handleDelete}>Delete Späti</button>
         </div>
       ) : null}
+      <div id="change-request-btn">
+        <Link to={`/spaeti/change-request/${spaetiId}`}>
+          <button>Request a Change</button>
+        </Link>
+      </div>
       <div id="header-container">
         <h1>{oneSpaeti.name}</h1>
         {averageRating !== null ? (
@@ -136,12 +141,6 @@ const SpaetiDetailsPage = () => {
       </div>
       <div id="rating-card">
         <RatingCard />
-      </div>
-      {/* Add button to navigate to the ChangeRequestForm */}
-      <div id="change-request-btn">
-        <Link to={`/spaeti/change-request/${spaetiId}`}>
-          <button>Request a Change</button>
-        </Link>
       </div>
     </div>
   );

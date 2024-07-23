@@ -10,7 +10,7 @@ const HomePage = () => {
 
   useEffect(() => {
     setIsOnProfile(false);
-    triggerAlert("Spätify is not finished yet. We are still adding features and design");
+    triggerAlert("Spätify is not finished yet. We are still working on features and design");
   }, []);
 
   const triggerAlert = (message) => {

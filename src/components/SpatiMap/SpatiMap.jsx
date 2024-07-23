@@ -99,7 +99,7 @@ const SpatiMap = () => {
 
       {userLocation && (
         <Marker position={[userLocation.lat, userLocation.lng]} icon={userIcon}>
-          <Popup>My precious</Popup>
+          <Popup>Your location</Popup>
         </Marker>
       )}
     </MapContainer>
