@@ -1,23 +1,25 @@
 import React, { useState } from "react";
-import { Col, InputNumber, Row, Slider } from 'antd';
-import './FilterComponent.css'
+import { Col, InputNumber, Row, Slider, Button, Flex, Tooltip } from "antd";
+import "./FilterComponent.css";
+import { SearchOutlined } from "@ant-design/icons";
 
 const FilterComponent = ({ applyFilter }) => {
   const [sterniMax, setSterniMax] = useState(2);
   const [wc, setWc] = useState("any");
   const [seats, setSeats] = useState("any");
-  const [starsMin, setStarsMin] = useState(0)
+  const [starsMin, setStarsMin] = useState(0);
   const [sortOrder, setSortOrder] = useState("none");
-  const [ratingSortOrder, setRatingSortOrder] = useState('none'); // New state for rating sort order
-
+  const [ratingSortOrder, setRatingSortOrder] = useState("none"); // New state for rating sort order
 
   const handleFilter = () => {
-    applyFilter({sterniMax, wc, seats, starsMin, sortOrder, ratingSortOrder });
+    applyFilter({ sterniMax, wc, seats, starsMin, sortOrder, ratingSortOrder });
   };
 
   return (
     <div id="filter-container">
-      <h3>Filter Spätis</h3>
+      <div id="filter-header">
+        <h1>Filter Spätis</h1>
+      </div>
       <div>
         <label>Sort by Sterni-Index:</label>
         <select
@@ -48,7 +50,7 @@ const FilterComponent = ({ applyFilter }) => {
           <Col span={12}>
             <Slider
               min={0}
-              max={5} 
+              max={5}
               onChange={setSterniMax}
               value={sterniMax}
               step={0.1}
@@ -57,9 +59,9 @@ const FilterComponent = ({ applyFilter }) => {
           <Col span={4}>
             <InputNumber
               min={0}
-              max={5} 
+              max={5}
               style={{
-                margin: '0 16px',
+                margin: "0 16px",
               }}
               step={0.1}
               value={sterniMax}
@@ -74,7 +76,7 @@ const FilterComponent = ({ applyFilter }) => {
           <Col span={12}>
             <Slider
               min={0}
-              max={5} 
+              max={5}
               onChange={setStarsMin}
               value={starsMin}
               step={0.1}
@@ -83,9 +85,9 @@ const FilterComponent = ({ applyFilter }) => {
           <Col span={4}>
             <InputNumber
               min={0}
-              max={5} 
+              max={5}
               style={{
-                margin: '0 16px',
+                margin: "0 16px",
               }}
               step={0.1}
               value={starsMin}
@@ -110,7 +112,11 @@ const FilterComponent = ({ applyFilter }) => {
           <option value="no">No</option>
         </select>
       </div>
-      <button id="apply-btn" onClick={handleFilter}>Apply Filter</button>
+      <div id="flt-btn-container">
+      <Button id="apply-btn" onClick={handleFilter} icon={<SearchOutlined />}>
+        Apply filter
+      </Button>
+      </div>
     </div>
   );
 };

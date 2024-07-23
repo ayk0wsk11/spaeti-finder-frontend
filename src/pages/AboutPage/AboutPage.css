@@ -1,0 +1,13 @@
+#about-content {
+    color: black;
+    font-weight: 100;
+    padding: 20px;
+}
+
+#about-content li {
+    font-weight: bold;
+}
+#about-content img{
+    padding-left: 5px;
+    text-align: center;
+}

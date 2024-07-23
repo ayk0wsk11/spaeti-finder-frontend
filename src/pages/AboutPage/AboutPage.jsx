@@ -1,6 +1,7 @@
 import { AuthContext } from "../../context/auth.context";
 import { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import "./AboutPage.css"
 
 const AboutPage = () => {
   const { setIsOnProfile } = useContext(AuthContext);
@@ -10,9 +11,9 @@ const AboutPage = () => {
     setIsOnProfile(false);
   }, []);
   return (
-    <div>
+    <div id="about-content">
       <h1>About Us</h1>
-      <h2>
+      <h3>
         Welcome to Spätify! <br />
         We are two web developers working on an exciting project called
         "Spätify." Our web app aims to help Berlin residents and visitors easily
@@ -20,7 +21,7 @@ const AboutPage = () => {
         to the city. With Spätify, users can discover the best Spätis based on
         community reviews, ensuring they always find the perfect spot for their
         late-night needs.
-      </h2>
+      </h3>
       <h2>Our Github:</h2>
       <ul style={{ listStyleType: "none", padding: 0 }}>
         <li>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { API_URL } from '../../config';
+import { Link } from 'react-router-dom';
 
 const TicketList = () => {
   const [tickets, setTickets] = useState([]);
@@ -46,8 +47,11 @@ const TicketList = () => {
       <ul>
         {tickets.map(ticket => (
           <li key={ticket._id}>
+            {console.log(ticket)}
             <p>User: {ticket.userId.username}</p>
+            <Link to={`/spaeti/details/${ticket.spaetiId._id}`}>
             <p>Späti: {ticket.spaetiId.name}</p>
+            </Link>
             <p>Changes: {JSON.stringify(ticket.changes)}</p>
             <button onClick={() => handleApprove(ticket._id)}>Approve</button>
             <button onClick={() => handleReject(ticket._id)}>Reject</button>

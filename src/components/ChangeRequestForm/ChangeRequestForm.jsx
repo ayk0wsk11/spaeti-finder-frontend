@@ -43,7 +43,7 @@ const ChangeRequestForm = () => {
       
       <label>
         Sterni:
-        <input type="number" name="sterni" onChange={handleChange} />
+        <input type="number" name="sterni" step={"0.1"} onChange={handleChange} />
       </label>
       <label>
         Seats:

@@ -43,3 +43,9 @@
   border-radius: 5px;
   font-weight: bolder;
 }
+
+.btn-list-page{
+  margin: 0 5px;
+  font-weight: 520;
+  border: 0.7px solid black;
+}

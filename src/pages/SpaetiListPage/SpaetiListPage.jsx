@@ -6,6 +6,9 @@ import { AuthContext } from "../../context/auth.context";
 import FilterComponent from "../../components/FilterComponent/FilterComponent";
 import { Link } from "react-router-dom";
 import "./SpaetiListPage.css";
+import { Button, Flex, Tooltip } from "antd";
+import { SearchOutlined } from '@ant-design/icons';
+
 
 const SpaetiListPage = () => {
   const { setIsOnProfile, currentUser } = useContext(AuthContext);
@@ -100,7 +103,7 @@ const SpaetiListPage = () => {
         {currentUser && currentUser.admin ? (
           <div>
             <Link to={`/approval`}>
-              <button id="approval-btn">Approval page</button>
+            <Button className="btn-list-page" >Approval page</Button>
             </Link>
           </div>
         ) : null}
@@ -108,7 +111,9 @@ const SpaetiListPage = () => {
           {currentUser ? (
             <div>
               <Link to="/spaeti/create">
-                <button id="create-spaeti-btn">Add a new Späti here! </button>
+                <Flex gap="small" wrap>
+                  <Button className="btn-list-page" >Add a new Späti here</Button>
+                </Flex>
               </Link>
             </div>
           ) : null}
