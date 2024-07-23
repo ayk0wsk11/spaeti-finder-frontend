@@ -47,7 +47,6 @@ const TicketList = () => {
       <ul>
         {tickets.map(ticket => (
           <li key={ticket._id}>
-            {console.log(ticket)}
             <p>User: {ticket.userId.username}</p>
             <Link to={`/spaeti/details/${ticket.spaetiId._id}`}>
             <p>Späti: {ticket.spaetiId.name}</p>

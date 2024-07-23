@@ -6,6 +6,7 @@ import { API_URL } from "../../config";
 import RatingCard from "../../components/RatingCard/RatingCard";
 import "./SpaetiDetailsPage.css";
 import sterniImg from "../../assets/icon.png";
+import { Button, Flex } from "antd";
 
 const SpaetiDetailsPage = () => {
   const { currentUser, isLoading, setIsOnProfile } = useContext(AuthContext);
@@ -79,7 +80,9 @@ const SpaetiDetailsPage = () => {
       ) : null}
       <div id="change-request-btn">
         <Link to={`/spaeti/change-request/${spaetiId}`}>
-          <button>Request a Change</button>
+          <Flex gap="small" wrap>
+            <Button className="btn-list-page">Request a change</Button>
+          </Flex>
         </Link>
       </div>
       <div id="header-container">
@@ -92,8 +95,8 @@ const SpaetiDetailsPage = () => {
               {oneSpaeti.zip}, {oneSpaeti.city}
               <br />
             </h4>
+          </div>
         </div>
-      </div>
         {averageRating !== null ? (
           <h3>
             Average Rating: {renderStars(Math.round(averageRating))} (
@@ -105,18 +108,18 @@ const SpaetiDetailsPage = () => {
         <img src={oneSpaeti.image} alt="Spaeti img" />
       </div>
 
-        <div id="labels">
-          {oneSpaeti.sterni > 0 && (
-            <div id="sterni">
-              <img src={sterniImg} />
-              &#32;
-              {oneSpaeti.sterni.toFixed(2)}€
-            </div>
-          )}
-          {oneSpaeti.seats && <div id="seats">seats</div>}
-          {oneSpaeti.wc && <div id="wc">WC</div>}
-        </div>
-        
+      <div id="labels">
+        {oneSpaeti.sterni > 0 && (
+          <div id="sterni">
+            <img src={sterniImg} />
+            &#32;
+            {oneSpaeti.sterni.toFixed(2)}€
+          </div>
+        )}
+        {oneSpaeti.seats && <div id="seats">seats</div>}
+        {oneSpaeti.wc && <div id="wc">WC</div>}
+      </div>
+
       <div id="rating-card">
         <RatingCard />
       </div>
