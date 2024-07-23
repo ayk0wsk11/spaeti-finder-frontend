@@ -83,7 +83,7 @@ const SpaetiCreatePage = () => {
 
 
   return (
-    <div id="test">
+    <div id="add-container">
       <form id="add-form" onSubmit={handleAddSpaeti}>
         <label>
           Name:
@@ -182,7 +182,7 @@ const SpaetiCreatePage = () => {
           ></input>
         </label>
 
-        <button>Add Späti</button>
+        <button id="add-spaeti-btn">Add Späti</button>
       </form>
     </div>
   );
