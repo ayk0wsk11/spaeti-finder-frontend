@@ -34,7 +34,7 @@ const SpaetiEditPage = () => {
         setSeats(data.data.seats);
         setWc(data.data.wc);
         setSterni(data.data.sterni);
-        setRating(data.data.rating)
+        setRating(data.data.rating);
       } catch (error) {
         console.log(error);
       }
@@ -43,22 +43,45 @@ const SpaetiEditPage = () => {
     fetchData();
   }, [spaetiId]);
 
-  const updatedSpaeti = {
-    name,
-    image,
-    street,
-    zip,
-    city,
-    rating,
-    sterni,
-    seats,
-    wc,
-    creator: currentUser,
-    approved: true,
+  const geocodeAddress = async (address) => {
+    const response = await fetch(
+      `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+        address
+      )}`
+    );
+    const data = await response.json();
+    if (data.length > 0) {
+      return { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
+    }
+    return null;
   };
 
   const handleEditSpaeti = async (event) => {
     event.preventDefault();
+    const address = `${street}, ${zip} ${city}`;
+    const coords = await geocodeAddress(address);
+
+    if (!coords) {
+      console.log("Failed to get coordinates for the address.");
+      return;
+    }
+
+    const updatedSpaeti = {
+      name,
+      image,
+      street,
+      zip,
+      city,
+      rating,
+      sterni,
+      seats,
+      wc,
+      creator: currentUser,
+      approved: true,
+      lat: coords.lat,
+      lng: coords.lng,
+    };
+
     try {
       const { data } = await axios.patch(
         `${API_URL}/spaetis/update/${spaetiId}`,
