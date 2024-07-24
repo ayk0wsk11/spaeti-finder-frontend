@@ -10,7 +10,7 @@ Welcome to Spätify! <br/>
 ## User Stories
 
 - **homepage** - Our homepage shows a map, with markers for all our spätis
-![alt text](image-1.png)
+![alt text](![alt text](image.png))
 - **sign up** - A page, where you can setup a user profile with a username and password, to enjoy all our features
 - **login** - The possibility to login to your profile and verify 
 - **All Spätis page** - A page where we show all our Spätis and have the possibility to filter for certain things
