@@ -69,7 +69,6 @@ const ChangeRequestForm = () => {
         <input
           type="checkbox"
           name="seats"
-          checked={oneSpaeti.seats ? true : false}
           onChange={handleChange}
         />
         Seats
@@ -77,7 +76,6 @@ const ChangeRequestForm = () => {
       <label>
         <input
           type="checkbox"
-          checked={oneSpaeti.wc ? true : false}
           name="wc"
           onChange={handleChange}
         />
