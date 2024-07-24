@@ -1,70 +1,71 @@
-#rating-container{
-    width: 100%;
-    display: flex;
-    flex-direction: column;
+#rating-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 #rating {
-    width: 100%;
-    border-top: 1px solid black;
-    margin-top: 10px;
-
+  width: 100%;
+  margin: 30px 0;
+  padding: 20px 0;
+  border: 1px solid black;
+  border-radius: 10px;
 }
 
-
-#create-container{
-    width: 100%;
-    display: flex;
-    height: 100px;
+#create-container {
+  width: 100%;
+  display: flex;
+  height: 100px;
+  margin-bottom: 20px;
 }
 
-#rating-content{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
+#rating-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
 }
-#rating-comment{
-    border: 1px solid black;
-    border-radius: 5px;
-    margin: 10px;
-    padding: 5px;
+#rating-comment {
+  border: 1px solid black;
+  border-radius: 5px;
+  margin: 10px;
+  padding: 5px;
 }
-#likes{
-    display: flex;
-    align-items: center;
-    justify-content: center;
+#likes {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-#likes-num{
-    margin: 5px 10px;
-}
-
-#rc-btn{
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    width: 20%;
-    margin: 10px 2px;
+#likes-num {
+  margin: 5px 10px;
 }
 
-#r-c-dlt-btn{
-    display: flex;
-    width: 100px;
-    height: 40px;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid black;
-    border-radius: 5px;
-    font-weight: bold;
+#rc-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 11%;
+  margin: 10px 10px;
 }
 
-#r-c-edt-btn{
-    display: flex;
-    width: 100px;
-    height: 40px;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid black;
-    border-radius: 5px;
-    font-weight: bold;
+#r-c-dlt-btn {
+  display: flex;
+  width: 70px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid black;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+#r-c-edt-btn {
+  display: flex;
+  width: 70px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid black;
+  border-radius: 5px;
+  font-weight: bold;
 }

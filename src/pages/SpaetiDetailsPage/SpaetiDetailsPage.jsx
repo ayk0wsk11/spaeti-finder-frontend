@@ -69,21 +69,23 @@ const SpaetiDetailsPage = () => {
 
   return (
     <div id="spaeti-list-container">
-      {currentUser && currentUser.admin ? (
-        <div id="detail-list-btn">
-          <Link to={`/spaeti/edit/${spaetiId}`}>
-            <button>Edit Späti</button>
-          </Link>
-          <button onClick={handleDelete}>Delete Späti</button>
-        </div>
-      ) : null}
-      <div id="change-request-btn">
+      <div id="top-left-button">
         <Link to={`/spaeti/change-request/${spaetiId}`}>
           <Flex gap="small" wrap>
             <Button className="btn-list-page">Request a change</Button>
           </Flex>
         </Link>
       </div>
+
+      {currentUser && currentUser.admin ? (
+        <div id="top-right-buttons">
+          <Link to={`/spaeti/edit/${spaetiId}`}>
+            <button>Edit Späti</button>
+          </Link>
+          <button onClick={handleDelete}>Delete Späti</button>
+        </div>
+      ) : null}
+
       <div id="header-container">
         <h1>{oneSpaeti.name}</h1>
         <div id="address">

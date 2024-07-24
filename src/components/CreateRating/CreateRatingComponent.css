@@ -1,33 +1,40 @@
-#form-container{
-    width: 100%;
-    height: 100px;
+#form-container {
+    width: 80%;
     display: flex;
+    flex-direction: column;
+    gap: 10px; /* Add spacing between the rows */
+    margin: 10px 0 40px 0; 
+
 }
 
-#comment{
-    font-weight: bolder;
-    width: 50%;
+#form {
     display: flex;
     align-items: center;
+    justify-content: space-between; /* Space out items within the form */
 }
-#input{
+
+#comment {
+    font-weight: bolder;
+    display: flex;
+    flex-direction: column; /* Stack comment label and input vertically */
+    gap: 5px; /* Add space between label and input */
+}
+
+#input {
     width: 300px;
     height: 50px;
 }
-#form{
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    width: 100%;
-}
 
-#rating-btn{
-    display: flex;
+#rating-btn {
     width: 100px;
     height: 40px;
-    align-items: center;
-    justify-content: center;
     border: 1px solid black;
     border-radius: 5px;
     font-weight: bolder;
+    margin-left: 10px; /* Space between the input field and button */
+}
+
+/* Add styling for Rate component to ensure it is centered above the comment input */
+.ant-rate {
+    margin-bottom: 10px; /* Space between the stars and the comment input */
 }

@@ -183,7 +183,8 @@ const RatingCard = ({ onNewRating }) => {
                   </div>
                 )}
                 <div id="rating-comment">
-                  <h4> Comment: {oneRating.comment} </h4>
+                  <h4> Comment: <br/>
+                    {oneRating.comment} </h4>
                 </div>
               </div>
             );

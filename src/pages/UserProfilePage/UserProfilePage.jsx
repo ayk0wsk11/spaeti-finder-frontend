@@ -1,31 +1,27 @@
 import { useContext, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import axios from "axios";
 import { Avatar, Card } from "antd";
-import { UserOutlined, LogoutOutlined } from "@ant-design/icons";
+import { UserOutlined } from "@ant-design/icons";
 import { AuthContext } from "../../context/auth.context";
 import { API_URL } from "../../config";
 import "./UserProfilePage.css";
+import { Link } from "react-router-dom";
 
 const tabList = [
   {
     key: "ratings",
-    label: "ratings",
+    label: "Ratings",
   },
   {
     key: "likes",
-    label: "likes",
+    label: "Likes",
   },
 ];
-
-const contentList = {
-  ratings: <p>ratings content</p>,
-  likes: <p>likes content</p>,
-};
 
 const UserProfilePage = () => {
   const { currentUser, setIsOnProfile } = useContext(AuthContext);
   const [user, setUser] = useState(null);
+  const [userRatings, setUserRatings] = useState([]);
   const [activeTabKey, setActiveTabKey] = useState("ratings");
 
   const onTabChange = (key) => {
@@ -33,38 +29,66 @@ const UserProfilePage = () => {
   };
 
   function getCreationDate() {
-    const date = user.createdAt.split("T")[0].split("-");
-    return date[1] + "/" + date[0];
+    if (!user || !user.createdAt) return "";
+    const date = new Date(user.createdAt).toLocaleDateString();
+    return date;
   }
 
   useEffect(() => {
     setIsOnProfile(true);
-    const fetchUser = async () => {
-      try {
-        const { data } = await axios.get(`${API_URL}/users/${currentUser._id}`);
-        setUser(data.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchUser();
-  }, []);
 
-  useEffect(() => {
-    const fetchRatings = async () => {
+    const fetchUserAndRatings = async () => {
       try {
-        const { data } = await axios.get(`${API_URL}/ratings`);
-        const allRatings = data.data.filter(
-          (r) => r.user._id === currentUser._id
+        // Fetch user details
+        const { data: userData } = await axios.get(
+          `${API_URL}/users/${currentUser._id}`
         );
+        setUser(userData.data);
+
+        // Fetch user ratings
+        const { data: ratingsData } = await axios.get(
+          `${API_URL}/ratings/user/${currentUser._id}`
+        );
+        setUserRatings(ratingsData.data);
       } catch (error) {
         console.log(error);
       }
     };
-    fetchRatings();
-  }, []);
 
-  if (!user) return;
+    fetchUserAndRatings();
+  }, [currentUser._id, setIsOnProfile]);
+
+  if (!user) return <div>Loading...</div>;
+
+  const renderStars = (stars) => {
+    return "★".repeat(stars) + "☆".repeat(5 - stars);
+  };
+
+  const contentList = {
+    ratings: (
+      <div>
+        {userRatings.length > 0 ? (
+          userRatings.map((rating) => (
+            <div id="oneRating" key={rating._id}>
+              <Link to={`/spaeti/details/${rating.spaeti._id}`}>
+                <h3>{rating.spaeti.name}</h3>
+              </Link>
+              <p style={{ fontWeight: "400" }}>
+                {" "}
+                <span style={{ fontWeight: "bolder" }}>Comment:</span>
+                <br />
+                {rating.comment}
+              </p>
+              <h4>Rating: {renderStars(rating.stars)}</h4>
+            </div>
+          ))
+        ) : (
+          <p>No ratings found.</p>
+        )}
+      </div>
+    ),
+    likes: <p>Likes content</p>, // Placeholder for likes content
+  };
 
   return (
     <div id="user-profile-page">
@@ -73,7 +97,7 @@ const UserProfilePage = () => {
           <Avatar size={64} icon={<UserOutlined />} />
           <div id="user-infos">
             <h3>{user.username}</h3>
-            <div>joined {getCreationDate()}</div>
+            <div>Joined {getCreationDate()}</div>
           </div>
         </div>
       </Card>
@@ -92,4 +116,5 @@ const UserProfilePage = () => {
     </div>
   );
 };
+
 export default UserProfilePage;

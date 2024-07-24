@@ -12,7 +12,6 @@ const CreateRatingComp = ({ onNewRating }) => {
   const [stars, setStars] = useState(0);
   const [comment, setComment] = useState("");
   const { spaetiId } = useParams();
-  const nav = useNavigate();
 
   const createRating = {
     stars,
@@ -29,7 +28,7 @@ const CreateRatingComp = ({ onNewRating }) => {
       await axios.post(`${API_URL}/ratings`, createRating);
       setStars(0);
       setComment("");
-      onNewRating(); // Call the callback to refresh the ratings
+      onNewRating(); 
 
     } catch (error) {
       console.log(error);
@@ -38,6 +37,7 @@ const CreateRatingComp = ({ onNewRating }) => {
 
   return (
     <div id="form-container">
+      <Rate value={stars} onChange={(value) => setStars(value)} />
       <form id="form" onSubmit={handleSubmit}>
         <label id="comment">
           Comment:
@@ -49,10 +49,9 @@ const CreateRatingComp = ({ onNewRating }) => {
             onChange={(event) => {
               setComment(event.target.value);
             }}
-          ></input>
+          />
         </label>
-        <Rate value={stars} onChange={(value) => setStars(value)} />
-        <button id="rating-btn"> Add Rating</button>
+        <button id="rating-btn">Add Rating</button>
       </form>
     </div>
   );
