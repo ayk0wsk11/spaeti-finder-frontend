@@ -35,8 +35,9 @@ const AuthContextWrapper = ({ children }) => {
 
   const handleLogout = () => {
     localStorage.removeItem("authToken");
-    nav("/login");
     setCurrentUser(null);
+    setIsLoggedIn(false);
+    setTimeout(() => nav("/"), 50);
   };
 
   useEffect(() => {

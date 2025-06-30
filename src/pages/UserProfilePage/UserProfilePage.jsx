@@ -92,6 +92,7 @@ const UserProfilePage = () => {
 
   return (
     <div id="user-profile-page">
+      {console.log("user:", user, "userRatings:", userRatings)}
       <Card>
         <div id="user-profile">
           <Avatar size={64} icon={<UserOutlined />} />

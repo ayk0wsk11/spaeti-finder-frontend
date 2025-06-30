@@ -6,10 +6,17 @@ import { AuthContext } from "../../context/auth.context";
 import "./ChangeRequestForm.css";
 
 const ChangeRequestForm = () => {
-  const [changes, setChanges] = useState({});
+  const [changes, setChanges] = useState({
+    name: "",
+    sterni: 0,
+    seats: false,
+    wc: false,
+  });
   const { spaetiId } = useParams();
   const { currentUser } = useContext(AuthContext);
-  const [oneSpaeti, setOneSpaeti] = useState({});
+  const [oneSpaeti, setOneSpaeti] = useState(null);
+
+  // Fetch the spaeti data
   useEffect(() => {
     const fetchSpaeti = async () => {
       const { data } = await axios.get(`${API_URL}/spaetis/${spaetiId}`);
@@ -18,18 +25,32 @@ const ChangeRequestForm = () => {
     fetchSpaeti();
   }, [spaetiId]);
 
+  // Initialize changes state when oneSpaeti loads
+  useEffect(() => {
+    if (oneSpaeti) {
+      setChanges({
+        name: oneSpaeti.name || "",
+        sterni: oneSpaeti.sterni || 0,
+        seats: oneSpaeti.seats || false,
+        wc: oneSpaeti.wc || false,
+      });
+    }
+  }, [oneSpaeti]);
+
   if (!currentUser) {
-    setTimeout(() => {
-      return <p>Loading...</p>;
-    }, 3000);
+    return <p>Loading user info...</p>;
+  }
+
+  if (!oneSpaeti) {
+    return <p>Loading spaeti data...</p>;
   }
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setChanges({
-      ...changes,
+    setChanges((prev) => ({
+      ...prev,
       [name]: type === "checkbox" ? checked : value,
-    });
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -57,19 +78,25 @@ const ChangeRequestForm = () => {
         <input
           type="text"
           name="name"
-          placeholder={oneSpaeti.name}
+          value={changes.name}
           onChange={handleChange}
         />
       </label>
       <label>
         Price of a Sterni:
-        <input type="number" name="sterni" placeholder={oneSpaeti.sterni} step="0.1" onChange={handleChange} />
+        <input
+          type="number"
+          name="sterni"
+          value={changes.sterni}
+          step="0.1"
+          onChange={handleChange}
+        />
       </label>
       <label>
         <input
           type="checkbox"
           name="seats"
-          checked={oneSpaeti.seats ? true : false}
+          checked={changes.seats}
           onChange={handleChange}
         />
         Seats
@@ -77,8 +104,8 @@ const ChangeRequestForm = () => {
       <label>
         <input
           type="checkbox"
-          checked={oneSpaeti.wc ? true : false}
           name="wc"
+          checked={changes.wc}
           onChange={handleChange}
         />
         WC
