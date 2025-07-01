@@ -19,6 +19,13 @@ const Sidebar = ({ isOpen, onClose }) => {
         onClick={onClose}
       />
       <aside className={`sidebar ${isOpen ? "open" : ""}`}>
+        <button
+          className="sidebar-close-btn"
+          onClick={onClose}
+          aria-label="Close sidebar"
+        >
+          X
+        </button>
         <div className="nav-container">
           <div className="nav-section">
             <ul>

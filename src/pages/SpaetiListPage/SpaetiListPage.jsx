@@ -5,18 +5,16 @@ import { API_URL } from "../../config";
 import { AuthContext } from "../../context/auth.context";
 import FilterComponent from "../../components/FilterComponent/FilterComponent";
 import { Link } from "react-router-dom";
+import { Input } from "antd";
 import "./SpaetiListPage.css";
-import { Button, Flex } from "antd";
-
 
 const SpaetiListPage = () => {
   const { setIsOnProfile, currentUser } = useContext(AuthContext);
   const [spaetis, setSpaetis] = useState([]);
   const [filteredSpaetis, setFilteredSpaetis] = useState([]);
+  const [search, setSearch] = useState("");
 
-  useEffect(() => {
-    setIsOnProfile(false);
-  }, []);
+  useEffect(() => setIsOnProfile(false), []);
 
   useEffect(() => {
     const fetchSpaetis = async () => {
@@ -31,112 +29,69 @@ const SpaetiListPage = () => {
     fetchSpaetis();
   }, []);
 
-  const applyFilter = ({
-    sterniMax,
-    wc,
-    seats,
-    starsMin,
-    sortOrder,
-    ratingSortOrder,
-  }) => {
-    let filtered = spaetis;
-  
+  const applyFilter = ({ sterniMax, wc, seats, starsMin, sortOrder, ratingSortOrder }) => {
+    let filtered = [...spaetis];
+
     if (sterniMax !== "") {
-      filtered = filtered.filter(
-        (spaeti) => spaeti.sterni <= parseFloat(sterniMax)
-      );
+      filtered = filtered.filter(spaeti => spaeti.sterni <= parseFloat(sterniMax));
     }
     if (starsMin !== 0) {
-      filtered = filtered.filter((spaeti) => {
-        const totalStars = spaeti.rating.reduce(
-          (sum, rating) => sum + Number(rating.stars),
-          0
-        );
-        const averageRating = totalStars / spaeti.rating.length || 0;
-        return averageRating >= starsMin;
+      filtered = filtered.filter(spaeti => {
+        const totalStars = spaeti.rating.reduce((sum, r) => sum + Number(r.stars), 0);
+        const avg = totalStars / spaeti.rating.length || 0;
+        return avg >= starsMin;
       });
     }
-  
-    if (wc !== "any") {
-      filtered = filtered.filter((spaeti) =>
-        wc === "yes" ? spaeti.wc : !spaeti.wc
-      );
-    }
-    if (seats !== "any") {
-      filtered = filtered.filter((spaeti) =>
-        seats === "yes" ? spaeti.seats : !spaeti.seats
-      );
-    }
-  
-    // Sorting by Sterni-Index
-    if (sortOrder === "asc") {
-      filtered = filtered.sort((a, b) => a.sterni - b.sterni);
-    } else if (sortOrder === "desc") {
-      filtered = filtered.sort((a, b) => b.sterni - a.sterni);
-    }
-  
-    // Sorting by Rating
+    if (wc !== "any") filtered = filtered.filter(spaeti => wc === "yes" ? spaeti.wc : !spaeti.wc);
+    if (seats !== "any") filtered = filtered.filter(spaeti => seats === "yes" ? spaeti.seats : !spaeti.seats);
+
+    if (sortOrder === "asc") filtered.sort((a, b) => a.sterni - b.sterni);
+    if (sortOrder === "desc") filtered.sort((a, b) => b.sterni - a.sterni);
+
     if (ratingSortOrder !== "none") {
-      filtered = filtered.sort((a, b) => {
-        const averageRatingA =
-          a.rating.length > 0
-            ? a.rating.reduce((sum, rating) => sum + Number(rating.stars), 0) /
-              a.rating.length
-            : 0;
-        const averageRatingB =
-          b.rating.length > 0
-            ? b.rating.reduce((sum, rating) => sum + Number(rating.stars), 0) /
-              b.rating.length
-            : 0;
-  
-        if (ratingSortOrder === "asc") {
-          return averageRatingA - averageRatingB || (averageRatingB === 0 ? -1 : 0);
-        } else if (ratingSortOrder === "desc") {
-          return averageRatingB - averageRatingA || (averageRatingA === 0 ? -1 : 0);
-        }
-        return 0;
+      filtered.sort((a, b) => {
+        const avgA = a.rating.reduce((sum, r) => sum + Number(r.stars), 0) / (a.rating.length || 1);
+        const avgB = b.rating.reduce((sum, r) => sum + Number(r.stars), 0) / (b.rating.length || 1);
+        return ratingSortOrder === "asc" ? avgA - avgB : avgB - avgA;
       });
     }
-  
+
     setFilteredSpaetis(filtered);
   };
-  
+
+  const filteredAndSearched = filteredSpaetis.filter(s => s.name.toLowerCase().includes(search.toLowerCase()));
 
   return (
-    <div>
-      <div id="btn-container">
-        {currentUser && currentUser.admin ? (
-          <div>
-            <Link to={`/approval`}>
-            <Button className="btn-list-page" >Approval page</Button>
-            </Link>
-          </div>
-        ) : null}
-        <div>
-          {currentUser ? (
-            <div>
-              <Link to="/spaeti/create">
-                <Flex gap="small" wrap>
-                  <Button className="btn-list-page" >Add a new Späti here</Button>
-                </Flex>
-              </Link>
-            </div>
-          ) : null}
-        </div>
+    <div id="spaeti-list-page">
+      <div id="left-panel">
+        <FilterComponent applyFilter={applyFilter} />
       </div>
 
-      <div id="spaeti-list-page">
-        <FilterComponent applyFilter={applyFilter} />
-        <br />
-        <div id="spaeti-cards">
-          {filteredSpaetis.map((spaeti) => {
-            if (spaeti.approved) {
-              return <SpaetiCard key={spaeti._id} spaeti={spaeti} />;
-            }
-          })}
+      <div id="right-panel">
+        <div id="btn-container">
+          {currentUser?.admin && (
+            <Link to="/approval" id="approval-btn">Approval Page</Link>
+          )}
+          {currentUser && (
+            <Link to="/spaeti/create" id="create-spaeti-btn">Add a new Späti</Link>
+          )}
+        </div>
+
+        <Input
+          placeholder="Search Späti by name"
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          className="mb-4"
+        />
+
+        <div id="spaeti-cards-column">
+          {filteredAndSearched.map(spaeti => spaeti.approved && (
+            <SpaetiCard key={spaeti._id} spaeti={spaeti} />
+          ))}
         </div>
       </div>
     </div>
   );
 };
+
 export default SpaetiListPage;

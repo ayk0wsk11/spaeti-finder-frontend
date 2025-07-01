@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import React from "react";
-import { PictureFilled, StarFilled } from "@ant-design/icons";
-import "./SpaetiCard.css";
+import { StarFilled } from "@ant-design/icons";
 import sterniImg from "../../assets/icon.png";
+import "./SpaetiCard.css";
 
 const SpaetiCard = ({ spaeti }) => {
   const calculateAverageRating = (ratings) => {
@@ -13,45 +13,37 @@ const SpaetiCard = ({ spaeti }) => {
     );
     return (totalStars / ratings.length).toFixed(1);
   };
-  if (!spaeti) return;
+
+  if (!spaeti) return null;
   const averageRating = calculateAverageRating(spaeti.rating);
 
   return (
-    <Link id="spaeti-card" to={`/spaeti/details/${spaeti._id}`}>
-      <div id="s-c-img-box">
-        {spaeti.image ? (
-          <img alt={spaeti.name} src={spaeti.image} />
-        ) : (
-          <PictureFilled />
-        )}
-      </div>
-      <div id="s-c-text-box">
+    <Link to={`/spaeti/details/${spaeti._id}`} className="spaeti-card">
+      <div className="spaeti-card-row top-row">
         <h3>{spaeti.name}</h3>
+        <span className="rating">
+          {averageRating} <StarFilled className="text-yellow-500" />
+        </span>
+      </div>
 
-        <div id="s-c-rating">
-          {averageRating && spaeti.rating ? (
-            <>
-              {averageRating} <StarFilled />
-              &#32; &#40;{spaeti.rating.length}&#41;
-            </>
-          ) : (
-            <>
-              - <StarFilled />
-              &#32; &#40;0&#41;
-            </>
-          )}
+      <div className="spaeti-card-row middle-row">
+        <p>
+          {spaeti.street}, {spaeti.zip} {spaeti.city}
+        </p>
+        <span className="distance">Distance: -- km</span>
+      </div>
+
+      <div className="spaeti-card-row bottom-row">
+        <div className="labels">
+          {spaeti.seats && <span className="label seats">Seats</span>}
+          {spaeti.wc && <span className="label wc">WC</span>}
         </div>
-        <div id="labels">
-          {spaeti.sterni > 0 && (
-            <div id="sterni">
-              <img src={sterniImg} />
-              &#32;
-              {spaeti.sterni.toFixed(2)}€
-            </div>
-          )}
-          {spaeti.seats && <div id="seats">seats</div>}
-          {spaeti.wc && <div id="wc">WC</div>}
-        </div>
+        <span className="sterni">
+          <img src={sterniImg} alt="sterni" />
+          {typeof spaeti.sterni === "number"
+            ? `${spaeti.sterni.toFixed(2)}€`
+            : "N/A"}
+        </span>
       </div>
     </Link>
   );

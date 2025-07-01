@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { Col, InputNumber, Row, Slider, Button } from "antd";
-import { SearchOutlined, FilterOutlined } from "@ant-design/icons";
+import { Slider, InputNumber, Button, Select } from "antd";
 import "./FilterComponent.css";
 
 const FilterComponent = ({ applyFilter }) => {
@@ -9,12 +8,9 @@ const FilterComponent = ({ applyFilter }) => {
   const [seats, setSeats] = useState("any");
   const [starsMin, setStarsMin] = useState(0);
   const [sortOrder, setSortOrder] = useState("none");
-  const [ratingSortOrder, setRatingSortOrder] = useState("none"); // New state for rating sort order
-  const [isMenuVisible, setIsMenuVisible] = useState(false); // State to control menu visibility
+  const [ratingSortOrder, setRatingSortOrder] = useState("none");
 
-  const handleFilter = () => {
-    applyFilter({ sterniMax, wc, seats, starsMin, sortOrder, ratingSortOrder });
-  };
+  const handleFilter = () => applyFilter({ sterniMax, wc, seats, starsMin, sortOrder, ratingSortOrder });
   const handleReset = () => {
     setSterniMax(2);
     setWc("any");
@@ -26,124 +22,46 @@ const FilterComponent = ({ applyFilter }) => {
 
   return (
     <div id="filter-container">
-      <Button
-        id="toggle-menu-btn"
-        onClick={() => setIsMenuVisible(!isMenuVisible)}
-        icon={<FilterOutlined />}
-      >
-        {isMenuVisible ? "Hide Filters" : "Show Filters"}
-      </Button>
+      <label>Sort by Sterni-Index</label>
+      <Select value={sortOrder} onChange={setSortOrder}>
+        <Select.Option value="none">None</Select.Option>
+        <Select.Option value="asc">Asc</Select.Option>
+        <Select.Option value="desc">Desc</Select.Option>
+      </Select>
 
-      {isMenuVisible && (
-        <div id="filter-menu">
-          <div>
-            <label>Sort by Sterni-Index:</label>
-            <select
-              value={sortOrder}
-              onChange={(e) => setSortOrder(e.target.value)}
-            >
-              <option value="none">None</option>
-              <option value="asc">Lowest to Highest</option>
-              <option value="desc">Highest to Lowest</option>
-            </select>
-          </div>
+      <label>Sort by Rating</label>
+      <Select value={ratingSortOrder} onChange={setRatingSortOrder}>
+        <Select.Option value="none">None</Select.Option>
+        <Select.Option value="asc">Asc</Select.Option>
+        <Select.Option value="desc">Desc</Select.Option>
+      </Select>
 
-          <div>
-            <label>Sort by Rating:</label>
-            <select
-              value={ratingSortOrder}
-              onChange={(e) => setRatingSortOrder(e.target.value)}
-            >
-              <option value="none">None</option>
-              <option value="asc">Lowest to Highest</option>
-              <option value="desc">Highest to Lowest</option>
-            </select>
-          </div>
+      <label>Sterni-Index Max</label>
+      <Slider min={0} max={5} step={0.1} value={sterniMax} onChange={setSterniMax} />
+      <InputNumber min={0} max={5} step={0.1} value={sterniMax} onChange={setSterniMax} />
 
-          <div>
-            <label>Sterni-Index Max:</label>
-            <Row>
-              <Col span={12}>
-                <Slider
-                  min={0}
-                  max={5}
-                  onChange={setSterniMax}
-                  value={sterniMax}
-                  step={0.1}
-                />
-              </Col>
-              <Col span={4}>
-                <InputNumber
-                  min={0}
-                  max={5}
-                  style={{
-                    margin: "0 10px",
-                    width: "60px"
-                  }}
-                  step={0.1}
-                  value={sterniMax}
-                  onChange={setSterniMax}
-                />
-              </Col>
-            </Row>
-          </div>
+      <label>Min Rating</label>
+      <Slider min={0} max={5} step={0.1} value={starsMin} onChange={setStarsMin} />
+      <InputNumber min={0} max={5} step={0.1} value={starsMin} onChange={setStarsMin} />
 
-          <div>
-            <label>Min Rating:</label>
-            <Row>
-              <Col span={12}>
-                <Slider
-                  min={0}
-                  max={5}
-                  onChange={setStarsMin}
-                  value={starsMin}
-                  step={0.1}
-                />
-              </Col>
-              <Col span={4}>
-                <InputNumber
-                  min={0}
-                  max={5}
-                  style={{
-                    margin: "0 10px",
-                    width: "60px"
-                  }}
-                  step={0.1}
-                  value={starsMin}
-                  onChange={setStarsMin}
-                />
-              </Col>
-            </Row>
-          </div>
+      <label>WC</label>
+      <Select value={wc} onChange={setWc}>
+        <Select.Option value="any">Any</Select.Option>
+        <Select.Option value="yes">Yes</Select.Option>
+        <Select.Option value="no">No</Select.Option>
+      </Select>
 
-          <div>
-            <label>WC:</label>
-            <select value={wc} onChange={(e) => setWc(e.target.value)}>
-              <option value="any">Any</option>
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
-            </select>
-          </div>
+      <label>Seats</label>
+      <Select value={seats} onChange={setSeats}>
+        <Select.Option value="any">Any</Select.Option>
+        <Select.Option value="yes">Yes</Select.Option>
+        <Select.Option value="no">No</Select.Option>
+      </Select>
 
-          <div>
-            <label>Seats:</label>
-            <select value={seats} onChange={(e) => setSeats(e.target.value)}>
-              <option value="any">Any</option>
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
-            </select>
-          </div>
-
-          <div id="flt-btn-container">
-            <Button id="apply-btn" onClick={handleFilter} icon={<SearchOutlined />}>
-              Apply filter
-            </Button>
-            <Button id="reset-btn" onClick={handleReset}>
-              Reset
-            </Button>
-          </div>
-        </div>
-      )}
+      <div id="flt-btn-container">
+        <button id="apply-btn" onClick={handleFilter}>Apply</button>
+        <button id="reset-btn" onClick={handleReset}>Reset</button>
+      </div>
     </div>
   );
 };

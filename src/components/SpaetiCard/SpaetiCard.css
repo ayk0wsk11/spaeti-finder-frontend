@@ -1,79 +1,81 @@
-#spaeti-card {
-  width: 100%;
-  text-decoration: none;
-  color: black;
+.spaeti-card {
   background-color: white;
-  width: 100%;
-  margin-bottom: 10px;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   display: flex;
-  flex-direction: row;
-  border-radius: 10px;
+  flex-direction: column;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow 0.2s;
 }
 
-#s-c-rating {
-  margin-bottom: 10px;
+.spaeti-card:hover {
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
 }
 
-#labels {
-  font-size: 12px;
+.spaeti-card-row {
   display: flex;
-  flex-wrap: wrap;
-}
-
-#labels > * {
-  padding: 3px 6px 4px;
-  margin-right: 4px;
-  border-radius: 8px;
-}
-
-#sterni {
-  background-color: black;
-  color: white;
-  align-self: baseline;
-}
-
-#wc {
-  background-color: cornflowerblue;
-  color: white;
-}
-
-#seats {
-  background-color: khaki;
-  color: black;
-}
-
-#sterni img {
-  width: 14px;
-  vertical-align: middle;
-}
-
-#s-c-img-box {
-  margin: 5px;
-  background-color: rgba(0, 0, 0, 0.076);
-  border-radius: 10px;
-  width: 100px;
-  height: 100px;
-  max-width: 100px;
-  max-height: 100px;
-  display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 }
 
-#s-c-img-box img {
-  border-radius: 10px;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.top-row h3 {
+  font-size: 1.2rem;
+  margin: 0;
+  color: black;
 }
 
-#s-c-text-box {
-  max-height: 100%;
-  max-width: calc(100% - 100px);
-  padding: 10px;
+.rating {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #333;
 }
 
-#s-c-text-box h3 {
-  margin-top: 0;
-  margin-bottom: 2px;
+.middle-row p {
+  margin: 0;
+  color: #555;
+}
+
+.distance {
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.labels {
+  display: flex;
+  gap: 8px;
+}
+
+.label {
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 16px;
+  display: inline-block;
+}
+
+.label.seats {
+  background-color: #f4d35e;
+  color: #333;
+}
+
+.label.wc {
+  background-color: #3f8efc;
+  color: #fff;
+}
+
+.sterni {
+  font-size: 0.95rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #222;
+}
+
+.sterni img {
+  width: 16px;
+  height: 16px;
 }
