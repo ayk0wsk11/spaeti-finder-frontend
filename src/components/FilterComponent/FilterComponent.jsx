@@ -1,6 +1,6 @@
 // src/components/FilterComponent/FilterComponent.jsx
 import React, { useState } from "react";
-import { Slider, InputNumber, Button, Select } from "antd";
+import { Slider, InputNumber, Button, Select, Input } from "antd";
 import "./FilterComponent.css";
 
 const FilterComponent = ({ applyFilter }) => {
@@ -8,11 +8,10 @@ const FilterComponent = ({ applyFilter }) => {
   const [wc, setWc] = useState("any");
   const [seats, setSeats] = useState("any");
   const [starsMin, setStarsMin] = useState(0);
-
-  // Only one of these three can be active at a time:
   const [sortOrder, setSortOrder] = useState("none");
   const [ratingSortOrder, setRatingSortOrder] = useState("none");
   const [distanceSortOrder, setDistanceSortOrder] = useState("none");
+  const [zipCode, setZipCode] = useState("");
 
   const handleFilter = () =>
     applyFilter({
@@ -23,6 +22,7 @@ const FilterComponent = ({ applyFilter }) => {
       sortOrder,
       ratingSortOrder,
       distanceSortOrder,
+      zipCode,
     });
 
   const handleReset = () => {
@@ -33,52 +33,59 @@ const FilterComponent = ({ applyFilter }) => {
     setSortOrder("none");
     setRatingSortOrder("none");
     setDistanceSortOrder("none");
+    setZipCode("");
   };
 
   return (
     <div id="filter-container">
+      {/* ZIP Filter */}
+      <label>PLZ (5-stellig)</label>
+      <Input
+        value={zipCode}
+        maxLength={5}
+        placeholder="z.B. 10115"
+        onChange={(e) =>
+          setZipCode(e.target.value.replace(/\D/g, "").slice(0, 5))
+        }
+      />
+
+      {/* Sterni-Index Sort */}
       <label>Sort by Sterni-Index</label>
-      <Select
-        value={sortOrder}
-        onChange={(val) => {
-          setSortOrder(val);
+      <Select value={sortOrder} onChange={(v) => {
+          setSortOrder(v);
           setRatingSortOrder("none");
           setDistanceSortOrder("none");
-        }}
-      >
+        }}>
         <Select.Option value="none">None</Select.Option>
         <Select.Option value="asc">Asc</Select.Option>
         <Select.Option value="desc">Desc</Select.Option>
       </Select>
 
+      {/* Rating Sort */}
       <label>Sort by Rating</label>
-      <Select
-        value={ratingSortOrder}
-        onChange={(val) => {
-          setRatingSortOrder(val);
+      <Select value={ratingSortOrder} onChange={(v) => {
+          setRatingSortOrder(v);
           setSortOrder("none");
           setDistanceSortOrder("none");
-        }}
-      >
+        }}>
         <Select.Option value="none">None</Select.Option>
         <Select.Option value="asc">Asc</Select.Option>
         <Select.Option value="desc">Desc</Select.Option>
       </Select>
 
+      {/* Distance Sort */}
       <label>Sort by Distance</label>
-      <Select
-        value={distanceSortOrder}
-        onChange={(val) => {
-          setDistanceSortOrder(val);
+      <Select value={distanceSortOrder} onChange={(v) => {
+          setDistanceSortOrder(v);
           setSortOrder("none");
           setRatingSortOrder("none");
-        }}
-      >
+        }}>
         <Select.Option value="none">None</Select.Option>
         <Select.Option value="asc">Closest first</Select.Option>
         <Select.Option value="desc">Farthest first</Select.Option>
       </Select>
 
+      {/* Sterni-Index Max */}
       <label>Sterni-Index Max</label>
       <Slider
         min={0}
@@ -95,6 +102,7 @@ const FilterComponent = ({ applyFilter }) => {
         onChange={setSterniMax}
       />
 
+      {/* Min Rating */}
       <label>Min Rating</label>
       <Slider
         min={0}
@@ -111,6 +119,7 @@ const FilterComponent = ({ applyFilter }) => {
         onChange={setStarsMin}
       />
 
+      {/* WC & Seats */}
       <label>WC</label>
       <Select value={wc} onChange={setWc}>
         <Select.Option value="any">Any</Select.Option>
@@ -125,6 +134,7 @@ const FilterComponent = ({ applyFilter }) => {
         <Select.Option value="no">No</Select.Option>
       </Select>
 
+      {/* Buttons */}
       <div id="flt-btn-container">
         <button id="apply-btn" onClick={handleFilter}>
           Apply

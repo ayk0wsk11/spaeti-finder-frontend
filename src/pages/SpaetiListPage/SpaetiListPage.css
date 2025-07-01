@@ -45,3 +45,22 @@
   gap: 16px;
   margin-top: 16px;
 }
+
+.no-results-topup {
+  position: relative;
+  background-color: #fff3cd;
+  border: 1px solid #ffeeba;
+  padding: 12px 16px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+
+.close-no-results {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+}
