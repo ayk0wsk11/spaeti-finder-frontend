@@ -33,7 +33,7 @@ const SpaetiListPage = () => {
     let filtered = [...spaetis];
 
     if (sterniMax !== "") {
-      filtered = filtered.filter(spaeti => spaeti.sterni <= parseFloat(sterniMax));
+      filtered = filtered.filter(spaeti => spaeti.sternAvg <= parseFloat(sterniMax));
     }
     if (starsMin !== 0) {
       filtered = filtered.filter(spaeti => {
@@ -45,8 +45,8 @@ const SpaetiListPage = () => {
     if (wc !== "any") filtered = filtered.filter(spaeti => wc === "yes" ? spaeti.wc : !spaeti.wc);
     if (seats !== "any") filtered = filtered.filter(spaeti => seats === "yes" ? spaeti.seats : !spaeti.seats);
 
-    if (sortOrder === "asc") filtered.sort((a, b) => a.sterni - b.sterni);
-    if (sortOrder === "desc") filtered.sort((a, b) => b.sterni - a.sterni);
+    if (sortOrder === "asc") filtered.sort((a, b) => a.sternAvg - b.sternAvg);
+    if (sortOrder === "desc") filtered.sort((a, b) => b.sternAvg - a.sternAvg);
 
     if (ratingSortOrder !== "none") {
       filtered.sort((a, b) => {

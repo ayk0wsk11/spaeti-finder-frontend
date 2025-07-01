@@ -40,8 +40,8 @@ const SpaetiCard = ({ spaeti }) => {
         </div>
         <span className="sterni">
           <img src={sterniImg} alt="sterni" />
-          {typeof spaeti.sterni === "number"
-            ? `${spaeti.sterni.toFixed(2)}€`
+          {typeof spaeti.sternAvg === "number"
+            ? `${spaeti.sternAvg.toFixed(2)}€`
             : "N/A"}
         </span>
       </div>

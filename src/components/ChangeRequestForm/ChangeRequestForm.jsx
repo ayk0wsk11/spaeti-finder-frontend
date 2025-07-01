@@ -8,7 +8,7 @@ import "./ChangeRequestForm.css";
 const ChangeRequestForm = () => {
   const [changes, setChanges] = useState({
     name: "",
-    sterni: 0,
+    proposedSterni: 0,
     seats: false,
     wc: false,
   });
@@ -30,7 +30,7 @@ const ChangeRequestForm = () => {
     if (oneSpaeti) {
       setChanges({
         name: oneSpaeti.name || "",
-        sterni: oneSpaeti.sterni || 0,
+        proposedSterni: oneSpaeti.sternAvg || 0,
         seats: oneSpaeti.seats || false,
         wc: oneSpaeti.wc || false,
       });
@@ -40,7 +40,6 @@ const ChangeRequestForm = () => {
   if (!currentUser) {
     return <p>Loading user info...</p>;
   }
-
   if (!oneSpaeti) {
     return <p>Loading spaeti data...</p>;
   }
@@ -60,9 +59,7 @@ const ChangeRequestForm = () => {
       await axios.post(
         `${API_URL}/tickets`,
         { spaetiId, changes, userId: currentUser._id },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       alert("Change request submitted!");
     } catch (err) {
@@ -73,6 +70,7 @@ const ChangeRequestForm = () => {
   return (
     <form className="change-request-form" onSubmit={handleSubmit}>
       <h2>Change Request</h2>
+
       <label>
         Name of the Späti:
         <input
@@ -82,16 +80,18 @@ const ChangeRequestForm = () => {
           onChange={handleChange}
         />
       </label>
+
       <label>
-        Price of a Sterni:
+        Proposed Sterni-Index (€):
         <input
           type="number"
-          name="sterni"
-          value={changes.sterni}
+          name="proposedSterni"
+          value={changes.proposedSterni}
           step="0.1"
           onChange={handleChange}
         />
       </label>
+
       <label>
         <input
           type="checkbox"
@@ -101,6 +101,7 @@ const ChangeRequestForm = () => {
         />
         Seats
       </label>
+
       <label>
         <input
           type="checkbox"
@@ -110,6 +111,7 @@ const ChangeRequestForm = () => {
         />
         WC
       </label>
+
       <button type="submit">Submit</button>
     </form>
   );

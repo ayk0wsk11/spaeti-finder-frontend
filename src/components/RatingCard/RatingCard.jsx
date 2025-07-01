@@ -42,31 +42,20 @@ const RatingCard = ({ onNewRating }) => {
   const handleLike = async (id) => {
     try {
       const response = await axios.get(`${API_URL}/ratings/${id}`);
-
-      if (!(response.data && response.data.data))
-        throw "response.data or response.data.data is undefined";
       const data = response.data.data;
-
       if (!data.likes.includes(currentUser._id)) {
         await axios.put(`${API_URL}/ratings/add-like/${id}`, {
           user: currentUser._id,
         });
-
-        setLikes((prevLikes) => ({
-          ...prevLikes,
-          [id]: prevLikes[id] + 1,
-        }));
+        setLikes((prev) => ({ ...prev, [id]: prev[id] + 1 }));
       } else {
         await axios.put(`${API_URL}/ratings/remove-like/${id}`, {
           user: currentUser._id,
         });
-        setLikes((prevLikes) => ({
-          ...prevLikes,
-          [id]: prevLikes[id] - 1,
-        }));
+        setLikes((prev) => ({ ...prev, [id]: prev[id] - 1 }));
       }
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error(error);
     }
   };
 
@@ -75,10 +64,7 @@ const RatingCard = ({ onNewRating }) => {
     setRatings(ratings.filter((e) => e._id !== id));
   };
 
-  const getCreationDate = (date) => {
-    const newDate = date.split("T");
-    return newDate[0];
-  };
+  const getCreationDate = (date) => date.split("T")[0];
 
   const handleEdit = (rating) => {
     setEditMode(rating._id);
@@ -94,102 +80,94 @@ const RatingCard = ({ onNewRating }) => {
         user: currentUser,
         spaeti: spaetiId,
       };
-
       await axios.put(`${API_URL}/ratings/update/${id}`, updatedRating);
-
-      setRatings((prevRatings) =>
-        prevRatings.map((rating) =>
-          rating._id === id
-            ? { ...rating, stars: editStars, comment: editComment }
-            : rating
+      setRatings((prev) =>
+        prev.map((r) =>
+          r._id === id ? { ...r, stars: editStars, comment: editComment } : r
         )
       );
-
       setEditMode(null);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const renderStars = (stars) => {
-    return "★".repeat(stars) + "☆".repeat(5 - stars);
-  };
+  const renderStars = (stars) =>
+    "★".repeat(stars) + "☆".repeat(5 - stars);
 
   return (
-    <div key={spaetiId} id="rating-container">
+    <div id="rating-container">
       <div id="create-container">
         {currentUser && <CreateRatingComp onNewRating={onNewRating} />}
       </div>
-      <div>
-        {ratings.map((oneRating) => {
-          if (oneRating.spaeti === spaetiId)
-            return (
-              <div key={oneRating._id} id="rating">
-                {currentUser && (currentUser._id === oneRating.user._id || currentUser.admin) ? (
-                  <div id="rc-btn">
-                    <div>
-                      <button
-                        id="r-c-dlt-btn"
-                        onClick={() => handleDeleteComment(oneRating._id)}
-                      >
-                        Delete
-                      </button>
-                    </div>
-                    <div>
-                      <button
-                        id="r-c-edt-btn"
-                        onClick={() => handleEdit(oneRating)}
-                      >
-                        Edit
-                      </button>
-                    </div>
-                  </div>
-                ) : null}
+      {ratings.map((oneRating) => {
+        if (oneRating.spaeti !== spaetiId) return null;
+        return (
+          <div key={oneRating._id} id="rating">
+            {/* edit/delete buttons */}
+            {currentUser &&
+            (currentUser._id === oneRating.user._id ||
+              currentUser.admin) ? (
+              <div id="rc-btn">
+                <button
+                  id="r-c-dlt-btn"
+                  onClick={() => handleDeleteComment(oneRating._id)}
+                >
+                  Delete
+                </button>
+                <button
+                  id="r-c-edt-btn"
+                  onClick={() => handleEdit(oneRating)}
+                >
+                  Edit
+                </button>
+              </div>
+            ) : null}
 
-                {editMode === oneRating._id ? (
-                  <>
-                    <input
-                      type="text"
-                      value={editComment}
-                      onChange={(e) => setEditComment(e.target.value)}
-                    />
-                    <Rate
-                      value={editStars}
-                      onChange={(value) => setEditStars(value)}
-                    />
-                    <button onClick={() => handleUpdate(oneRating._id)}>
-                      Update
-                    </button>
-                  </>
-                ) : (
-                  <div id="rating-content">
-                    <h4>User: {oneRating.user.username}</h4>
-                    <h4>Rating: {renderStars(oneRating.stars)}</h4>
-                    <h4>Created: {getCreationDate(oneRating.date)}</h4>
-                    <div>
-                      {currentUser && (
-                        <div id="likes">
-                          <div>
-                            <LikeOutlined
-                              onClick={() => handleLike(oneRating._id)}
-                            />
-                          </div>
-                          <div id="likes-num">
-                            <h4> {likes[oneRating._id]}</h4>
-                          </div>
-                        </div>
-                      )}
+            {/* edit mode */}
+            {editMode === oneRating._id ? (
+              <>
+                <input
+                  type="text"
+                  value={editComment}
+                  onChange={(e) => setEditComment(e.target.value)}
+                />
+                <Rate
+                  value={editStars}
+                  onChange={(value) => setEditStars(value)}
+                />
+                <button onClick={() => handleUpdate(oneRating._id)}>
+                  Update
+                </button>
+              </>
+            ) : (
+              <>
+                <div id="rating-content">
+                  <h4>User: {oneRating.user.username}</h4>
+                  <h4>Rating: {renderStars(oneRating.stars)}</h4>
+                  <h4>Created: {getCreationDate(oneRating.date)}</h4>
+                  {currentUser && (
+                    <div id="likes">
+                      <LikeOutlined
+                        onClick={() => handleLike(oneRating._id)}
+                      />
+                      <span id="likes-num">{likes[oneRating._id]}</span>
                     </div>
+                  )}
+                </div>
+
+                {/* only show non-empty comments */}
+                {oneRating.comment?.trim() && (
+                  <div id="rating-comment">
+                    <h4>Comment:</h4>
+                    <p>{oneRating.comment}</p>
                   </div>
                 )}
-                <div id="rating-comment">
-                  <h4> Comment: <br/>
-                    {oneRating.comment} </h4>
-                </div>
-              </div>
-            );
-        })}
-      </div>
+              </>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 };
