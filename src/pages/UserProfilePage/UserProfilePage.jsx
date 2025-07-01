@@ -8,30 +8,22 @@ import "./UserProfilePage.css";
 import { Link } from "react-router-dom";
 
 const tabList = [
-  {
-    key: "ratings",
-    label: "Ratings",
-  },
-  {
-    key: "likes",
-    label: "Likes",
-  },
+  { key: "ratings", label: "Ratings" },
+  { key: "likes",   label: "Likes"   },
 ];
 
 const UserProfilePage = () => {
   const { currentUser, setIsOnProfile } = useContext(AuthContext);
-  const [user, setUser] = useState(null);
+  const [user, setUser]           = useState(null);
   const [userRatings, setUserRatings] = useState([]);
   const [activeTabKey, setActiveTabKey] = useState("ratings");
 
-  const onTabChange = (key) => {
-    setActiveTabKey(key);
-  };
+  const onTabChange = (key) => setActiveTabKey(key);
 
   function getCreationDate() {
-    if (!user || !user.createdAt) return "";
-    const date = new Date(user.createdAt).toLocaleDateString();
-    return date;
+    return user?.createdAt
+      ? new Date(user.createdAt).toLocaleDateString()
+      : "";
   }
 
   useEffect(() => {
@@ -39,13 +31,11 @@ const UserProfilePage = () => {
 
     const fetchUserAndRatings = async () => {
       try {
-        // Fetch user details
         const { data: userData } = await axios.get(
           `${API_URL}/users/${currentUser._id}`
         );
         setUser(userData.data);
 
-        // Fetch user ratings
         const { data: ratingsData } = await axios.get(
           `${API_URL}/ratings/user/${currentUser._id}`
         );
@@ -60,9 +50,8 @@ const UserProfilePage = () => {
 
   if (!user) return <div>Loading...</div>;
 
-  const renderStars = (stars) => {
-    return "★".repeat(stars) + "☆".repeat(5 - stars);
-  };
+  const renderStars = (stars) =>
+    "★".repeat(stars) + "☆".repeat(5 - stars);
 
   const contentList = {
     ratings: (
@@ -73,8 +62,7 @@ const UserProfilePage = () => {
               <Link to={`/spaeti/details/${rating.spaeti._id}`}>
                 <h3>{rating.spaeti.name}</h3>
               </Link>
-              <p style={{ fontWeight: "400" }}>
-                {" "}
+              <p style={{ fontWeight: 400 }}>
                 <span style={{ fontWeight: "bolder" }}>Comment:</span>
                 <br />
                 {rating.comment}
@@ -87,15 +75,18 @@ const UserProfilePage = () => {
         )}
       </div>
     ),
-    likes: <p>Likes content</p>, // Placeholder for likes content
+    likes: <p>Likes content</p>,
   };
 
   return (
     <div id="user-profile-page">
-      {console.log("user:", user, "userRatings:", userRatings)}
       <Card>
         <div id="user-profile">
-          <Avatar size={64} icon={<UserOutlined />} />
+          <Avatar
+            size={64}
+            src={user.image}
+            icon={!user.image && <UserOutlined />}
+          />
           <div id="user-infos">
             <h3>{user.username}</h3>
             <div>Joined {getCreationDate()}</div>
@@ -107,9 +98,7 @@ const UserProfilePage = () => {
           tabList={tabList}
           activeTabKey={activeTabKey}
           onTabChange={onTabChange}
-          tabProps={{
-            size: "middle",
-          }}
+          tabProps={{ size: "middle" }}
         >
           {contentList[activeTabKey]}
         </Card>
