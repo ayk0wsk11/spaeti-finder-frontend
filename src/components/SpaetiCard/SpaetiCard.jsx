@@ -4,7 +4,7 @@ import { StarFilled } from "@ant-design/icons";
 import sterniImg from "../../assets/icon.png";
 import "./SpaetiCard.css";
 
-const SpaetiCard = ({ spaeti }) => {
+const SpaetiCard = ({ spaeti, distance }) => {
   const calculateAverageRating = (ratings) => {
     if (!ratings || ratings.length === 0) return 0;
     const totalStars = ratings.reduce(
@@ -30,7 +30,14 @@ const SpaetiCard = ({ spaeti }) => {
         <p>
           {spaeti.street}, {spaeti.zip} {spaeti.city}
         </p>
-        <span className="distance">Distance: -- km</span>
+        <span className="distance">
+          Distance:{" "}
+          {distance == null
+            ? "…"
+            : distance < 1000
+            ? `${Math.round(distance)} m`
+            : `${(distance / 1000).toFixed(1)} km`}
+        </span>
       </div>
 
       <div className="spaeti-card-row bottom-row">
