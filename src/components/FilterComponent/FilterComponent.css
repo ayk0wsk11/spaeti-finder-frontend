@@ -15,7 +15,8 @@
 
 #filter-container .ant-slider,
 #filter-container .ant-input-number,
-#filter-container .ant-select {
+#filter-container .ant-select,
+#filter-container .ant-input {
   margin-bottom: 16px;
   width: 100%;
 }
@@ -51,4 +52,71 @@
 
 #reset-btn:hover {
   background-color: #ff7875;
+}
+
+/* ----------------------------------------
+   Responsive: Tablet & kleinere Screens
+   (max-width: 768px)
+---------------------------------------- */
+@media (max-width: 768px) {
+  #filter-container {
+    padding: 12px;
+  }
+
+  #filter-container label {
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+
+  #filter-container .ant-slider,
+  #filter-container .ant-input-number,
+  #filter-container .ant-select,
+  #filter-container .ant-input {
+    margin-bottom: 12px;
+  }
+
+  /* Buttons: etwas kleiner und enger zusammen */
+  #flt-btn-container {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  #apply-btn,
+  #reset-btn {
+    padding: 6px 10px;
+    font-size: 14px;
+  }
+}
+
+/* ----------------------------------------
+   Responsive: Mobile
+   (max-width: 480px)
+---------------------------------------- */
+@media (max-width: 480px) {
+  #filter-container {
+    padding: 8px;
+    border: none;
+  }
+
+  #filter-container label {
+    font-size: 12px;
+  }
+
+  #filter-container .ant-slider,
+  #filter-container .ant-input-number,
+  #filter-container .ant-select,
+  #filter-container .ant-input {
+    margin-bottom: 10px;
+  }
+
+  #flt-btn-container {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  #apply-btn,
+  #reset-btn {
+    padding: 6px;
+    font-size: 13px;
+  }
 }

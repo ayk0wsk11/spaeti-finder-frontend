@@ -1,0 +1,24 @@
+/* src/pages/FavoritenPage/FavoritenPage.css */
+
+.favorites-page {
+  max-width: 1200px;
+  margin: 24px auto;
+  padding: 0 16px;
+}
+
+.favorites-page h2 {
+  font-size: 1.8rem;
+  margin-bottom: 16px;
+}
+
+.favorites-page p {
+  font-size: 1rem;
+  color: #555;
+}
+
+.favorites-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}

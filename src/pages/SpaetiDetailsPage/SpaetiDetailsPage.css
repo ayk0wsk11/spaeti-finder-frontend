@@ -26,6 +26,38 @@
   color: #555555;
   font-size: 1rem;
 }
+
+/* neue Wrapper für Request & Herz & Admin */
+.detail-header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+#change-btn {
+  font-weight: 500;
+  color: #222831;
+}
+
+/* Favoriten‐Icon im Header */
+.fav-icon-header {
+  font-size: 1.6rem;
+  cursor: pointer;
+}
+.fav-icon-header svg {
+  color: #e74c3c;
+}
+.fav-icon-header svg.anticon-heart-filled {
+  fill: currentColor;
+  stroke: none;
+}
+.fav-icon-header svg.anticon-heart-outlined {
+  /* kein fill, default ist none */
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 4px;
+}
+
+/* Admin‐Buttons nebenan */
 .admin-actions button {
   margin-left: 8px;
   font-size: 0.85rem;
@@ -48,20 +80,21 @@
   padding: 16px;
   background: linear-gradient(transparent, rgba(0,0,0,0.6));
   display: flex;
-  justify-content: space-between;
   align-items: flex-end;
+  justify-content: space-between;
 }
 .spaeti-name {
   color: #fff;
   font-size: 2rem;
   margin: 0;
+  line-height: 1;
 }
 .hero-rating {
+  margin-right: 25px;
   color: #FFD369;
   font-size: 1.2rem;
   display: flex;
   align-items: center;
-  margin-right: 25px;
 }
 .hero-rating .star-icon {
   margin-left: 4px;
@@ -97,10 +130,10 @@
   font-size: 0.85rem;
   font-weight: 500;
 }
-.tag.wc    { background: cornflowerblue; color: #fff; }
-.tag.seats { background: khaki;        color: #333; }
-.tag.atm   { background: #eee;         color: #222; }
-.tag.card  { background: #ddd;         color: #222; }
+.tag.wc { background: cornflowerblue; color: #fff; }
+.tag.seats { background: khaki; color: #333; }
+.tag.atm { background: #eee; color: #222; }
+.tag.card { background: #ddd; color: #222; }
 
 /* Map placeholder / distance */
 .info-right {
@@ -127,10 +160,27 @@
   margin-bottom: 40px;
 }
 
-/* Responsive */
+/* Responsive (Mobile First) */
 @media (max-width: 768px) {
+  .detail-header-right {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .hero-image {
+    height: 220px;
+  }
+  .hero-overlay {
+    flex-wrap: wrap;
+    padding: 12px;
+  }
+  .spaeti-name {
+    font-size: 1.6rem;
+  }
+  .hero-rating {
+    margin: 8px 0 0;
+    font-size: 1rem;
+  }
   .info-section {
     flex-direction: column;
   }
-  .hero-image { height: 200px; }
 }

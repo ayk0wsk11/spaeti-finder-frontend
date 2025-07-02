@@ -23,6 +23,7 @@ import ApprovalPage from "./pages/ApprovalPage/ApprovalPage";
 import AboutPage from "./pages/AboutPage/AboutPage";
 import AdminDashboard from "./pages/AdminDashboard/AdminDashboard";
 import ChangeRequestForm from "./components/ChangeRequestForm/ChangeRequestForm";
+import FavoritenPage from "./pages/FavoritenPage/FavoritenPage";
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -95,6 +96,14 @@ function App() {
 
           <Route path="*" element={<NotFoundPage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route
+            path="/favorites"
+            element={
+              <IsPrivate>
+                <FavoritenPage />
+              </IsPrivate>
+            }
+          />
         </Routes>
       </div>
       <Footer />

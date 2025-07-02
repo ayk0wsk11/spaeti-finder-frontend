@@ -8,13 +8,14 @@ import "./SpaetiDetailsPage.css";
 import SingleSpaetiMap from "../../components/SingleSpaetiMap/SingleSpaetiMap";
 import sterniImg from "../../assets/icon.png";
 import { Button, Flex } from "antd";
-import { StarFilled } from "@ant-design/icons";
+import { StarFilled, HeartOutlined, HeartFilled } from "@ant-design/icons";
 import L from "leaflet";
 
 const SpaetiDetailsPage = () => {
   const { currentUser, isLoading, setIsOnProfile } = useContext(AuthContext);
   const [oneSpaeti, setOneSpaeti] = useState(null);
   const [averageRating, setAverageRating] = useState(null);
+  const [isFav, setIsFav] = useState(false);
   const { spaetiId } = useParams();
   const [userLocation, setUserLocation] = useState(null);
   const [distance, setDistance] = useState(null);
@@ -22,14 +23,17 @@ const SpaetiDetailsPage = () => {
 
   useEffect(() => setIsOnProfile(false), [setIsOnProfile]);
 
+  // Geolocation holen
   useEffect(() => {
     navigator.geolocation?.getCurrentPosition(
-      ({ coords }) => setUserLocation({ lat: coords.latitude, lng: coords.longitude }),
+      ({ coords }) =>
+        setUserLocation({ lat: coords.latitude, lng: coords.longitude }),
       console.error,
       { enableHighAccuracy: true }
     );
   }, []);
 
+  // Distanz berechnen
   useEffect(() => {
     if (!userLocation || !oneSpaeti) return;
     const p1 = L.latLng(userLocation.lat, userLocation.lng);
@@ -37,23 +41,60 @@ const SpaetiDetailsPage = () => {
     setDistance(p1.distanceTo(p2));
   }, [userLocation, oneSpaeti]);
 
-  const calculateAverageRating = (ratings) =>
-    ratings && ratings.length
-      ? (ratings.reduce((sum, r) => sum + Number(r.stars), 0) / ratings.length).toFixed(1)
-      : 0;
-
+  // Daten & Favorite-Status laden
   const fetchData = async () => {
     try {
-      const { data: spaData } = await axios.get(`${API_URL}/spaetis/${spaetiId}`);
-      const { data: ratingData } = await axios.get(`${API_URL}/spaetis/ratings/${spaetiId}`);
+      const { data: spaData } = await axios.get(
+        `${API_URL}/spaetis/${spaetiId}`
+      );
       setOneSpaeti(spaData.data);
+
+      const { data: ratingData } = await axios.get(
+        `${API_URL}/spaetis/ratings/${spaetiId}`
+      );
       setAverageRating(calculateAverageRating(ratingData.rating));
+
+      if (currentUser) {
+        const token = localStorage.getItem("authToken");
+        const { data: userRes } = await axios.get(
+          `${API_URL}/users/${currentUser._id}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        const favs = userRes.data.favorites || [];
+        setIsFav(favs.includes(spaetiId));
+      }
     } catch (err) {
       console.error(err);
     }
   };
 
-  useEffect(() => { fetchData(); }, [spaetiId]);
+  useEffect(() => {
+    fetchData();
+  }, [spaetiId, currentUser]);
+
+  // Durchschnitts‐Rating
+  const calculateAverageRating = (ratings) =>
+    ratings && ratings.length
+      ? (
+          ratings.reduce((sum, r) => sum + Number(r.stars), 0) / ratings.length
+        ).toFixed(1)
+      : 0;
+
+  // Favoriten umschalten
+  const toggleFavorite = async () => {
+    if (!currentUser) return;
+    try {
+      const token = localStorage.getItem("authToken");
+      await axios.patch(
+        `${API_URL}/users/${currentUser._id}/favorite/${spaetiId}`,
+        { add: !isFav },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setIsFav(!isFav);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const handleDelete = async () => {
     await axios.delete(`${API_URL}/spaetis/delete/${spaetiId}`);
@@ -65,23 +106,44 @@ const SpaetiDetailsPage = () => {
   return (
     <div className="detail-page">
       <div className="detail-header">
-        <Link to="/spaeti/list" className="back-btn">← Zurück</Link>
-        {currentUser && (
-          <Link to={`/spaeti/change-request/${spaetiId}`}>
-            <Flex gap="small" wrap>
-              <Button className="btn-list-page">Request a change</Button>
-            </Flex>
-          </Link>
-        )}
-        {currentUser?.admin && (
-          <div className="admin-actions">
-            <Button onClick={() => nav(`/spaeti/edit/${spaetiId}`)}>Edit</Button>
-            <Button danger onClick={handleDelete}>Delete</Button>
-          </div>
-        )}
+        <Link to="/spaeti/list" className="back-btn">
+          ← Zurück
+        </Link>
+
+        {/* ganz rechts: Request change, Herz & ggf. Admin-Actions */}
+        <div className="detail-header-right">
+          {currentUser && (
+            <Button id="change-btn" onClick={() => nav(`/spaeti/change-request/${spaetiId}`)}>
+              Request a change
+            </Button>
+          )}
+          {currentUser && (
+            <span
+              className="fav-icon-header"
+              onClick={toggleFavorite}
+              role="button"
+              aria-label={isFav ? "Remove favorite" : "Add favorite"}
+            >
+              {isFav ? <HeartFilled /> : <HeartOutlined />}
+            </span>
+          )}
+          {currentUser?.admin && (
+            <div className="admin-actions">
+              <Button onClick={() => nav(`/spaeti/edit/${spaetiId}`)}>
+                Edit
+              </Button>
+              <Button danger onClick={handleDelete}>
+                Delete
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
 
-      <div className="hero-image" style={{ backgroundImage: `url(${oneSpaeti.image})` }}>
+      <div
+        className="hero-image"
+        style={{ backgroundImage: `url(${oneSpaeti.image})` }}
+      >
         <div className="hero-overlay">
           <h1 className="spaeti-name">{oneSpaeti.name}</h1>
           <div className="hero-rating">
@@ -91,10 +153,12 @@ const SpaetiDetailsPage = () => {
         </div>
       </div>
 
+      {/* Rest unverändert */}
       <section className="info-section">
         <div className="info-left">
           <p className="info-line">
-            <strong>Adresse:</strong><br/>
+            <strong>Adresse:</strong>
+            <br />
             {oneSpaeti.street}, {oneSpaeti.zip} {oneSpaeti.city}
           </p>
           <p className="info-line">
@@ -109,9 +173,14 @@ const SpaetiDetailsPage = () => {
           </div>
         </div>
         <div className="info-right">
-          <SingleSpaetiMap lat={oneSpaeti.lat} lng={oneSpaeti.lng} name={oneSpaeti.name} />
+          <SingleSpaetiMap
+            lat={oneSpaeti.lat}
+            lng={oneSpaeti.lng}
+            name={oneSpaeti.name}
+          />
           <p className="distance">
-            Distance: {distance == null
+            Distance:{" "}
+            {distance == null
               ? "…"
               : distance < 1000
               ? `${Math.round(distance)} m`

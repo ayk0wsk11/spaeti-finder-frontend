@@ -1,9 +1,12 @@
 // src/components/FilterComponent/FilterComponent.jsx
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Slider, InputNumber, Button, Select, Input } from "antd";
+import { AuthContext } from "../../context/auth.context";
 import "./FilterComponent.css";
 
 const FilterComponent = ({ applyFilter }) => {
+  const { currentUser } = useContext(AuthContext);
+
   const [sterniMax, setSterniMax] = useState(2);
   const [wc, setWc] = useState("any");
   const [seats, setSeats] = useState("any");
@@ -12,6 +15,7 @@ const FilterComponent = ({ applyFilter }) => {
   const [ratingSortOrder, setRatingSortOrder] = useState("none");
   const [distanceSortOrder, setDistanceSortOrder] = useState("none");
   const [zipCode, setZipCode] = useState("");
+  const [showFavorites, setShowFavorites] = useState(false);
 
   const handleFilter = () =>
     applyFilter({
@@ -23,6 +27,7 @@ const FilterComponent = ({ applyFilter }) => {
       ratingSortOrder,
       distanceSortOrder,
       zipCode,
+      showFavorites,
     });
 
   const handleReset = () => {
@@ -34,10 +39,48 @@ const FilterComponent = ({ applyFilter }) => {
     setRatingSortOrder("none");
     setDistanceSortOrder("none");
     setZipCode("");
+    setShowFavorites(false);
+    applyFilter({
+      sterniMax: 2,
+      wc: "any",
+      seats: "any",
+      starsMin: 0,
+      sortOrder: "none",
+      ratingSortOrder: "none",
+      distanceSortOrder: "none",
+      zipCode: "",
+      showFavorites: false,
+    });
   };
 
   return (
     <div id="filter-container">
+      {/* Favoriten Toggle */}
+      {currentUser && (
+        <Button
+          type={showFavorites ? "primary" : "default"}
+          block
+          style={{ marginBottom: 12 }}
+          onClick={() => {
+            const next = !showFavorites;
+            setShowFavorites(next);
+            applyFilter({
+              sterniMax,
+              wc,
+              seats,
+              starsMin,
+              sortOrder,
+              ratingSortOrder,
+              distanceSortOrder,
+              zipCode,
+              showFavorites: next,
+            });
+          }}
+        >
+          {showFavorites ? "Alle Spätis anzeigen" : "Favoriten anzeigen"}
+        </Button>
+      )}
+
       {/* ZIP Filter */}
       <label>PLZ (5-stellig)</label>
       <Input
@@ -51,11 +94,14 @@ const FilterComponent = ({ applyFilter }) => {
 
       {/* Sterni-Index Sort */}
       <label>Sort by Sterni-Index</label>
-      <Select value={sortOrder} onChange={(v) => {
+      <Select
+        value={sortOrder}
+        onChange={(v) => {
           setSortOrder(v);
           setRatingSortOrder("none");
           setDistanceSortOrder("none");
-        }}>
+        }}
+      >
         <Select.Option value="none">None</Select.Option>
         <Select.Option value="asc">Asc</Select.Option>
         <Select.Option value="desc">Desc</Select.Option>
@@ -63,11 +109,14 @@ const FilterComponent = ({ applyFilter }) => {
 
       {/* Rating Sort */}
       <label>Sort by Rating</label>
-      <Select value={ratingSortOrder} onChange={(v) => {
+      <Select
+        value={ratingSortOrder}
+        onChange={(v) => {
           setRatingSortOrder(v);
           setSortOrder("none");
           setDistanceSortOrder("none");
-        }}>
+        }}
+      >
         <Select.Option value="none">None</Select.Option>
         <Select.Option value="asc">Asc</Select.Option>
         <Select.Option value="desc">Desc</Select.Option>
@@ -75,11 +124,14 @@ const FilterComponent = ({ applyFilter }) => {
 
       {/* Distance Sort */}
       <label>Sort by Distance</label>
-      <Select value={distanceSortOrder} onChange={(v) => {
+      <Select
+        value={distanceSortOrder}
+        onChange={(v) => {
           setDistanceSortOrder(v);
           setSortOrder("none");
           setRatingSortOrder("none");
-        }}>
+        }}
+      >
         <Select.Option value="none">None</Select.Option>
         <Select.Option value="asc">Closest first</Select.Option>
         <Select.Option value="desc">Farthest first</Select.Option>

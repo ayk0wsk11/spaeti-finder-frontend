@@ -15,39 +15,77 @@
   box-shadow: 0 6px 18px rgba(0,0,0,0.15);
 }
 
+/* Jede Zeile ist ein Flex-Container */
 .spaeti-card-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.top-row h3 {
-  font-size: 1.2rem;
-  margin: 0;
-  color: black;
+/* Obere Reihe: Titel + Herz vs. Rating */
+.title-group {
+  display: flex;
+  align-items: center;
 }
 
+.spaeti-name {
+  font-size: 1.2rem;
+  margin: 0;
+  color: #222;
+}
+
+/* Favoriten-Icon direkt neben dem Namen */
+.fav-icon {
+  margin-left: 8px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+}
+.fav-icon svg {
+  color: #e74c3c;
+}
+
+/* Outline‐Herz: nur Kontur (kein Füllung), übernimmt die stroke-Farbe von “color” */
+.fav-icon svg.anticon-heart-outlined {
+  /* kein fill, default ist none */
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 4px;
+}
+
+/* Gefülltes Herz: komplett rote Füllung */
+.fav-icon svg.anticon-heart-filled {
+  fill: currentColor;
+  stroke: none;
+}
+
+/* Rating rechts */
 .rating {
   font-size: 0.95rem;
   font-weight: 600;
   color: #333;
 }
+.rating .star-icon {
+  margin-left: 4px;
+}
 
+/* Mittlere Reihe: Adresse + Distance */
 .middle-row p {
   margin: 0;
   color: #555;
+  font-size: 0.9rem;
 }
-
 .distance {
   font-size: 0.85rem;
   color: #888;
 }
 
+/* Untere Reihe: Labels + Sterni */
 .labels {
   display: flex;
   gap: 8px;
 }
-
 .label {
   padding: 4px 8px;
   font-size: 12px;
@@ -55,17 +93,14 @@
   border-radius: 16px;
   display: inline-block;
 }
-
 .label.seats {
   background-color: #f4d35e;
   color: #333;
 }
-
 .label.wc {
   background-color: #3f8efc;
   color: #fff;
 }
-
 .sterni {
   font-size: 0.95rem;
   font-weight: bold;
@@ -74,8 +109,40 @@
   gap: 4px;
   color: #222;
 }
-
 .sterni img {
   width: 16px;
   height: 16px;
+}
+
+/* Mobile First Anpassungen */
+@media (max-width: 768px) {
+  .spaeti-card {
+    padding: 12px;
+  }
+  .spaeti-name {
+    font-size: 1rem;
+  }
+  .fav-icon {
+    font-size: 1rem;
+  }
+  .rating {
+    font-size: 0.85rem;
+  }
+  .middle-row p {
+    font-size: 0.85rem;
+  }
+  .distance {
+    font-size: 0.75rem;
+  }
+  .label {
+    font-size: 10px;
+    padding: 2px 6px;
+  }
+  .sterni {
+    font-size: 0.85rem;
+  }
+  .sterni img {
+    width: 14px;
+    height: 14px;
+  }
 }

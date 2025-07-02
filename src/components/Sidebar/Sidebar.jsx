@@ -49,7 +49,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                 </Link>
               </li>
               <li>
-                <Link to="/favourites" onClick={onClose}>
+                <Link to="/favorites" onClick={onClose}>
                   Favourite Spätis
                 </Link>
               </li>

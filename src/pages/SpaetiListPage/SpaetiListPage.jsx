@@ -12,41 +12,56 @@ import "./SpaetiListPage.css";
 
 const SpaetiListPage = () => {
   const { setIsOnProfile, currentUser } = useContext(AuthContext);
-  const [spaetis, setSpaetis] = useState([]);
+
+  const [spaetis, setSpaetis]             = useState([]);
   const [filteredSpaetis, setFilteredSpaetis] = useState([]);
-  const [search, setSearch] = useState("");
-  const [userLocation, setUserLocation] = useState(null);
+  const [search, setSearch]               = useState("");
+  const [userLocation, setUserLocation]   = useState(null);
   const [showNoResults, setShowNoResults] = useState(false);
+
+  // NEU: Favoriten-IDs aus dem Backend holen
+  const [favoriteIds, setFavoriteIds]     = useState([]);
+  useEffect(() => {
+    if (!currentUser) return;
+    const token = localStorage.getItem("authToken");
+    axios
+      .get(`${API_URL}/users/${currentUser._id}/favorites`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => {
+        // extract nur die IDs
+        setFavoriteIds(res.data.data.map((spa) => spa._id));
+      })
+      .catch(console.error);
+  }, [currentUser]);
 
   useEffect(() => {
     setIsOnProfile(false);
   }, [setIsOnProfile]);
 
-  // 1) grab user geolocation
+  // Geolocation wie gehabt
   useEffect(() => {
     if (!navigator.geolocation) return;
     navigator.geolocation.getCurrentPosition(
-      ({ coords }) => setUserLocation({ lat: coords.latitude, lng: coords.longitude }),
+      ({ coords }) =>
+        setUserLocation({ lat: coords.latitude, lng: coords.longitude }),
       console.error,
       { enableHighAccuracy: true }
     );
   }, []);
 
-  // 2) fetch all Spätis
+  // Alle Spätis laden
   useEffect(() => {
-    const fetchSpaetis = async () => {
-      try {
-        const { data } = await axios.get(`${API_URL}/spaetis`);
+    axios
+      .get(`${API_URL}/spaetis`)
+      .then(({ data }) => {
         setSpaetis(data.data);
         setFilteredSpaetis(data.data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchSpaetis();
+      })
+      .catch(console.error);
   }, []);
 
-  // 3) apply filters & sorts
+  // Filter-Funktion übernimmt jetzt `favoriteIds`
   const applyFilter = ({
     sterniMax,
     wc,
@@ -56,20 +71,26 @@ const SpaetiListPage = () => {
     ratingSortOrder,
     distanceSortOrder,
     zipCode,
+    showFavorites,
   }) => {
     let filtered = [...spaetis];
 
-    // ZIP filter
+    // 1) Favoriten
+    if (showFavorites) {
+      filtered = filtered.filter((s) => favoriteIds.includes(s._id));
+    }
+
+    // 2) PLZ-Filter
     if (zipCode && zipCode.length === 5) {
       filtered = filtered.filter((s) => String(s.zip) === zipCode);
     }
 
-    // Sterni-Index max
+    // 3) Sterni-Max
     if (sterniMax !== "") {
       filtered = filtered.filter((s) => s.sternAvg <= parseFloat(sterniMax));
     }
 
-    // Min rating
+    // 4) Min-Rating
     if (starsMin !== 0) {
       filtered = filtered.filter((s) => {
         const avg =
@@ -79,23 +100,21 @@ const SpaetiListPage = () => {
       });
     }
 
-    // WC / seats filters
+    // 5) WC & Seats
     if (wc !== "any") {
       filtered = filtered.filter((s) => (wc === "yes" ? s.wc : !s.wc));
     }
     if (seats !== "any") {
-      filtered = filtered.filter((s) => (seats === "yes" ? s.seats : !s.seats));
+      filtered = filtered.filter((s) =>
+        seats === "yes" ? s.seats : !s.seats
+      );
     }
 
-    // Sort by Sterni-Index
-    if (sortOrder === "asc") {
-      filtered.sort((a, b) => a.sternAvg - b.sternAvg);
-    }
-    if (sortOrder === "desc") {
-      filtered.sort((a, b) => b.sternAvg - a.sternAvg);
-    }
+    // 6) Sort by Sterni-Index
+    if (sortOrder === "asc") filtered.sort((a, b) => a.sternAvg - b.sternAvg);
+    if (sortOrder === "desc") filtered.sort((a, b) => b.sternAvg - a.sternAvg);
 
-    // Sort by Rating
+    // 7) Sort by Rating
     if (ratingSortOrder !== "none") {
       filtered.sort((a, b) => {
         const avgA =
@@ -108,7 +127,7 @@ const SpaetiListPage = () => {
       });
     }
 
-    // Sort by Distance
+    // 8) Sort by Distance
     if (userLocation && distanceSortOrder !== "none") {
       filtered.sort((a, b) => {
         const da = L.latLng(userLocation).distanceTo(L.latLng(a.lat, a.lng));
@@ -117,7 +136,7 @@ const SpaetiListPage = () => {
       });
     }
 
-    // Show “no results” banner only if ZIP was entered and nothing matched
+    // No-results Banner nur bei PLZ
     if (zipCode && zipCode.length === 5 && filtered.length === 0) {
       setShowNoResults(true);
     } else {
@@ -127,15 +146,18 @@ const SpaetiListPage = () => {
     setFilteredSpaetis(filtered);
   };
 
-  // 4) search + attach distance prop for cards
+  // Search + Anhängen der Distance-Prop
   const filteredAndSearched = filteredSpaetis
     .filter((s) => s.name.toLowerCase().includes(search.toLowerCase()))
     .map((spa) => {
       if (userLocation && spa.lat && spa.lng) {
-        const d = L.latLng(userLocation).distanceTo(L.latLng(spa.lat, spa.lng));
-        return { ...spa, distance: d };
+        spa.distance = L.latLng(userLocation).distanceTo(
+          L.latLng(spa.lat, spa.lng)
+        );
+      } else {
+        spa.distance = null;
       }
-      return { ...spa, distance: null };
+      return spa;
     });
 
   return (
@@ -171,12 +193,12 @@ const SpaetiListPage = () => {
             showIcon
             closable
             onClose={() => setShowNoResults(false)}
-            message="No Späti found :("
+            message="Kein Späti gefunden :("
             description={
               <span>
-                Unfortunately we didn't find you a Späti matching your criterias in this Kiez. Maybe try do adjust your filter.
-                Should you find a Späti matching your criteria, please add it{" "}
-                <Link to="/spaeti/create">here</Link>.
+                Leider gibt es in dieser PLZ keinen Späti. Falls du einen
+                gefunden hast, füge ihn bitte{" "}
+                <Link to="/spaeti/create">hier</Link> hinzu.
               </span>
             }
             style={{ marginBottom: 16, borderRadius: 8 }}
