@@ -2,7 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import { API_URL } from "../config";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
+import App from "../App";
 const AuthContext = createContext();
 
 const AuthContextWrapper = ({ children }) => {
@@ -38,6 +38,7 @@ const AuthContextWrapper = ({ children }) => {
     setCurrentUser(null);
     setIsLoggedIn(false);
     setTimeout(() => nav("/"), 50);
+    App.setSidebarOpen(false);
   };
 
   useEffect(() => {

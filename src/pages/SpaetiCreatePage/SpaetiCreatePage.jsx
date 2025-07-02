@@ -1,192 +1,188 @@
-import { useContext, useState, useEffect } from "react";
+// src/pages/SpaetiCreatePage.jsx
+import React, { useContext, useState, useEffect } from "react";
+import { Form, Input, Button, Switch, Upload, message, Modal } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
 import axios from "axios";
-import { API_URL } from "../../config";
-import { AuthContext } from "../../context/auth.context";
 import { useNavigate } from "react-router-dom";
-import './SpaetiCreatePage.css';
+import { AuthContext } from "../../context/auth.context";
+import { API_URL } from "../../config";
+import "./SpaetiCreatePage.css";
 
 const SpaetiCreatePage = () => {
-  const [name, setName] = useState("");
-  const [image, setImage] = useState("");
-  const [street, setStreet] = useState("");
-  const [zip, setZip] = useState(undefined);
-  const [city, setCity] = useState("Berlin");
-  const [seats, setSeats] = useState(false);
-  const [wc, setWc] = useState(false);
-  const [sterni, setSterni] = useState(0);
-  const [rating, setRating] = useState([]);
-  const [approved, setApproved] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
   const { currentUser, setIsOnProfile } = useContext(AuthContext);
+  const [preview, setPreview] = useState(null);
+  const [file, setFile] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const nav = useNavigate();
 
   useEffect(() => {
     setIsOnProfile(false);
-  }, []);
+  }, [setIsOnProfile]);
 
   const geocodeAddress = async (address) => {
-    const response = await fetch(
+    const resp = await fetch(
       `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
         address
       )}`
     );
-    const data = await response.json();
-    if (data.length > 0) {
-      return { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
+    const data = await resp.json();
+    if (data.length) {
+      return {
+        lat: parseFloat(data[0].lat),
+        lng: parseFloat(data[0].lon),
+      };
     }
     return null;
   };
 
-  const handleAddSpaeti = async (event) => {
-    event.preventDefault();
-
-    const address = `${street}, ${zip} ${city}`;
-    const coords = await geocodeAddress(address);
-
-    if (!coords) {
-      console.log("Failed to get coordinates for the address.");
-      return;
-    }
-
-    const newSpaeti = {
-      name,
-      image,
-      street,
-      zip,
-      city,
-      rating,
-      sterni,
-      seats,
-      wc,
-      creator: currentUser,
-      approved,
-      lat: coords.lat,
-      lng: coords.lng,
-    };
-
-    try {
-      await axios.post(`${API_URL}/spaetis`, newSpaeti);
-      setShowAlert(true);
-    } catch (error) {
-      console.log(error);
+  const handleFileChange = (info) => {
+    const fileList = info.fileList;
+    if (fileList.length > 0) {
+      const fileObj = fileList[0].originFileObj;
+      if (fileObj) {
+        setFile(fileObj);
+        setPreview(URL.createObjectURL(fileObj));
+      }
+    } else {
+      // wenn gelöscht oder leer
+      setFile(null);
+      setPreview(null);
     }
   };
 
-  const handleHome = () => {
-    nav("/");
+  const onFinish = async (values) => {
+    const { name, street, zip, city, sterni, wc, seats } = values;
+    const coords = await geocodeAddress(`${street}, ${zip} ${city}`);
+    if (!coords) {
+      message.error("Adresse konnte nicht gefunden werden");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("name", name);
+    if (file) formData.append("image", file, file.name);
+    formData.append("street", street);
+    formData.append("zip", zip);
+    formData.append("city", city);
+    formData.append("lat", coords.lat);
+    formData.append("lng", coords.lng);
+    formData.append("sterni", sterni);
+    formData.append("wc", wc);
+    formData.append("seats", seats);
+    formData.append("creator", currentUser._id);
+    formData.append("approved", false);
+
+    try {
+      await axios.post(`${API_URL}/spaetis`, formData);
+      setIsModalVisible(true);
+    } catch (err) {
+      console.error(err);
+      message.error("Fehler beim Erstellen des Spätis");
+    }
   };
 
   return (
     <div id="add-container">
-      <form id="add-form" onSubmit={handleAddSpaeti}>
-        <label>
-          Name:
-          <input
-            value={name}
-            placeholder="Name"
-            type="text"
-            onChange={(event) => {
-              setName(event.target.value);
-            }}
-          ></input>
-        </label>
+      <Modal
+        title="Späti erfolgreich erstellt!"
+        open={isModalVisible}
+        maskClosable={false}
+        closable={false}
+        footer={[
+          <Button type="primary" key="continue" onClick={() => nav("/")}>
+            Continue
+          </Button>,
+        ]}
+      >
+        <p>
+          Danke für das hinzufügen! Sobald dein Späti freigeschaltet ist,
+          erscheint er auf der Karte.
+        </p>
+      </Modal>
 
-        <label>
-          Image:
-          <input
-            value={image}
-            placeholder="Image URL"
-            type="text"
-            onChange={(event) => {
-              setImage(event.target.value);
-            }}
-          ></input>
-        </label>
+      <Form layout="vertical" onFinish={onFinish} className="spaeti-form">
+        <Form.Item
+          name="name"
+          label="Name"
+          rules={[{ required: true, message: "Bitte Name eingeben" }]}
+        >
+          <Input placeholder="Späti Name" />
+        </Form.Item>
 
-        <label>
-          Address:
-          <input
-            value={street}
-            placeholder="Street + Number"
-            type="text"
-            onChange={(event) => {
-              setStreet(event.target.value);
-            }}
-          ></input>
-          <input
-            placeholder="Zipcode"
-            value={zip}
-            type="number"
-            onChange={(event) => {
-              setZip(event.target.value);
-            }}
-          ></input>
-          <input
-            name="city"
-            value={city}
-            placeholder="City"
-            type="text"
-            onChange={(event) => {
-              setCity(event.target.value);
-            }}
-          ></input>
-        </label>
-
-        <label>
-          Toilet:
-          <select
-            name="wc"
-            value={wc}
-            onChange={(event) => {
-              setWc(event.target.value === "true");
-            }}
+        <Form.Item label="Bild (optional)">
+          <Upload
+            name="image"
+            beforeUpload={() => false}
+            onChange={handleFileChange}
+            maxCount={1}
+            accept="image/jpeg,image/png"
           >
-            <option value="">-- Select an option --</option>
-            <option value={true}>Yes</option>
-            <option value={false}>No</option>
-            <option value="">Unknown</option>
-          </select>
-        </label>
+            <Button icon={<UploadOutlined />}>Bild auswählen</Button>
+          </Upload>
 
-        <label>
-          Seats:
-          <select
-            name="seats"
-            value={seats}
-            onChange={(event) => {
-              setSeats(event.target.value === "true");
-            }}
-          >
-            <option value="">-- Select an option --</option>
-            <option value={true}>Yes</option>
-            <option value={false}>No</option>
-            <option value="">Unknown</option>
-          </select>
-        </label>
+          {preview && (
+            <img src={preview} alt="Preview" className="image-preview" />
+          )}
+        </Form.Item>
 
-        <label>
-          Sterni:
-          <input
-            value={sterni}
-            placeholder="Price of a Sternburg"
-            type="number"
-            onChange={(event) => {
-              setSterni(event.target.value);
-            }}
-          ></input>
-        </label>
+        <Form.Item label="Adresse" required>
+          <Input.Group compact>
+            <Form.Item
+              name="street"
+              noStyle
+              rules={[{ required: true, message: "Straße eingeben" }]}
+              style={{ width: "60%" }}
+            >
+              <Input placeholder="Straße + Nr." />
+            </Form.Item>
+            <Form.Item
+              name="zip"
+              noStyle
+              rules={[
+                { required: true, message: "PLZ eingeben" },
+                { len: 5, message: "PLZ muss 5 Stellen haben" },
+              ]}
+              style={{ width: "20%", marginLeft: 8 }}
+            >
+              <Input placeholder="PLZ" maxLength={5} />
+            </Form.Item>
+            <Form.Item
+              name="city"
+              noStyle
+              rules={[{ required: true, message: "Stadt eingeben" }]}
+              style={{ width: "20%", marginLeft: 8 }}
+            >
+              <Input placeholder="Stadt" />
+            </Form.Item>
+          </Input.Group>
+        </Form.Item>
 
-        <button id="add-spaeti-btn">Add Späti</button>
-      </form>
+        <Form.Item
+          name="sterni"
+          label="Sterni-Index (€)"
+          rules={[{ required: true, message: "Preis eingeben" }]}
+        >
+          <Input type="number" step="0.1" placeholder="z.B. 1.20" />
+        </Form.Item>
 
-      {showAlert && (
-        <div id="alert-overlay">
-          <div id="alert-box">
-            <p>Späti created successfully! After approval your Späti will be added to our map and list! 😃 </p>
-            <button id="home-btn" onClick={handleHome}>Home</button>
-          </div>
-        </div>
-      )}
+        <Form.Item name="wc" label="Toilette" valuePropName="checked">
+          <Switch checkedChildren="Ja" unCheckedChildren="Nein" />
+        </Form.Item>
+
+        <Form.Item
+          name="seats"
+          label="Sitzmöglichkeiten"
+          valuePropName="checked"
+        >
+          <Switch checkedChildren="Ja" unCheckedChildren="Nein" />
+        </Form.Item>
+
+        <Form.Item>
+          <Button type="primary" htmlType="submit" block>
+            Späti hinzufügen
+          </Button>
+        </Form.Item>
+      </Form>
     </div>
   );
 };

@@ -1,8 +1,9 @@
-import { useEffect, useContext } from "react";
+// src/pages/LoginPage.jsx
+import React, { useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Checkbox, Form, Input } from "antd";
+import { Button, Form, Input } from "antd";
 import { API_URL } from "../../config";
 import { AuthContext } from "../../context/auth.context";
 import "./LoginPage.css";
@@ -14,9 +15,12 @@ const LoginPage = () => {
 
   useEffect(() => {
     setIsOnProfile(false);
-  }, []);
-  
-  if (isLoggedIn) nav("/profile");
+  }, [setIsOnProfile]);
+
+  if (isLoggedIn) {
+    nav("/profile");
+    return null;
+  }
 
   const onFinish = ({ username, password }) => {
     axios
@@ -33,66 +37,55 @@ const LoginPage = () => {
 
   return (
     <div id="login-page">
-      <Form
-        name="normal_login"
-        className="login-form"
-        // initialValues={{
-        //   remember: true,
-        // }}
-        onFinish={onFinish}
-      >
-        <Form.Item
-          name="username"
-          rules={[
-            {
-              required: true,
-              message: "Please input your Username!",
-            },
-          ]}
+      <div id="login-container">
+        <h2 className="login-title">Spätify Login</h2>
+        <Form
+          layout="vertical"
+          className="login-form"
+          onFinish={onFinish}
         >
-          <Input
-            prefix={<UserOutlined className="site-form-item-icon" />}
-            placeholder="Username"
-          />
-        </Form.Item>
-
-        <Form.Item
-          name="password"
-          rules={[
-            {
-              required: true,
-              message: "Please input your Password!",
-            },
-          ]}
-        >
-          <Input
-            prefix={<LockOutlined className="site-form-item-icon" />}
-            type="password"
-            placeholder="Password"
-          />
-        </Form.Item>
-
-        {/* <Form.Item>
-          <Form.Item name="remember" valuePropName="checked" noStyle>
-            <Checkbox>Remember me</Checkbox>
+          <Form.Item
+            name="username"
+            label="Username"
+            rules={[
+              { required: true, message: "Bitte Username eingeben" },
+            ]}
+          >
+            <Input
+              prefix={<UserOutlined />}
+              placeholder="Username"
+            />
           </Form.Item>
 
-          <a className="login-form-forgot" href="">
-            Forgot password
-          </a>
-        </Form.Item> */}
-
-        <Form.Item>
-          <Button
-            type="primary"
-            htmlType="submit"
-            className="login-form-button"
+          <Form.Item
+            name="password"
+            label="Passwort"
+            rules={[
+              { required: true, message: "Bitte Passwort eingeben" },
+            ]}
           >
-            Log in
-          </Button>
-          Or <Link to="/signup">register now!</Link>
-        </Form.Item>
-      </Form>
+            <Input.Password
+              prefix={<LockOutlined />}
+              placeholder="Passwort"
+            />
+          </Form.Item>
+
+          <Form.Item>
+            <Button
+              block
+              type="primary"
+              htmlType="submit"
+              className="login-form-button"
+            >
+              Einloggen
+            </Button>
+          </Form.Item>
+        </Form>
+
+        <div className="login-footer">
+          Noch kein Account? <Link to="/signup">Jetzt registrieren!</Link>
+        </div>
+      </div>
     </div>
   );
 };

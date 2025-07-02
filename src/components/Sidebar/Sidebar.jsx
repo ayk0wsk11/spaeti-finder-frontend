@@ -6,7 +6,7 @@ import { AuthContext, AuthContextWrapper } from "../../context/auth.context";
 import { useLocation } from "react-router-dom";
 
 const Sidebar = ({ isOpen, onClose }) => {
-  const { currentUser, isLoggedIn } = useContext(AuthContext);
+  const { currentUser, isLoggedIn, handleLogout } = useContext(AuthContext);
   const location = useLocation();
   const isHomePage = location.pathname === "/";
   const isList = location.pathname === "/spaeti/list";
@@ -79,11 +79,16 @@ const Sidebar = ({ isOpen, onClose }) => {
                   </Link>
                 </li>
               )}
-              <li>
+              {/* <li>
                 <Link to="/settings" onClick={onClose}>
                   Settings
                 </Link>
-              </li>
+              </li> */}
+              {isLoggedIn && (
+                <li>
+                  <Link onClick={handleLogout}>Logout</Link>
+                </li>
+              )}
             </ul>
           </div>
         </div>

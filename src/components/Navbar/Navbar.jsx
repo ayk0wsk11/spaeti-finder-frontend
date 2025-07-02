@@ -1,18 +1,21 @@
-import { useContext } from "react";
-import { Link } from "react-router-dom";
+// src/components/Navbar/Navbar.jsx
+import React, { useContext } from "react";
+import { Link, useLocation } from "react-router-dom";
 import {
-  SearchOutlined,
+  MenuOutlined,
   LoginOutlined,
   LogoutOutlined,
-  InfoCircleOutlined,
   UserOutlined,
-  MenuOutlined, // <-- import burger icon
 } from "@ant-design/icons";
 import { AuthContext } from "../../context/auth.context";
 import "./Navbar.css";
 
 const Navbar = ({ onBurgerClick }) => {
-  const { handleLogout, currentUser, isOnProfile } = useContext(AuthContext);
+  const { handleLogout, currentUser, isLoggedIn } = useContext(AuthContext);
+  const location = useLocation();
+
+  // true, wenn wir gerade auf /profile sind
+  const onProfilePage = location.pathname === "/profile";
 
   return (
     <nav id="navbar">
@@ -22,9 +25,10 @@ const Navbar = ({ onBurgerClick }) => {
           onClick={onBurgerClick}
           aria-label="Toggle sidebar"
         >
-          <MenuOutlined style={{ fontSize: "24px", color: "white" }} />
+          <MenuOutlined style={{ fontSize: 24, color: "white" }} />
         </button>
       </div>
+
       <div id="middle-div">
         <Link to="/" id="app-icon-link">
           <h3 id="app-icon">Spätify</h3>
@@ -32,23 +36,14 @@ const Navbar = ({ onBurgerClick }) => {
       </div>
 
       <div id="navbar-right">
-        {currentUser ? (
-          isOnProfile ? (
-            <Link to="/" onClick={handleLogout}>
-              <LogoutOutlined id="logout-button"/>
-            </Link>
-          ) : (
-            <Link to="/profile">
-              <UserOutlined />
-            </Link>
-          )
-        ) : (
-          <Link to="/login">
-            <LoginOutlined id="login-button" />
+        {!currentUser && !isLoggedIn &&(
+          <Link to="/login" aria-label="Login">
+            <LoginOutlined style={{ fontSize: 20, color: "white" }} />
           </Link>
         )}
       </div>
     </nav>
   );
 };
+
 export default Navbar;

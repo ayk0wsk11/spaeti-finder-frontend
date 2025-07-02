@@ -1,11 +1,27 @@
-import { useContext, useState, useEffect } from "react";
+// src/pages/UserProfilePage.jsx
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { Avatar, Card } from "antd";
+import {
+  Avatar,
+  Card,
+  Modal,
+  Row,
+  Col,
+  Button,
+  Spin,
+} from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { AuthContext } from "../../context/auth.context";
 import { API_URL } from "../../config";
-import "./UserProfilePage.css";
 import { Link } from "react-router-dom";
+import avatar1 from "../../assets/avatar1.png";
+import avatar2 from "../../assets/avatar2.png";
+import avatar3 from "../../assets/avatar3.png";
+import avatar4 from "../../assets/avatar4.png";
+import avatar5 from "../../assets/avatar5.png";
+import "./UserProfilePage.css";
+
+const avatars = [avatar1, avatar2, avatar3, avatar4, avatar5];
 
 const tabList = [
   { key: "ratings", label: "Ratings" },
@@ -13,61 +29,87 @@ const tabList = [
 ];
 
 const UserProfilePage = () => {
-  const { currentUser, setIsOnProfile } = useContext(AuthContext);
-  const [user, setUser]           = useState(null);
+  const {
+    currentUser,
+    authenticateUser,
+    setIsOnProfile,
+  } = useContext(AuthContext);
+
+  const [user, setUser] = useState(null);
   const [userRatings, setUserRatings] = useState([]);
   const [activeTabKey, setActiveTabKey] = useState("ratings");
-
-  const onTabChange = (key) => setActiveTabKey(key);
-
-  function getCreationDate() {
-    return user?.createdAt
-      ? new Date(user.createdAt).toLocaleDateString()
-      : "";
-  }
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     setIsOnProfile(true);
+  }, [setIsOnProfile]);
 
-    const fetchUserAndRatings = async () => {
+  // fetch user + ratings
+  useEffect(() => {
+    if (!currentUser) return;
+    const fetchData = async () => {
       try {
-        const { data: userData } = await axios.get(
-          `${API_URL}/users/${currentUser._id}`
-        );
+        const [{ data: userData }, { data: ratingsData }] = await Promise.all([
+          axios.get(`${API_URL}/users/${currentUser._id}`),
+          axios.get(`${API_URL}/ratings/user/${currentUser._id}`),
+        ]);
         setUser(userData.data);
-
-        const { data: ratingsData } = await axios.get(
-          `${API_URL}/ratings/user/${currentUser._id}`
-        );
         setUserRatings(ratingsData.data);
-      } catch (error) {
-        console.log(error);
+      } catch (err) {
+        console.error(err);
       }
     };
+    fetchData();
+  }, [currentUser]);
 
-    fetchUserAndRatings();
-  }, [currentUser._id, setIsOnProfile]);
+  const getCreationDate = () => {
+    if (!user?.createdAt) return "";
+    return new Date(user.createdAt).toLocaleDateString();
+  };
 
-  if (!user) return <div>Loading...</div>;
+  const onTabChange = (key) => setActiveTabKey(key);
 
-  const renderStars = (stars) =>
-    "★".repeat(stars) + "☆".repeat(5 - stars);
+  // update profile image on select
+  const handleAvatarSelect = async (imgUrl) => {
+    try {
+      const token = localStorage.getItem("authToken");
+      await axios.put(
+        `${API_URL}/users/update/${currentUser._id}`,
+        { image: imgUrl },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      // refresh auth & local data
+      await authenticateUser();
+      const { data } = await axios.get(`${API_URL}/users/${currentUser._id}`);
+      setUser(data.data);
+      setModalVisible(false);
+    } catch (err) {
+      console.error("Error updating avatar:", err);
+    }
+  };
+
+  if (!user) {
+    return (
+      <div className="loading">
+        <Spin size="large" />
+      </div>
+    );
+  }
+
+  const renderStars = (n) =>
+    "★".repeat(n) + "☆".repeat(5 - n);
 
   const contentList = {
     ratings: (
-      <div>
+      <div className="activity-list">
         {userRatings.length > 0 ? (
-          userRatings.map((rating) => (
-            <div id="oneRating" key={rating._id}>
-              <Link to={`/spaeti/details/${rating.spaeti._id}`}>
-                <h3>{rating.spaeti.name}</h3>
+          userRatings.map((r) => (
+            <div className="one-rating" key={r._id}>
+              <Link to={`/spaeti/details/${r.spaeti._id}`}>
+                <h3>{r.spaeti.name}</h3>
               </Link>
-              <p style={{ fontWeight: 400 }}>
-                <span style={{ fontWeight: "bolder" }}>Comment:</span>
-                <br />
-                {rating.comment}
-              </p>
-              <h4>Rating: {renderStars(rating.stars)}</h4>
+              {r.comment && <p>{r.comment}</p>}
+              <h4>Rating: {renderStars(r.stars)}</h4>
             </div>
           ))
         ) : (
@@ -80,20 +122,28 @@ const UserProfilePage = () => {
 
   return (
     <div id="user-profile-page">
-      <Card>
-        <div id="user-profile">
+      <Card className="profile-card">
+        <div className="profile-header">
           <Avatar
-            size={64}
+            size={80}
             src={user.image}
-            icon={!user.image && <UserOutlined />}
+            icon={<UserOutlined />}
           />
-          <div id="user-infos">
-            <h3>{user.username}</h3>
-            <div>Joined {getCreationDate()}</div>
-          </div>
+          <Button
+            type="link"
+            className="change-image-btn"
+            onClick={() => setModalVisible(true)}
+          >
+            Change image
+          </Button>
+        </div>
+        <div className="user-infos">
+          <h2>{user.username}</h2>
+          <p>Joined {getCreationDate()}</p>
         </div>
       </Card>
-      <div id="user-activity">
+
+      <div className="user-activity">
         <Card
           tabList={tabList}
           activeTabKey={activeTabKey}
@@ -103,6 +153,26 @@ const UserProfilePage = () => {
           {contentList[activeTabKey]}
         </Card>
       </div>
+
+      <Modal
+        title="Choose Your Avatar"
+        visible={modalVisible}
+        footer={null}
+        onCancel={() => setModalVisible(false)}
+      >
+        <Row gutter={[16, 16]}>
+          {avatars.map((img, idx) => (
+            <Col key={idx} span={8} className="avatar-choice">
+              <Avatar
+                size={64}
+                src={img}
+                onClick={() => handleAvatarSelect(img)}
+                className="avatar-option"
+              />
+            </Col>
+          ))}
+        </Row>
+      </Modal>
     </div>
   );
 };
