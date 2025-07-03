@@ -1,51 +1,83 @@
+/*
+  Refactored for mobile-first, using global variables and unified design.
+  Only component-specific overrides here.
+*/
 #navbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   background-color: #161616;
   height: 60px;
-  padding: 0 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  font-size: 16px;
-  /* REMOVE this ↓ */
-  /* position: fixed; */
-  /* top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1100; */
+  padding: 0 1.2em;
+  box-shadow: var(--box-shadow);
+  font-size: 1rem;
 }
-
 
 #burger-button {
   background: none;
   border: none;
   cursor: pointer;
-  margin-right: 15px;
+  margin-right: 1em;
   display: flex;
   align-items: center;
+  padding: 0.5em;
+  border-radius: var(--border-radius);
+  transition: background var(--transition);
+}
+#burger-button:hover {
+  background: rgba(255, 255, 255, 0.1);
 }
 
 #app-icon-link {
   flex-grow: 1;
-  background-color: beige;
-  width: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  transition: transform var(--transition);
+}
+#app-icon-link:hover {
+  transform: scale(1.05);
 }
 
 #app-icon {
-  color: white;
+  color: var(--color-secondary);
   margin: 0;
+  font-weight: 800;
+  font-size: 1.8rem;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, var(--color-secondary), #f39c12);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 20px rgba(255, 211, 105, 0.3);
 }
 
-#navbar-right{
-display: flex;
-align-items: center;
-justify-content: space-between;
-};
-
-#middle-div{
+#navbar-right {
   display: flex;
-};
-#burger-btn-div{
+  align-items: center;
+  justify-content: space-between;
+  gap: 1em;
+}
+
+#theme-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5em;
+  border-radius: var(--border-radius);
+  transition: background var(--transition);
+  display: flex;
+  align-items: center;
+}
+#theme-toggle:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+#middle-div {
+  display: flex;
+}
+#burger-btn-div {
   display: flex;
 }
 #logout-button{

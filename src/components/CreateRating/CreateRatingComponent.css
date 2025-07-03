@@ -1,34 +1,57 @@
+/*
+  Refactored for mobile-first, using global variables and unified design.
+  Only component-specific overrides here.
+*/
 .create-rating-card {
-  max-width: 500px;
-  margin: 20px auto 40px;
-  padding: 16px 24px;
-  border-radius: 8px;
+  max-width: 100%;
+  margin: 1.2em auto 2em;
+  padding: 1em 0.8em;
+  border-radius: var(--border-radius);
+  background: var(--color-bg-card);
+  box-shadow: var(--box-shadow);
 }
 
 .create-rating-form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 1em;
 }
 
 .star-label {
   font-weight: 600;
-  color: #222;
+  color: var(--color-text);
 }
 
 .star-input {
   font-size: 1.4rem;
 }
 
+/* Dark mode star styling for better visibility */
+[data-theme="dark"] .star-input .ant-rate-star:not(.ant-rate-star-full) .ant-rate-star-first,
+[data-theme="dark"] .star-input .ant-rate-star:not(.ant-rate-star-full) .ant-rate-star-second {
+  color: var(--color-secondary) !important;
+}
+
+[data-theme="dark"] .star-input .ant-rate-star:not(.ant-rate-star-full) {
+  color: var(--color-secondary) !important;
+}
+
+/* Ensure star outlines are visible in dark mode */
+[data-theme="dark"] .ant-rate-star-zero .ant-rate-star-first,
+[data-theme="dark"] .ant-rate-star-zero .ant-rate-star-second {
+  color: var(--color-secondary) !important;
+  opacity: 0.6;
+}
+
 .comment-group {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 0.4em;
 }
 
 .comment-group label {
   font-weight: 500;
-  color: #444;
+  color: var(--color-muted);
 }
 
 #create-rating-area,
@@ -38,10 +61,28 @@
 
 .submit-rating-btn {
   align-self: flex-end;
-  padding: 6px 20px;
+  padding: 0.4em 1.2em;
   font-weight: 600;
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--border-radius);
+  transition: background var(--transition);
+}
+
+.submit-rating-btn:hover {
+  background: var(--color-secondary);
+  color: var(--color-text);
 }
 
 .create-error {
-  margin-bottom: 12px;
+  margin-bottom: 0.8em;
+  color: var(--color-danger);
+}
+
+@media (min-width: 600px) {
+  .create-rating-card {
+    max-width: 500px;
+    padding: 1.2em 1.5em;
+  }
 }

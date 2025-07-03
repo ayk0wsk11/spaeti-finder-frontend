@@ -1,0 +1,117 @@
+/* src/styles/global.css */
+
+:root {
+  --color-primary: #1890ff;
+  --color-secondary: #FFD369;
+  --color-danger: #ff4d4f;
+  --color-success: #28a745;
+  --color-bg: #fafafa;
+  --color-bg-card: #fff;
+  --color-border: #ddd;
+  --color-text: #222831;
+  --color-muted: #555;
+  --border-radius: 8px;
+  --box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  --font-main: 'Poppins', Arial, sans-serif;
+  --transition: 0.2s all;
+}
+
+/* Dark mode variables */
+[data-theme="dark"] {
+  --color-primary: #40a9ff;
+  --color-secondary: #FFD369;
+  --color-danger: #ff7875;
+  --color-success: #52c41a;
+  --color-bg: #141414;
+  --color-bg-card: #1f1f1f;
+  --color-border: #434343;
+  --color-text: #f0f0f0;
+  --color-muted: #bfbfbf;
+  --box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+
+html {
+  font-size: 16px;
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-main);
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+a:hover {
+  color: var(--color-secondary);
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: 1rem;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--color-border);
+  outline: none;
+  transition: box-shadow var(--transition), border-color var(--transition);
+}
+
+button {
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  padding: 0.5em 1.2em;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--box-shadow);
+}
+button:hover {
+  background: var(--color-secondary);
+  color: var(--color-text);
+}
+
+.card {
+  background: var(--color-bg-card);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 1.2em;
+  margin-bottom: 1.2em;
+}
+
+/* Dark mode improvements for Ant Design components */
+[data-theme="dark"] .ant-rate-star:not(.ant-rate-star-full) {
+  color: var(--color-secondary) !important;
+}
+
+[data-theme="dark"] .ant-rate-star-zero .ant-rate-star-first,
+[data-theme="dark"] .ant-rate-star-zero .ant-rate-star-second {
+  color: var(--color-secondary) !important;
+  opacity: 0.5;
+}
+
+[data-theme="dark"] .ant-input,
+[data-theme="dark"] .ant-select-selector,
+[data-theme="dark"] .ant-btn:not(.ant-btn-primary) {
+  background: var(--color-bg-card) !important;
+  border-color: var(--color-border) !important;
+  color: var(--color-text) !important;
+}
+
+@media (min-width: 600px) {
+  html {
+    font-size: 17px;
+  }
+}
+@media (min-width: 900px) {
+  html {
+    font-size: 18px;
+  }
+}

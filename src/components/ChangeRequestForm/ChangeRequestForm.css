@@ -1,48 +1,60 @@
 /* ChangeRequestForm.css */
 
+/*
+  Refactored for mobile-first, using global variables and unified design.
+  Only component-specific overrides here.
+*/
 .change-request-form {
-    max-width: 600px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    font-family: Arial, sans-serif;
-  }
+  max-width: 100%;
+  margin: 1.2em auto;
+  padding: 1.2em;
+  background-color: var(--color-bg-card);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  font-family: var(--font-main);
+}
 
-  .change-request-form h2 {
-    color: black;
+.change-request-form h2 {
+  color: var(--color-text);
+}
+
+.change-request-form label {
+  display: block;
+  margin-bottom: 1em;
+  font-size: 1rem;
+  color: var(--color-text);
+}
+
+.change-request-form input[type="text"],
+.change-request-form input[type="number"],
+.change-request-form select {
+  width: 100%;
+  padding: 0.7em;
+  margin-top: 0.3em;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  box-sizing: border-box;
+}
+
+.change-request-form button {
+  background-color: var(--color-primary);
+  color: #fff;
+  border: none;
+  padding: 0.7em 1.2em;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background var(--transition);
+}
+
+.change-request-form button:hover {
+  background-color: var(--color-secondary);
+  color: var(--color-text);
+}
+
+@media (min-width: 600px) {
+  .change-request-form {
+    max-width: 600px;
+    padding: 1.5em;
   }
-  
-  .change-request-form label {
-    display: block;
-    margin-bottom: 15px;
-    font-size: 16px;
-    color: #333;
-  }
-  
-  .change-request-form input[type="text"],
-  .change-request-form input[type="number"],
-  .change-request-form select {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-sizing: border-box;
-  }
-  
-  .change-request-form button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-  }
-  
-  .change-request-form button:hover {
-    background-color: #0056b3;
-  }
-  
+}

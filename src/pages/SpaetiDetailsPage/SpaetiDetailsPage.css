@@ -1,47 +1,61 @@
 /* Container */
 .detail-page {
-  max-width: 900px;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 20px;
-  font-family: "Poppins", sans-serif;
-  color: #222831;
+  padding: 1.2em;
+  font-family: var(--font-main);
+  color: var(--color-text);
+  background: var(--color-bg);
 }
 
 /* Loading */
 .loading {
   text-align: center;
-  padding: 40px;
-  font-size: 1.2rem;
+  padding: 2.5em 0;
+  font-size: 1.1rem;
 }
 
 /* Header */
 .detail-header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  gap: 0.8em;
+  align-items: flex-start;
   position: relative;
+}
+@media (min-width: 600px) {
+  .detail-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
 }
 .back-btn {
   text-decoration: none;
-  color: #555555;
+  color: var(--color-muted);
   font-size: 1rem;
+  transition: color var(--transition);
+}
+.back-btn:hover {
+  color: var(--color-primary);
 }
 
 /* neue Wrapper für Request & Herz & Admin */
 .detail-header-right {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 0.7em;
 }
 #change-btn {
   font-weight: 500;
-  color: #222831;
+  color: var(--color-text);
 }
 
 /* Favoriten‐Icon im Header */
 .fav-icon-header {
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   cursor: pointer;
+  color: #e74c3c;
 }
 .fav-icon-header svg {
   color: #e74c3c;

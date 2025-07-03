@@ -1,18 +1,22 @@
 /* TicketList.css */
 
+/*
+  Refactored for mobile-first, using global variables and unified design.
+  Only component-specific overrides here.
+*/
 .ticket-list {
-  max-width: 800px;
-  margin: 20px auto;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  font-family: Arial, sans-serif;
+  max-width: 100%;
+  margin: 1.2em auto;
+  padding: 1.2em;
+  background-color: var(--color-bg-card);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  font-family: var(--font-main);
 }
 
 .ticket-list h2 {
-  margin-bottom: 20px;
-  color: #333;
+  margin-bottom: 1.2em;
+  color: var(--color-text);
   text-align: center;
 }
 
@@ -22,35 +26,40 @@
 }
 
 .ticket-list li {
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
+  padding: 0.7em 0;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .ticket-list li p {
-  margin: 5px 0;
-  color: #555;
+  margin: 0.3em 0;
+  color: var(--color-muted);
 }
 
 .ticket-list button {
-  background-color: #007bff;
-  color: white;
+  background-color: var(--color-primary);
+  color: #fff;
   border: none;
-  padding: 10px 15px;
-  margin-right: 10px;
-  border-radius: 5px;
+  padding: 0.7em 1em;
+  margin-right: 0.7em;
+  border-radius: var(--border-radius);
   cursor: pointer;
-  font-size: 14px;
+  font-size: 1rem;
+  transition: background var(--transition);
 }
 
 .ticket-list button:hover {
-  background-color: #0056b3;
+  background-color: var(--color-secondary);
+  color: var(--color-text);
 }
 
 .ticket-list a {
-  color: #007bff;
-  text-decoration: none;
+  color: var(--color-primary);
+  text-decoration: underline;
 }
 
-.ticket-list a:hover {
-  text-decoration: underline;
+@media (min-width: 600px) {
+  .ticket-list {
+    max-width: 800px;
+    padding: 1.5em;
+  }
 }

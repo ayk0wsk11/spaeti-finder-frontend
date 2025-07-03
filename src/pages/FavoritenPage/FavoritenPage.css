@@ -1,19 +1,25 @@
 /* src/pages/FavoritenPage/FavoritenPage.css */
 
+/*
+  Refactored for mobile-first, using global variables and unified design.
+  Only page-specific overrides here.
+*/
 .favorites-page {
-  max-width: 1200px;
-  margin: 24px auto;
-  padding: 0 16px;
+  max-width: 100%;
+  margin: 1.5em auto;
+  padding: 0 1em;
+  background: var(--color-bg);
 }
 
 .favorites-page h2 {
-  font-size: 1.8rem;
-  margin-bottom: 16px;
+  font-size: 1.6rem;
+  margin-bottom: 1em;
+  color: var(--color-text);
 }
 
 .favorites-page p {
   font-size: 1rem;
-  color: #555;
+  color: var(--color-muted);
 }
 
 .favorites-loading {
@@ -21,4 +27,15 @@
   justify-content: center;
   align-items: center;
   height: 200px;
+  color: var(--color-muted);
+}
+
+@media (min-width: 600px) {
+  .favorites-page {
+    max-width: 1200px;
+    padding: 0 1.5em;
+  }
+  .favorites-page h2 {
+    font-size: 1.8rem;
+  }
 }

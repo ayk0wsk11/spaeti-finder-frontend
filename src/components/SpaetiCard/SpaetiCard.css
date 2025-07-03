@@ -1,14 +1,18 @@
+/*
+  Refactored for mobile-first, using global variables and unified design.
+  Only component-specific overrides here.
+*/
 .spaeti-card {
-  background-color: white;
-  border-radius: 12px;
-  padding: 16px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  background-color: var(--color-bg-card);
+  border-radius: var(--border-radius);
+  padding: 1em;
+  box-shadow: var(--box-shadow);
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 0.7em;
   text-decoration: none;
   color: inherit;
-  transition: box-shadow 0.2s;
+  transition: box-shadow var(--transition);
 }
 
 .spaeti-card:hover {
@@ -29,15 +33,15 @@
 }
 
 .spaeti-name {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   margin: 0;
-  color: #222;
+  color: var(--color-text);
 }
 
 /* Favoriten-Icon direkt neben dem Namen */
 .fav-icon {
-  margin-left: 8px;
-  font-size: 1.2rem;
+  margin-left: 0.5em;
+  font-size: 1.1rem;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -47,72 +51,88 @@
   color: #e74c3c;
 }
 
-/* Outline‐Herz: nur Kontur (kein Füllung), übernimmt die stroke-Farbe von “color” */
-.fav-icon svg.anticon-heart-outlined {
-  /* kein fill, default ist none */
+.fav-icon.outline svg {
+  stroke: #e74c3c;
   fill: none;
-  stroke: currentColor;
-  stroke-width: 4px;
+  stroke-width: 2;
 }
 
-/* Gefülltes Herz: komplett rote Füllung */
-.fav-icon svg.anticon-heart-filled {
-  fill: currentColor;
-  stroke: none;
+.fav-icon.filled svg {
+  fill: #e74c3c;
 }
 
 /* Rating rechts */
 .rating {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 600;
-  color: #333;
-}
-.rating .star-icon {
-  margin-left: 4px;
+  color: var(--color-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.3em;
 }
 
 /* Mittlere Reihe: Adresse + Distance */
+.middle-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 .middle-row p {
   margin: 0;
-  color: #555;
   font-size: 0.9rem;
+  color: var(--color-muted);
 }
 .distance {
-  font-size: 0.85rem;
-  color: #888;
+  font-size: 0.8rem;
+  color: var(--color-muted);
+  font-weight: 500;
 }
 
 /* Untere Reihe: Labels + Sterni */
+.bottom-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .labels {
   display: flex;
-  gap: 8px;
+  gap: 0.3em;
+  flex-wrap: wrap;
 }
 .label {
-  padding: 4px 8px;
-  font-size: 12px;
-  font-weight: 500;
-  border-radius: 16px;
-  display: inline-block;
+  background-color: var(--color-border);
+  color: var(--color-text);
+  font-size: 0.7rem;
+  padding: 0.2em 0.5em;
+  border-radius: calc(var(--border-radius) / 2);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
-.label.seats {
-  background-color: #f4d35e;
-  color: #333;
+.label.alcohol {
+  background-color: var(--color-danger);
+  color: #fff;
+}
+.label.halal {
+  background-color: var(--color-success);
+  color: #fff;
 }
 .label.wc {
-  background-color: #3f8efc;
+  background-color: var(--color-primary);
   color: #fff;
 }
 .sterni {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: bold;
   display: flex;
   align-items: center;
-  gap: 4px;
-  color: #222;
+  gap: 0.3em;
+  color: var(--color-text);
 }
 .sterni img {
-  width: 16px;
-  height: 16px;
+  width: 1em;
+  height: 1em;
 }
 
 /* Mobile First Anpassungen */
@@ -145,5 +165,16 @@
   .sterni img {
     width: 14px;
     height: 14px;
+  }
+}
+@media (min-width: 600px) {
+  .spaeti-card {
+    padding: 1.2em;
+  }
+  .spaeti-name {
+    font-size: 1.2rem;
+  }
+  .fav-icon {
+    font-size: 1.2rem;
   }
 }

@@ -1,13 +1,32 @@
+/*
+  Refactored for mobile-first, using global variables and unified design.
+  Only page-specific overrides here.
+*/
 #about-content {
-    color: black;
-    font-weight: 100;
-    padding: 20px;
+  color: var(--color-text);
+  font-weight: 300;
+  padding: 1.2em;
+  background: var(--color-bg-card);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  margin: 1.5em;
 }
 
 #about-content li {
-    font-weight: bold;
+  font-weight: bold;
+  color: var(--color-text);
 }
-#about-content img{
-    padding-left: 5px;
-    text-align: center;
+
+#about-content img {
+  padding-left: 0.3em;
+  text-align: center;
+  border-radius: var(--border-radius);
+}
+
+@media (min-width: 600px) {
+  #about-content {
+    margin: 2em auto;
+    max-width: 800px;
+    padding: 2em;
+  }
 }

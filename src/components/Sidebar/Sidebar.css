@@ -1,3 +1,7 @@
+/*
+  Refactored for mobile-first, using global variables and unified design.
+  Only component-specific overrides here.
+*/
 .sidebar {
   width: 250px;
   background-color: #222;
@@ -20,19 +24,21 @@
 /* Close button, minimal styling */
 .sidebar-close-btn {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 0.8em;
+  right: 0.8em;
   background: transparent;
   border: none;
-  font-size: 20px;
+  font-size: 1.2rem;
   color: white;
   cursor: pointer;
   z-index: 1300;
-  padding: 4px;
+  padding: 0.3em;
+  border-radius: var(--border-radius);
+  transition: color var(--transition);
 }
 
 .sidebar-close-btn:hover {
-  color: #FFD369;
+  color: var(--color-secondary);
 }
 
 
@@ -42,7 +48,7 @@
   flex-direction: column;
   justify-content: space-between; /* push upper/lower apart */
   height: 100%;
-  padding: 20px 0;
+  padding: 1.2em 0;
 }
 
 /* Top and bottom sections */
@@ -57,23 +63,21 @@
 }
 
 .nav-section li {
-  width: 100%;
+  margin: 0;
 }
 
 /* Make each link stretch full width */
 .nav-section a {
   display: block;
-  width: 100%;
-  padding: 12px 20px;
-  text-decoration: none;
+  padding: 0.8em 1.2em;
   color: white;
-  font-weight: 500;
-  box-sizing: border-box;
+  text-decoration: none;
+  transition: background var(--transition);
 }
 
 .nav-section a:hover {
-  background-color: #333;
-  color: #FFD369;
+  background: rgba(255, 211, 105, 0.2);
+  color: var(--color-secondary);
 }
 
 /* Overlay behind the sidebar */
@@ -93,4 +97,10 @@
 .sidebar-overlay.visible {
   opacity: 1;
   pointer-events: auto;
+}
+
+@media (min-width: 600px) {
+  .sidebar {
+    width: 280px;
+  }
 }
