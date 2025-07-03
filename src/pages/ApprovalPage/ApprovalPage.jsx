@@ -3,6 +3,7 @@ import SpaetiCard from "../../components/SpaetiCard/SpaetiCard";
 import axios from "axios";
 import { API_URL } from "../../config";
 import { AuthContext } from "../../context/auth.context";
+import { useSpaetiContext } from "../../context/spaeti.context";
 import { message, Tabs, Card, Button, Image } from "antd";
 import BackButton from "../../components/BackButton/BackButton";
 import "./ApprovalPage.css";
@@ -11,24 +12,15 @@ const { TabPane } = Tabs;
 
 const ApprovalPage = () => {
   const { setIsOnProfile } = useContext(AuthContext);
-  const [spaetis, setSpaetis] = useState([]);
+  const { getUnapprovedSpaetis, updateSpaeti, deleteSpaeti, refreshSpaetis } = useSpaetiContext();
   const [tickets, setTickets] = useState([]);
 
   useEffect(() => {
     setIsOnProfile(false);
-    fetchSpaetis();
     fetchTickets();
   }, []);
 
-  const fetchSpaetis = async () => {
-    try {
-      const { data } = await axios.get(`${API_URL}/spaetis`);
-      setSpaetis(data.data);
-    } catch (error) {
-      console.log(error);
-      message.error("Failed to fetch Späti data");
-    }
-  };
+  const spaetis = getUnapprovedSpaetis(); // Get unapproved Spätis from context
 
   const fetchTickets = async () => {
     try {
@@ -46,11 +38,7 @@ const ApprovalPage = () => {
   const handleApproval = async (id) => {
     try {
       await axios.patch(`${API_URL}/spaetis/update/${id}`, { approved: true });
-      setSpaetis((prevSpaetis) =>
-        prevSpaetis.map((spaeti) =>
-          spaeti._id === id ? { ...spaeti, approved: true } : spaeti
-        )
-      );
+      updateSpaeti(id, { approved: true }); // Update in context
       message.success("Späti approved successfully!");
     } catch (error) {
       console.log(error);
@@ -61,9 +49,7 @@ const ApprovalPage = () => {
   const handleRejection = async (id) => {
     try {
       await axios.delete(`${API_URL}/spaetis/delete/${id}`);
-      setSpaetis((prevSpaetis) =>
-        prevSpaetis.filter((spaeti) => spaeti._id !== id)
-      );
+      deleteSpaeti(id); // Remove from context
       message.success("Späti rejected and deleted successfully!");
     } catch (error) {
       console.log(error);
@@ -80,6 +66,7 @@ const ApprovalPage = () => {
       setTickets((prevTickets) =>
         prevTickets.filter((ticket) => ticket._id !== ticketId)
       );
+      refreshSpaetis(); // Refresh Spätis from server after ticket approval
       message.success("Change request approved successfully!");
     } catch (error) {
       console.log(error);

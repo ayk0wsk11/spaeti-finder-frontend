@@ -5,31 +5,39 @@ import axios from "axios";
 import { API_URL } from "../../config";
 import { useParams } from "react-router-dom";
 import { AuthContext } from "../../context/auth.context";
+import { useSpaetiContext } from "../../context/spaeti.context";
 import BackButton from "../BackButton/BackButton";
 import "./ChangeRequestForm.css";
 
 const ChangeRequestForm = () => {
+  const { spaetiId } = useParams();
+  const { currentUser } = useContext(AuthContext);
+  const { getSpaeti } = useSpaetiContext();
   const [changes, setChanges] = useState({
     name: "",
     proposedSterni: 0,
     seats: false,
     wc: false,
   });
-  const { spaetiId } = useParams();
-  const { currentUser } = useContext(AuthContext);
   const [oneSpaeti, setOneSpaeti] = useState(null);
   const [preview, setPreview] = useState(null);
   const [file, setFile] = useState(null);
   const [form] = Form.useForm();
 
-  // Fetch the spaeti data
+  // Get Späti from context instead of API call
   useEffect(() => {
-    const fetchSpaeti = async () => {
-      const { data } = await axios.get(`${API_URL}/spaetis/${spaetiId}`);
-      setOneSpaeti(data.data);
-    };
-    fetchSpaeti();
-  }, [spaetiId]);
+    const spaetiFromContext = getSpaeti(spaetiId);
+    if (spaetiFromContext) {
+      setOneSpaeti(spaetiFromContext);
+    } else {
+      // Fallback: fetch from API if not in context yet
+      const fetchSpaeti = async () => {
+        const { data } = await axios.get(`${API_URL}/spaetis/${spaetiId}`);
+        setOneSpaeti(data.data);
+      };
+      fetchSpaeti();
+    }
+  }, [spaetiId, getSpaeti]);
 
   // Initialize form values when oneSpaeti loads
   useEffect(() => {

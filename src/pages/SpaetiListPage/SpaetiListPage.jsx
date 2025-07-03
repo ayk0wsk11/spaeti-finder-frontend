@@ -6,6 +6,7 @@ import { InfoCircleOutlined } from "@ant-design/icons";
 import SpaetiCard from "../../components/SpaetiCard/SpaetiCard";
 import FilterComponent from "../../components/FilterComponent/FilterComponent";
 import { AuthContext } from "../../context/auth.context";
+import { useSpaetiContext } from "../../context/spaeti.context";
 import axios from "axios";
 import L from "leaflet";
 import { API_URL } from "../../config";
@@ -13,28 +14,12 @@ import "./SpaetiListPage.css";
 
 const SpaetiListPage = () => {
   const { setIsOnProfile, currentUser } = useContext(AuthContext);
+  const { spaetis, loading, getApprovedSpaetis, favoriteIds } = useSpaetiContext();
 
-  const [spaetis, setSpaetis]             = useState([]);
   const [filteredSpaetis, setFilteredSpaetis] = useState([]);
-  const [search, setSearch]               = useState("");
-  const [userLocation, setUserLocation]   = useState(null);
+  const [search, setSearch] = useState("");
+  const [userLocation, setUserLocation] = useState(null);
   const [showNoResults, setShowNoResults] = useState(false);
-
-  // NEU: Favoriten-IDs aus dem Backend holen
-  const [favoriteIds, setFavoriteIds]     = useState([]);
-  useEffect(() => {
-    if (!currentUser) return;
-    const token = localStorage.getItem("authToken");
-    axios
-      .get(`${API_URL}/users/${currentUser._id}/favorites`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((res) => {
-        // extract nur die IDs
-        setFavoriteIds(res.data.data.map((spa) => spa._id));
-      })
-      .catch(console.error);
-  }, [currentUser]);
 
   useEffect(() => {
     setIsOnProfile(false);
@@ -51,16 +36,24 @@ const SpaetiListPage = () => {
     );
   }, []);
 
-  // Alle Spätis laden
+  // Set initial filtered Spätis when spaetis from context change
   useEffect(() => {
-    axios
-      .get(`${API_URL}/spaetis`)
-      .then(({ data }) => {
-        setSpaetis(data.data);
-        setFilteredSpaetis(data.data);
-      })
-      .catch(console.error);
-  }, []);
+    const approvedSpaetis = getApprovedSpaetis();
+    // Sort favorites to the top by default
+    const sortedSpaetis = [...approvedSpaetis].sort((a, b) => {
+      const aIsFav = favoriteIds.includes(a._id);
+      const bIsFav = favoriteIds.includes(b._id);
+      
+      // Favorites first
+      if (aIsFav && !bIsFav) return -1;
+      if (!aIsFav && bIsFav) return 1;
+      
+      // If both are favorites or both are not, maintain original order
+      return 0;
+    });
+    
+    setFilteredSpaetis(sortedSpaetis);
+  }, [spaetis, favoriteIds, getApprovedSpaetis]);
 
   // Filter-Funktion übernimmt jetzt `favoriteIds`
   const applyFilter = ({
@@ -74,7 +67,7 @@ const SpaetiListPage = () => {
     zipCode,
     showFavorites,
   }) => {
-    let filtered = [...spaetis];
+    let filtered = [...getApprovedSpaetis()]; // Use approved Spätis from context
 
     // 1) Favoriten
     if (showFavorites) {
@@ -111,11 +104,26 @@ const SpaetiListPage = () => {
       );
     }
 
-    // 6) Sort by Sterni-Index
-    if (sortOrder === "asc") filtered.sort((a, b) => a.sternAvg - b.sternAvg);
-    if (sortOrder === "desc") filtered.sort((a, b) => b.sternAvg - a.sternAvg);
+    // 6) Sort by Sterni-Index (overrides favorite sorting)
+    if (sortOrder === "asc") {
+      filtered.sort((a, b) => a.sternAvg - b.sternAvg);
+    } else if (sortOrder === "desc") {
+      filtered.sort((a, b) => b.sternAvg - a.sternAvg);
+    } else {
+      // No explicit Sterni sorting - apply default favorite sorting
+      filtered.sort((a, b) => {
+        const aIsFav = favoriteIds.includes(a._id);
+        const bIsFav = favoriteIds.includes(b._id);
+        
+        // Favorites first
+        if (aIsFav && !bIsFav) return -1;
+        if (!aIsFav && bIsFav) return 1;
+        
+        return 0;
+      });
+    }
 
-    // 7) Sort by Rating
+    // 7) Sort by Rating (overrides previous sorting)
     if (ratingSortOrder !== "none") {
       filtered.sort((a, b) => {
         const avgA =
@@ -128,7 +136,7 @@ const SpaetiListPage = () => {
       });
     }
 
-    // 8) Sort by Distance
+    // 8) Sort by Distance (overrides previous sorting)
     if (userLocation && distanceSortOrder !== "none") {
       filtered.sort((a, b) => {
         const da = L.latLng(userLocation).distanceTo(L.latLng(a.lat, a.lng));
@@ -223,15 +231,19 @@ const SpaetiListPage = () => {
         </Modal>
 
         <div id="spaeti-cards-column">
-          {filteredAndSearched.map(
-            (spaeti) =>
-              spaeti.approved && (
-                <SpaetiCard
-                  key={spaeti._id}
-                  spaeti={spaeti}
-                  distance={spaeti.distance}
-                />
-              )
+          {loading ? (
+            <p>Loading Spätis...</p>
+          ) : (
+            filteredAndSearched.map(
+              (spaeti) =>
+                spaeti.approved && (
+                  <SpaetiCard
+                    key={spaeti._id}
+                    spaeti={spaeti}
+                    distance={spaeti.distance}
+                  />
+                )
+            )
           )}
         </div>
       </div>

@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/auth.context";
+import { useSpaetiContext } from "../../context/spaeti.context";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../../config";
@@ -13,6 +14,7 @@ import L from "leaflet";
 
 const SpaetiDetailsPage = () => {
   const { currentUser, isLoading, setIsOnProfile } = useContext(AuthContext);
+  const { getSpaeti, updateSpaeti, refreshSpaetis } = useSpaetiContext();
   const [oneSpaeti, setOneSpaeti] = useState(null);
   const [averageRating, setAverageRating] = useState(null);
   const [isFav, setIsFav] = useState(false);
@@ -41,7 +43,18 @@ const SpaetiDetailsPage = () => {
     setDistance(p1.distanceTo(p2));
   }, [userLocation, oneSpaeti]);
 
-  // Daten & Favorite-Status laden
+  // First try to get Späti from context, fallback to API if needed
+  useEffect(() => {
+    const spaetiFromContext = getSpaeti(spaetiId);
+    if (spaetiFromContext) {
+      setOneSpaeti(spaetiFromContext);
+    } else {
+      // Fallback: fetch from API if not in context yet
+      fetchData();
+    }
+  }, [spaetiId, getSpaeti]);
+
+  // Daten & Favorite-Status laden (fallback function)
   const fetchData = async () => {
     try {
       const { data: spaData } = await axios.get(
@@ -68,9 +81,24 @@ const SpaetiDetailsPage = () => {
     }
   };
 
+  // Load favorites when user changes
   useEffect(() => {
-    fetchData();
-  }, [spaetiId, currentUser]);
+    if (currentUser && oneSpaeti) {
+      // Only fetch favorites, not the Späti data
+      const checkFavoriteStatus = async () => {
+        try {
+          const { data: userData } = await axios.get(
+            `${API_URL}/users/${currentUser._id}`,
+            { headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` } }
+          );
+          setIsFav(userData.data.favorites?.includes(spaetiId));
+        } catch (err) {
+          console.error(err);
+        }
+      };
+      checkFavoriteStatus();
+    }
+  }, [currentUser, spaetiId, oneSpaeti]);
 
   // Durchschnitts‐Rating
   const calculateAverageRating = (ratings) =>
@@ -190,7 +218,7 @@ const SpaetiDetailsPage = () => {
       </section>
 
       <section className="reviews-section">
-        <RatingCard onNewRating={fetchData} />
+        <RatingCard onNewRating={refreshSpaetis} />
       </section>
     </div>
   );

@@ -2,6 +2,9 @@ import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import { useState } from "react";
 
+//***************** CONTEXT ****************/
+import { SpaetiProvider } from "./context/spaeti.context";
+
 //***************** COMPONENTS ****************/
 import Navbar from "./components/Navbar/Navbar";
 import IsPrivate from "./components/IsPrivate/IsPrivate";
@@ -32,11 +35,12 @@ function App() {
   };
 
   return (
-    <div id="spa">
-      <Navbar onBurgerClick={toggleSidebar} />
-      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      <div id="main" className={sidebarOpen ? "sidebar-open" : ""}>
-        <Routes>
+    <SpaetiProvider>
+      <div id="spa">
+        <Navbar onBurgerClick={toggleSidebar} />
+        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+        <div id="main" className={sidebarOpen ? "sidebar-open" : ""}>
+          <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
@@ -108,6 +112,7 @@ function App() {
       </div>
       <Footer />
     </div>
+    </SpaetiProvider>
   );
 }
 

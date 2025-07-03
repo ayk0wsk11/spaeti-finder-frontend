@@ -5,12 +5,14 @@ import { UploadOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/auth.context";
+import { useSpaetiContext } from "../../context/spaeti.context";
 import { API_URL } from "../../config";
 import BackButton from "../../components/BackButton/BackButton";
 import "./SpaetiCreatePage.css";
 
 const SpaetiCreatePage = () => {
   const { currentUser, setIsOnProfile } = useContext(AuthContext);
+  const { addSpaeti, refreshSpaetis } = useSpaetiContext();
   const [preview, setPreview] = useState(null);
   const [file, setFile] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -74,7 +76,8 @@ const SpaetiCreatePage = () => {
     formData.append("approved", false);
 
     try {
-      await axios.post(`${API_URL}/spaetis`, formData);
+      const response = await axios.post(`${API_URL}/spaetis`, formData);
+      addSpaeti(response.data.data); // Add the new Späti to context
       setIsModalVisible(true);
     } catch (err) {
       console.error(err);
@@ -105,7 +108,15 @@ const SpaetiCreatePage = () => {
 
       <BackButton />
 
-      <Form layout="vertical" onFinish={onFinish} className="spaeti-form">
+      <Form 
+        layout="vertical" 
+        onFinish={onFinish} 
+        className="spaeti-form"
+        initialValues={{
+          wc: false,
+          seats: false
+        }}
+      >
         <Form.Item
           name="name"
           label="Name"

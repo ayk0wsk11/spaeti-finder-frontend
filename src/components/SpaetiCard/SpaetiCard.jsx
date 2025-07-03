@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { StarFilled, HeartOutlined, HeartFilled } from "@ant-design/icons";
 import { AuthContext } from "../../context/auth.context";
+import { useSpaetiContext } from "../../context/spaeti.context";
 import axios from "axios";
 import { API_URL } from "../../config";
 import sterniImg from "../../assets/icon.png";
@@ -9,39 +10,18 @@ import "./SpaetiCard.css";
 
 const SpaetiCard = ({ spaeti, distance }) => {
   const { currentUser } = useContext(AuthContext);
-  const [isFav, setIsFav] = useState(false);
-
-  // beim Laden prüfen, ob dieser Späti in den Favoriten ist
-  useEffect(() => {
-    if (!currentUser) return;
-    const fetchFavs = async () => {
-      try {
-        const token = localStorage.getItem("authToken");
-        const { data } = await axios.get(
-          `${API_URL}/users/${currentUser._id}`,
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-        setIsFav(data.data.favorites?.includes(spaeti._id) ?? false);
-      } catch (err) {
-        console.error("Fehler beim Laden der Favoriten", err);
-      }
-    };
-    fetchFavs();
-  }, [currentUser, spaeti._id]);
-
+  const { isFavorite, toggleFavorite } = useSpaetiContext();
+  
+  // No more local state or useEffect - use context directly!
+  
   // Favoriten umschalten
-  const toggleFavorite = async (e) => {
+  const handleToggleFavorite = async (e) => {
     e.preventDefault();
     e.stopPropagation(); // Link‐Navigation verhindern
     if (!currentUser) return;
+    
     try {
-      const token = localStorage.getItem("authToken");
-      await axios.patch(
-        `${API_URL}/users/${currentUser._id}/favorite/${spaeti._id}`,
-        { add: !isFav },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setIsFav(!isFav);
+      await toggleFavorite(spaeti._id, currentUser._id);
     } catch (err) {
       console.error("Fehler beim Umschalten des Favoriten", err);
     }
@@ -64,12 +44,12 @@ const SpaetiCard = ({ spaeti, distance }) => {
           {currentUser && (
             <span
               className="fav-icon"
-              onClick={toggleFavorite}
+              onClick={handleToggleFavorite}
               aria-label={
-                isFav ? "Aus Favoriten entfernen" : "Zu Favoriten hinzufügen"
+                isFavorite(spaeti._id) ? "Aus Favoriten entfernen" : "Zu Favoriten hinzufügen"
               }
             >
-              {isFav ? <HeartFilled /> : <HeartOutlined />}
+              {isFavorite(spaeti._id) ? <HeartFilled /> : <HeartOutlined />}
             </span>
           )}
         </div>
