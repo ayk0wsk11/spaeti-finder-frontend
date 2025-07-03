@@ -1,5 +1,26 @@
-#map {
-  height: calc(100vh - 80px);
-  width: 100vw;
+.leaflet-marker-icon.user-marker-icon {
+  border-radius: 50%;
+  border: 2px solid #FFD369;
+  object-fit: cover;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
 }
 
+.my-location-btn {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  background-color: white;
+  border: 2px solid #555;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  transition: background-color 0.3s ease;
+}
+
+.my-location-btn:hover {
+  background-color: #eee;
+}

@@ -1,22 +1,76 @@
+/* src/pages/LoginPage.css */
+
+/* ========== Basis (Mobile) ========== */
 #login-page {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-top: 80px;
+  padding: 24px 16px;
+  background: #f5f5f5;
+  min-height: 100vh;    /* volle Höhe */
+  box-sizing: border-box;
 }
 
-.login-form {
-  max-width: 300px;
+#login-container {
+  width: 100%;
+  background: #fff;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
-.login-form-forgot {
-  float: right;
+.login-title {
+  text-align: center;
+  margin-bottom: 16px;
+  font-size: 1.4rem;
+  color: #333;
 }
 
-.ant-col-rtl .login-form-forgot {
-  float: left;
+.login-form .ant-form-item {
+  margin-bottom: 12px;
 }
 
 .login-form-button {
-  width: 100%;
+  font-weight: 600;
+}
+
+.login-footer {
+  text-align: center;
+  margin-top: 12px;
+  font-size: 0.85rem;
+}
+
+/* ========== Größer als 600px (Tablet+) ========== */
+@media (min-width: 600px) {
+  #login-page {
+    padding: 40px 0;
+  }
+
+  #login-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 32px;
+  }
+
+  .login-title {
+    margin-bottom: 24px;
+    font-size: 1.8rem;
+  }
+
+  .login-footer {
+    margin-top: 16px;
+    font-size: 0.9rem;
+  }
+}
+
+/* ========== Noch größer als 1024px (Desktop) ========== */
+@media (min-width: 1024px) {
+  #login-container {
+    max-width: 450px;
+    padding: 40px;
+  }
+
+  .login-title {
+    font-size: 2rem;
+  }
 }

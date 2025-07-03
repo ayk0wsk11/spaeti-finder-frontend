@@ -12,15 +12,12 @@ const SpaetiEditPage = () => {
   const [city, setCity] = useState("Berlin");
   const [seats, setSeats] = useState(false);
   const [wc, setWc] = useState(false);
-  const [sterni, setSterni] = useState(0);
-  const [rating, setRating] = useState([]);
+  const [sterni, setSterni] = useState(0); // this is the newly edited price
   const { currentUser, setIsOnProfile } = useContext(AuthContext);
   const nav = useNavigate();
   const { spaetiId } = useParams();
 
-  useEffect(() => {
-    setIsOnProfile(false);
-  });
+  useEffect(() => { setIsOnProfile(false); }, [setIsOnProfile]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,61 +30,44 @@ const SpaetiEditPage = () => {
         setCity(data.data.city);
         setSeats(data.data.seats);
         setWc(data.data.wc);
-        setSterni(data.data.sterni);
-        setRating(data.data.rating);
+        setSterni(data.data.sternAvg); // pull the current average into your editor
       } catch (error) {
         console.log(error);
       }
     };
-
     fetchData();
   }, [spaetiId]);
 
   const geocodeAddress = async (address) => {
-    const response = await fetch(
-      `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-        address
-      )}`
+    const res = await fetch(
+      `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`
     );
-    const data = await response.json();
-    if (data.length > 0) {
-      return { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
-    }
+    const json = await res.json();
+    if (json.length) return { lat: +json[0].lat, lng: +json[0].lon };
     return null;
   };
 
-  const handleEditSpaeti = async (event) => {
-    event.preventDefault();
-    const address = `${street}, ${zip} ${city}`;
-    const coords = await geocodeAddress(address);
+  const handleEditSpaeti = async (e) => {
+    e.preventDefault();
+    const coords = await geocodeAddress(`${street}, ${zip} ${city}`);
+    if (!coords) return console.log("Geo failed");
 
-    if (!coords) {
-      console.log("Failed to get coordinates for the address.");
-      return;
-    }
-
-    const updatedSpaeti = {
+    // send the newly edited Sterni as `sterni`: backend will append & recalc
+    const payload = {
       name,
       image,
       street,
       zip,
       city,
-      rating,
-      sterni,
       seats,
       wc,
-      creator: currentUser,
-      approved: true,
+      sterni,       // new price goes here
       lat: coords.lat,
       lng: coords.lng,
     };
 
     try {
-      const { data } = await axios.patch(
-        `${API_URL}/spaetis/update/${spaetiId}`,
-        updatedSpaeti
-      );
-
+      await axios.patch(`${API_URL}/spaetis/update/${spaetiId}`, payload);
       nav(`/spaeti/details/${spaetiId}`);
     } catch (error) {
       console.log(error);
@@ -99,99 +79,46 @@ const SpaetiEditPage = () => {
       <form id="add-form" onSubmit={handleEditSpaeti}>
         <label>
           Name:
-          <input
-            value={name}
-            placeholder="Name"
-            type="text"
-            onChange={(event) => {
-              setName(event.target.value);
-            }}
-          ></input>
+          <input value={name} onChange={e => setName(e.target.value)} required />
         </label>
 
         <label>
-          Image:
-          <input
-            value={image}
-            placeholder="Image URL"
-            type="text"
-            onChange={(event) => {
-              setImage(event.target.value);
-            }}
-          ></input>
+          Image URL:
+          <input value={image} onChange={e => setImage(e.target.value)} />
         </label>
 
         <label>
           Address:
-          <input
-            value={street}
-            placeholder="Street"
-            type="text"
-            onChange={(event) => {
-              setStreet(event.target.value);
-            }}
-          ></input>
-          <input
-            value={zip}
-            placeholder="Zipcode"
-            type="number"
-            onChange={(event) => {
-              setZip(event.target.value);
-            }}
-          ></input>
-          <input
-            name="city"
-            value={city}
-            placeholder="City"
-            type="text"
-            onChange={(event) => {
-              setCity(event.target.value);
-            }}
-          ></input>
+          <input value={street} onChange={e => setStreet(e.target.value)} required />
+          <input type="number" value={zip} onChange={e => setZip(e.target.value)} required />
+          <input value={city} onChange={e => setCity(e.target.value)} required />
         </label>
 
         <label>
           Toilet:
-          <select
-            name="wc"
-            value={wc}
-            onChange={(event) => {
-              setWc(event.target.value);
-            }}
-          >
-            <option value="">-- Select an option --</option>
-            <option value={true}>Yes</option>
-            <option value={false}>No</option>
-            <option value={false}>Unknown</option>
+          <select value={wc} onChange={e => setWc(e.target.value === "true")}>
+            <option value="false">No</option>
+            <option value="true">Yes</option>
           </select>
         </label>
 
         <label>
           Seats:
-          <select
-            name="seats"
-            value={seats}
-            onChange={(event) => {
-              setSeats(event.target.value);
-            }}
-          >
-            <option value="">-- Select an option --</option>
-            <option value={true}>Yes</option>
-            <option value={false}>No</option>
-            <option value={false}>Unknown</option>
+          <select value={seats} onChange={e => setSeats(e.target.value === "true")}>
+            <option value="false">No</option>
+            <option value="true">Yes</option>
           </select>
         </label>
 
         <label>
-          Sterni:
+          New Sterni-Index (€):
           <input
-            value={sterni}
-            placeholder="Price of a Sternburg"
             type="number"
-            onChange={(event) => {
-              setSterni(event.target.value);
-            }}
-          ></input>
+            step="0.1"
+            value={sterni}
+            onChange={e => setSterni(e.target.value)}
+            required
+          />
         </label>
 
         <button>Update Späti</button>
@@ -199,4 +126,5 @@ const SpaetiEditPage = () => {
     </div>
   );
 };
+
 export default SpaetiEditPage;

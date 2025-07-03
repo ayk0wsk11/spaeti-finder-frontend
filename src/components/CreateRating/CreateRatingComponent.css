@@ -1,40 +1,47 @@
-#form-container {
-    width: 80%;
-    display: flex;
-    flex-direction: column;
-    gap: 10px; /* Add spacing between the rows */
-    margin: 10px 0 40px 0; 
-
+.create-rating-card {
+  max-width: 500px;
+  margin: 20px auto 40px;
+  padding: 16px 24px;
+  border-radius: 8px;
 }
 
-#form {
-    display: flex;
-    align-items: center;
-    justify-content: space-between; /* Space out items within the form */
+.create-rating-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
-#comment {
-    font-weight: bolder;
-    display: flex;
-    flex-direction: column; /* Stack comment label and input vertically */
-    gap: 5px; /* Add space between label and input */
+.star-label {
+  font-weight: 600;
+  color: #222;
 }
 
-#input {
-    width: 300px;
-    height: 50px;
+.star-input {
+  font-size: 1.4rem;
 }
 
-#rating-btn {
-    width: 100px;
-    height: 40px;
-    border: 1px solid black;
-    border-radius: 5px;
-    font-weight: bolder;
-    margin-left: 10px; /* Space between the input field and button */
+.comment-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
-/* Add styling for Rate component to ensure it is centered above the comment input */
-.ant-rate {
-    margin-bottom: 10px; /* Space between the stars and the comment input */
+.comment-group label {
+  font-weight: 500;
+  color: #444;
+}
+
+#create-rating-area,
+#comment-area {
+  resize: vertical;
+}
+
+.submit-rating-btn {
+  align-self: flex-end;
+  padding: 6px 20px;
+  font-weight: 600;
+}
+
+.create-error {
+  margin-bottom: 12px;
 }

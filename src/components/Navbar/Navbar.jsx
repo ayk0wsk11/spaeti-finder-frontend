@@ -1,47 +1,49 @@
-import { useContext } from "react";
-import { Link } from "react-router-dom";
+// src/components/Navbar/Navbar.jsx
+import React, { useContext } from "react";
+import { Link, useLocation } from "react-router-dom";
 import {
-  SearchOutlined,
+  MenuOutlined,
   LoginOutlined,
   LogoutOutlined,
-  InfoCircleOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import { AuthContext } from "../../context/auth.context";
 import "./Navbar.css";
 
-const Navbar = () => {
-  const { handleLogout, currentUser, isOnProfile } = useContext(AuthContext);
+const Navbar = ({ onBurgerClick }) => {
+  const { handleLogout, currentUser, isLoggedIn } = useContext(AuthContext);
+  const location = useLocation();
+
+  // true, wenn wir gerade auf /profile sind
+  const onProfilePage = location.pathname === "/profile";
 
   return (
     <nav id="navbar">
-      <Link to="/">
-        <h3 id="app-icon">Spätify</h3>
-      </Link>
+      <div id="burger-btn-div">
+        <button
+          id="burger-button"
+          onClick={onBurgerClick}
+          aria-label="Toggle sidebar"
+        >
+          <MenuOutlined style={{ fontSize: 24, color: "white" }} />
+        </button>
+      </div>
+
+      <div id="middle-div">
+        <Link to="/" id="app-icon-link">
+          <h3 id="app-icon">Spätify</h3>
+        </Link>
+      </div>
+
       <div id="navbar-right">
-        <Link to="/spaeti/list">
-          <SearchOutlined />
-        </Link>
-        <Link to="/about">
-          <InfoCircleOutlined />
-        </Link>
-        {currentUser ? (
-          isOnProfile ? (
-            <Link to="/" onClick={handleLogout}>
-              <LogoutOutlined id="logout-button" />
-            </Link>
-          ) : (
-            <Link to="/profile">
-              <UserOutlined />
-            </Link>
-          )
-        ) : (
-          <Link to="/login">
-            <LoginOutlined id="login-button" />
+        {!currentUser && !isLoggedIn &&(
+          <Link to="/login" aria-label="Login">
+            <LoginOutlined style={{ fontSize: 20, color: "white" }} />
           </Link>
         )}
       </div>
     </nav>
   );
 };
+
 export default Navbar;

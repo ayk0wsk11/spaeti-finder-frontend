@@ -8,20 +8,20 @@ const HomePage = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
 
-  useEffect(() => {
-    setIsOnProfile(false);
-    triggerAlert("Spätify is not finished yet. We are still working on features and design. If you want to test the webpage without creating an account, ask us for credentials to login.");
-  }, []);
+  // useEffect(() => {
+  //   setIsOnProfile(false);
+  //   triggerAlert("Spätify is not finished yet. We are still working on features and design. If you want to test the webpage without creating an account, ask us for credentials to login.");
+  // }, []);
 
-  const triggerAlert = (message) => {
-    setAlertMessage(message);
-    setShowAlert(true);
-  };
+  // const triggerAlert = (message) => {
+  //   setAlertMessage(message);
+  //   setShowAlert(true);
+  // };
 
-  const closeAlert = () => {
-    setShowAlert(false);
-    setAlertMessage("");
-  };
+  // const closeAlert = () => {
+  //   setShowAlert(false);
+  //   setAlertMessage("");
+  // };
 
   return (
     <div>

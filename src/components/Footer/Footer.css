@@ -1,0 +1,30 @@
+#footer {
+  height: 30px; /* match grid row height */
+  background-color: #161616;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 100; /* optional, just in case */
+  /* REMOVE fixed positioning */
+  /* position: fixed;
+     bottom: 0;
+     left: 0;
+     right: 0; */
+}
+
+
+.footer-content {
+  display: flex;
+  gap: 40px;
+  color: white;
+}
+
+.footer-content a {
+  color: white;
+  transition: color 0.2s ease;
+}
+
+.footer-content a:hover {
+  color: #40a9ff; /* Ant Design blue */
+}

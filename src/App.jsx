@@ -1,10 +1,13 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
+import { useState } from "react";
 
 //***************** COMPONENTS ****************/
 import Navbar from "./components/Navbar/Navbar";
 import IsPrivate from "./components/IsPrivate/IsPrivate";
 import IsApproved from "./components/IsApproved/IsApproved";
+import Sidebar from "./components/Sidebar/Sidebar";
+import Footer from "./components/Footer/Footer";
 
 //***************** PAGES *****************/
 import HomePage from "./pages/HomePage/HomePage";
@@ -20,12 +23,19 @@ import ApprovalPage from "./pages/ApprovalPage/ApprovalPage";
 import AboutPage from "./pages/AboutPage/AboutPage";
 import AdminDashboard from "./pages/AdminDashboard/AdminDashboard";
 import ChangeRequestForm from "./components/ChangeRequestForm/ChangeRequestForm";
+import FavoritenPage from "./pages/FavoritenPage/FavoritenPage";
 
 function App() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const toggleSidebar = () => {
+    setSidebarOpen((prev) => !prev);
+  };
+
   return (
     <div id="spa">
-      <Navbar />
-      <div id="main">
+      <Navbar onBurgerClick={toggleSidebar} />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div id="main" className={sidebarOpen ? "sidebar-open" : ""}>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
@@ -75,11 +85,28 @@ function App() {
               </IsApproved>
             }
           />
-          <Route path="/admin" element={<AdminDashboard />} />
+          <Route
+            path="/admin"
+            element={
+              <IsApproved>
+                <AdminDashboard />
+              </IsApproved>
+            }
+          />
+
           <Route path="*" element={<NotFoundPage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route
+            path="/favorites"
+            element={
+              <IsPrivate>
+                <FavoritenPage />
+              </IsPrivate>
+            }
+          />
         </Routes>
       </div>
+      <Footer />
     </div>
   );
 }

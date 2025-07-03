@@ -1,0 +1,15 @@
+.single-spaeti-map {
+  width: 100%;
+  height: 200px;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+/* round the user icon image */
+.user-marker-icon {
+  border-radius: 50%;
+  border: 2px solid #FFD369;
+  box-shadow: 0 0 6px rgba(0,0,0,0.3);
+  object-fit: cover;
+}

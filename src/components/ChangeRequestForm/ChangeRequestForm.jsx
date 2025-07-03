@@ -6,10 +6,17 @@ import { AuthContext } from "../../context/auth.context";
 import "./ChangeRequestForm.css";
 
 const ChangeRequestForm = () => {
-  const [changes, setChanges] = useState({});
+  const [changes, setChanges] = useState({
+    name: "",
+    proposedSterni: 0,
+    seats: false,
+    wc: false,
+  });
   const { spaetiId } = useParams();
   const { currentUser } = useContext(AuthContext);
-  const [oneSpaeti, setOneSpaeti] = useState({});
+  const [oneSpaeti, setOneSpaeti] = useState(null);
+
+  // Fetch the spaeti data
   useEffect(() => {
     const fetchSpaeti = async () => {
       const { data } = await axios.get(`${API_URL}/spaetis/${spaetiId}`);
@@ -18,18 +25,31 @@ const ChangeRequestForm = () => {
     fetchSpaeti();
   }, [spaetiId]);
 
+  // Initialize changes state when oneSpaeti loads
+  useEffect(() => {
+    if (oneSpaeti) {
+      setChanges({
+        name: oneSpaeti.name || "",
+        proposedSterni: oneSpaeti.sternAvg || 0,
+        seats: oneSpaeti.seats || false,
+        wc: oneSpaeti.wc || false,
+      });
+    }
+  }, [oneSpaeti]);
+
   if (!currentUser) {
-    setTimeout(() => {
-      return <p>Loading...</p>;
-    }, 3000);
+    return <p>Loading user info...</p>;
+  }
+  if (!oneSpaeti) {
+    return <p>Loading spaeti data...</p>;
   }
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setChanges({
-      ...changes,
+    setChanges((prev) => ({
+      ...prev,
       [name]: type === "checkbox" ? checked : value,
-    });
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -39,9 +59,7 @@ const ChangeRequestForm = () => {
       await axios.post(
         `${API_URL}/tickets`,
         { spaetiId, changes, userId: currentUser._id },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       alert("Change request submitted!");
     } catch (err) {
@@ -52,35 +70,48 @@ const ChangeRequestForm = () => {
   return (
     <form className="change-request-form" onSubmit={handleSubmit}>
       <h2>Change Request</h2>
+
       <label>
         Name of the Späti:
         <input
           type="text"
           name="name"
-          placeholder={oneSpaeti.name}
+          value={changes.name}
           onChange={handleChange}
         />
       </label>
+
       <label>
-        Price of a Sterni:
-        <input type="number" name="sterni" placeholder={oneSpaeti.sterni} step="0.1" onChange={handleChange} />
+        Proposed Sterni-Index (€):
+        <input
+          type="number"
+          name="proposedSterni"
+          value={changes.proposedSterni}
+          step="0.1"
+          onChange={handleChange}
+        />
       </label>
+
       <label>
         <input
           type="checkbox"
           name="seats"
+          checked={changes.seats}
           onChange={handleChange}
         />
         Seats
       </label>
+
       <label>
         <input
           type="checkbox"
           name="wc"
+          checked={changes.wc}
           onChange={handleChange}
         />
         WC
       </label>
+
       <button type="submit">Submit</button>
     </form>
   );

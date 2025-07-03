@@ -1,91 +1,122 @@
-/* FilterComponent.css */
-
-/* Basic container styling */
 #filter-container {
   padding: 16px;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 8px;
   background-color: #fff;
-  max-width: 300px;
 }
 
-/* Basic button styling */
-#toggle-menu-btn {
-  width: 100%;
-  margin-bottom: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: #1890ff;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  padding: 8px;
-  cursor: pointer;
-}
-
-/* Button hover effect */
-#toggle-menu-btn:hover {
-  background-color: #40a9ff;
-}
-
-/* Label styling */
 #filter-container label {
   display: block;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   font-size: 14px;
-  font-weight: bold;
+  font-weight: 600;
   color: #333;
 }
 
-/* Select and input styling */
-#filter-container select,
-#filter-container .ant-input-number {
+#filter-container .ant-slider,
+#filter-container .ant-input-number,
+#filter-container .ant-select,
+#filter-container .ant-input {
+  margin-bottom: 16px;
   width: 100%;
-  margin-bottom: 16px;
-  padding: 4px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
 }
 
-/* Slider styling */
-#filter-container .ant-slider {
-  margin-bottom: 16px;
-}
-
-/* Button container styling */
 #flt-btn-container {
   display: flex;
-  justify-content: space-between;
+  gap: 8px;
 }
 
-/* Apply button styling */
-#apply-btn {
-  background-color: #1890ff;
-  color: #fff;
+#apply-btn,
+#reset-btn {
+  flex: 1;
+  padding: 8px 12px;
   border: none;
   border-radius: 4px;
-  padding: 8px;
   cursor: pointer;
-  margin-right: 8px;
+  font-weight: 600;
 }
 
-/* Apply button hover effect */
+#apply-btn {
+  background-color: #1890ff;
+  color: white;
+}
+
 #apply-btn:hover {
   background-color: #40a9ff;
 }
 
-/* Reset button styling */
 #reset-btn {
   background-color: #ff4d4f;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  padding: 8px;
-  cursor: pointer;
+  color: white;
 }
 
-/* Reset button hover effect */
 #reset-btn:hover {
   background-color: #ff7875;
+}
+
+/* ----------------------------------------
+   Responsive: Tablet & kleinere Screens
+   (max-width: 768px)
+---------------------------------------- */
+@media (max-width: 768px) {
+  #filter-container {
+    padding: 12px;
+  }
+
+  #filter-container label {
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+
+  #filter-container .ant-slider,
+  #filter-container .ant-input-number,
+  #filter-container .ant-select,
+  #filter-container .ant-input {
+    margin-bottom: 12px;
+  }
+
+  /* Buttons: etwas kleiner und enger zusammen */
+  #flt-btn-container {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  #apply-btn,
+  #reset-btn {
+    padding: 6px 10px;
+    font-size: 14px;
+  }
+}
+
+/* ----------------------------------------
+   Responsive: Mobile
+   (max-width: 480px)
+---------------------------------------- */
+@media (max-width: 480px) {
+  #filter-container {
+    padding: 8px;
+    border: none;
+  }
+
+  #filter-container label {
+    font-size: 12px;
+  }
+
+  #filter-container .ant-slider,
+  #filter-container .ant-input-number,
+  #filter-container .ant-select,
+  #filter-container .ant-input {
+    margin-bottom: 10px;
+  }
+
+  #flt-btn-container {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  #apply-btn,
+  #reset-btn {
+    padding: 6px;
+    font-size: 13px;
+  }
 }

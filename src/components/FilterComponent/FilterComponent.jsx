@@ -1,20 +1,35 @@
-import React, { useState } from "react";
-import { Col, InputNumber, Row, Slider, Button } from "antd";
-import { SearchOutlined, FilterOutlined } from "@ant-design/icons";
+// src/components/FilterComponent/FilterComponent.jsx
+import React, { useState, useContext } from "react";
+import { Slider, InputNumber, Button, Select, Input } from "antd";
+import { AuthContext } from "../../context/auth.context";
 import "./FilterComponent.css";
 
 const FilterComponent = ({ applyFilter }) => {
+  const { currentUser } = useContext(AuthContext);
+
   const [sterniMax, setSterniMax] = useState(2);
   const [wc, setWc] = useState("any");
   const [seats, setSeats] = useState("any");
   const [starsMin, setStarsMin] = useState(0);
   const [sortOrder, setSortOrder] = useState("none");
-  const [ratingSortOrder, setRatingSortOrder] = useState("none"); // New state for rating sort order
-  const [isMenuVisible, setIsMenuVisible] = useState(false); // State to control menu visibility
+  const [ratingSortOrder, setRatingSortOrder] = useState("none");
+  const [distanceSortOrder, setDistanceSortOrder] = useState("none");
+  const [zipCode, setZipCode] = useState("");
+  const [showFavorites, setShowFavorites] = useState(false);
 
-  const handleFilter = () => {
-    applyFilter({ sterniMax, wc, seats, starsMin, sortOrder, ratingSortOrder });
-  };
+  const handleFilter = () =>
+    applyFilter({
+      sterniMax,
+      wc,
+      seats,
+      starsMin,
+      sortOrder,
+      ratingSortOrder,
+      distanceSortOrder,
+      zipCode,
+      showFavorites,
+    });
+
   const handleReset = () => {
     setSterniMax(2);
     setWc("any");
@@ -22,128 +37,164 @@ const FilterComponent = ({ applyFilter }) => {
     setStarsMin(0);
     setSortOrder("none");
     setRatingSortOrder("none");
+    setDistanceSortOrder("none");
+    setZipCode("");
+    setShowFavorites(false);
+    applyFilter({
+      sterniMax: 2,
+      wc: "any",
+      seats: "any",
+      starsMin: 0,
+      sortOrder: "none",
+      ratingSortOrder: "none",
+      distanceSortOrder: "none",
+      zipCode: "",
+      showFavorites: false,
+    });
   };
 
   return (
     <div id="filter-container">
-      <Button
-        id="toggle-menu-btn"
-        onClick={() => setIsMenuVisible(!isMenuVisible)}
-        icon={<FilterOutlined />}
-      >
-        {isMenuVisible ? "Hide Filters" : "Show Filters"}
-      </Button>
-
-      {isMenuVisible && (
-        <div id="filter-menu">
-          <div>
-            <label>Sort by Sterni-Index:</label>
-            <select
-              value={sortOrder}
-              onChange={(e) => setSortOrder(e.target.value)}
-            >
-              <option value="none">None</option>
-              <option value="asc">Lowest to Highest</option>
-              <option value="desc">Highest to Lowest</option>
-            </select>
-          </div>
-
-          <div>
-            <label>Sort by Rating:</label>
-            <select
-              value={ratingSortOrder}
-              onChange={(e) => setRatingSortOrder(e.target.value)}
-            >
-              <option value="none">None</option>
-              <option value="asc">Lowest to Highest</option>
-              <option value="desc">Highest to Lowest</option>
-            </select>
-          </div>
-
-          <div>
-            <label>Sterni-Index Max:</label>
-            <Row>
-              <Col span={12}>
-                <Slider
-                  min={0}
-                  max={5}
-                  onChange={setSterniMax}
-                  value={sterniMax}
-                  step={0.1}
-                />
-              </Col>
-              <Col span={4}>
-                <InputNumber
-                  min={0}
-                  max={5}
-                  style={{
-                    margin: "0 10px",
-                    width: "60px"
-                  }}
-                  step={0.1}
-                  value={sterniMax}
-                  onChange={setSterniMax}
-                />
-              </Col>
-            </Row>
-          </div>
-
-          <div>
-            <label>Min Rating:</label>
-            <Row>
-              <Col span={12}>
-                <Slider
-                  min={0}
-                  max={5}
-                  onChange={setStarsMin}
-                  value={starsMin}
-                  step={0.1}
-                />
-              </Col>
-              <Col span={4}>
-                <InputNumber
-                  min={0}
-                  max={5}
-                  style={{
-                    margin: "0 10px",
-                    width: "60px"
-                  }}
-                  step={0.1}
-                  value={starsMin}
-                  onChange={setStarsMin}
-                />
-              </Col>
-            </Row>
-          </div>
-
-          <div>
-            <label>WC:</label>
-            <select value={wc} onChange={(e) => setWc(e.target.value)}>
-              <option value="any">Any</option>
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
-            </select>
-          </div>
-
-          <div>
-            <label>Seats:</label>
-            <select value={seats} onChange={(e) => setSeats(e.target.value)}>
-              <option value="any">Any</option>
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
-            </select>
-          </div>
-
-          <div id="flt-btn-container">
-            <Button id="apply-btn" onClick={handleFilter} icon={<SearchOutlined />}>
-              Apply filter
-            </Button>
-            <Button id="reset-btn" onClick={handleReset}>
-              Reset
-            </Button>
-          </div>
-        </div>
+      {/* Favoriten Toggle */}
+      {currentUser && (
+        <Button
+          type={showFavorites ? "primary" : "default"}
+          block
+          style={{ marginBottom: 12 }}
+          onClick={() => {
+            const next = !showFavorites;
+            setShowFavorites(next);
+            applyFilter({
+              sterniMax,
+              wc,
+              seats,
+              starsMin,
+              sortOrder,
+              ratingSortOrder,
+              distanceSortOrder,
+              zipCode,
+              showFavorites: next,
+            });
+          }}
+        >
+          {showFavorites ? "Alle Spätis anzeigen" : "Favoriten anzeigen"}
+        </Button>
       )}
+
+      {/* ZIP Filter */}
+      <label>PLZ (5-stellig)</label>
+      <Input
+        value={zipCode}
+        maxLength={5}
+        placeholder="z.B. 10115"
+        onChange={(e) =>
+          setZipCode(e.target.value.replace(/\D/g, "").slice(0, 5))
+        }
+      />
+
+      {/* Sterni-Index Sort */}
+      <label>Sort by Sterni-Index</label>
+      <Select
+        value={sortOrder}
+        onChange={(v) => {
+          setSortOrder(v);
+          setRatingSortOrder("none");
+          setDistanceSortOrder("none");
+        }}
+      >
+        <Select.Option value="none">None</Select.Option>
+        <Select.Option value="asc">Asc</Select.Option>
+        <Select.Option value="desc">Desc</Select.Option>
+      </Select>
+
+      {/* Rating Sort */}
+      <label>Sort by Rating</label>
+      <Select
+        value={ratingSortOrder}
+        onChange={(v) => {
+          setRatingSortOrder(v);
+          setSortOrder("none");
+          setDistanceSortOrder("none");
+        }}
+      >
+        <Select.Option value="none">None</Select.Option>
+        <Select.Option value="asc">Asc</Select.Option>
+        <Select.Option value="desc">Desc</Select.Option>
+      </Select>
+
+      {/* Distance Sort */}
+      <label>Sort by Distance</label>
+      <Select
+        value={distanceSortOrder}
+        onChange={(v) => {
+          setDistanceSortOrder(v);
+          setSortOrder("none");
+          setRatingSortOrder("none");
+        }}
+      >
+        <Select.Option value="none">None</Select.Option>
+        <Select.Option value="asc">Closest first</Select.Option>
+        <Select.Option value="desc">Farthest first</Select.Option>
+      </Select>
+
+      {/* Sterni-Index Max */}
+      <label>Sterni-Index Max</label>
+      <Slider
+        min={0}
+        max={5}
+        step={0.1}
+        value={sterniMax}
+        onChange={setSterniMax}
+      />
+      <InputNumber
+        min={0}
+        max={5}
+        step={0.1}
+        value={sterniMax}
+        onChange={setSterniMax}
+      />
+
+      {/* Min Rating */}
+      <label>Min Rating</label>
+      <Slider
+        min={0}
+        max={5}
+        step={0.1}
+        value={starsMin}
+        onChange={setStarsMin}
+      />
+      <InputNumber
+        min={0}
+        max={5}
+        step={0.1}
+        value={starsMin}
+        onChange={setStarsMin}
+      />
+
+      {/* WC & Seats */}
+      <label>WC</label>
+      <Select value={wc} onChange={setWc}>
+        <Select.Option value="any">Any</Select.Option>
+        <Select.Option value="yes">Yes</Select.Option>
+        <Select.Option value="no">No</Select.Option>
+      </Select>
+
+      <label>Seats</label>
+      <Select value={seats} onChange={setSeats}>
+        <Select.Option value="any">Any</Select.Option>
+        <Select.Option value="yes">Yes</Select.Option>
+        <Select.Option value="no">No</Select.Option>
+      </Select>
+
+      {/* Buttons */}
+      <div id="flt-btn-container">
+        <button id="apply-btn" onClick={handleFilter}>
+          Apply
+        </button>
+        <button id="reset-btn" onClick={handleReset}>
+          Reset
+        </button>
+      </div>
     </div>
   );
 };
