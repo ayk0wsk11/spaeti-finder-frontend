@@ -33,7 +33,7 @@ const SpaetiListPage = () => {
         setFavoriteIds(res.data.data.map((spa) => spa._id));
       })
       .catch(console.error);
-  }, [currentUser, favoriteIds]);
+  }, [currentUser]);
 
   useEffect(() => {
     setIsOnProfile(false);

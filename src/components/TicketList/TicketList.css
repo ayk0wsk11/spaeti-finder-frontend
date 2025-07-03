@@ -2,15 +2,13 @@
 
 /*
   Refactored for mobile-first, using global variables and unified design.
-  Only component-specific overrides here.
+  Updated to support Card-based layout similar to ApprovalPage.
 */
 .ticket-list {
   max-width: 100%;
   margin: 1.2em auto;
   padding: 1.2em;
-  background-color: var(--color-bg-card);
-  border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
+  background-color: var(--color-bg);
   font-family: var(--font-main);
 }
 
@@ -20,46 +18,105 @@
   text-align: center;
 }
 
-.ticket-list ul {
-  list-style: none;
-  padding: 0;
+.ticket-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2em;
 }
 
-.ticket-list li {
-  padding: 0.7em 0;
+.ticket-card {
+  background-color: var(--color-bg-card);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  border: 1px solid var(--color-border);
+}
+
+.ticket-card .ant-card-head {
+  background-color: var(--color-bg-secondary);
   border-bottom: 1px solid var(--color-border);
 }
 
-.ticket-list li p {
-  margin: 0.3em 0;
+.ticket-card .ant-card-head-title {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.ticket-card .ant-card-extra {
   color: var(--color-muted);
 }
 
-.ticket-list button {
-  background-color: var(--color-primary);
-  color: #fff;
-  border: none;
-  padding: 0.7em 1em;
-  margin-right: 0.7em;
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  font-size: 1rem;
-  transition: background var(--transition);
+.ticket-content {
+  padding: 1em 0;
 }
 
-.ticket-list button:hover {
-  background-color: var(--color-secondary);
+.change-details h4 {
   color: var(--color-text);
+  margin-bottom: 0.5em;
 }
 
-.ticket-list a {
-  color: var(--color-primary);
-  text-decoration: underline;
+.change-details ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 1em;
+}
+
+.change-details li {
+  padding: 0.3em 0;
+  color: var(--color-muted);
+}
+
+.proposed-image {
+  margin-top: 1em;
+}
+
+.proposed-image h4 {
+  margin-bottom: 0.5em;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.7em;
+  margin-top: 1.2em;
+}
+
+.action-buttons .ant-btn {
+  flex: 1;
+  height: 2.5em;
+  font-weight: 500;
+}
+
+.approve-btn {
+  background-color: var(--color-success) !important;
+  border-color: var(--color-success) !important;
+}
+
+.approve-btn:hover {
+  background-color: var(--color-success-hover) !important;
+  border-color: var(--color-success-hover) !important;
+}
+
+.reject-btn:hover {
+  background-color: var(--color-danger-hover) !important;
+  border-color: var(--color-danger-hover) !important;
 }
 
 @media (min-width: 600px) {
   .ticket-list {
     max-width: 800px;
     padding: 1.5em;
+    margin: 2em auto;
+  }
+  
+  .ticket-cards {
+    gap: 1.5em;
+  }
+  
+  .action-buttons {
+    flex-direction: row;
+  }
+  
+  .action-buttons .ant-btn {
+    flex: 0 0 auto;
+    min-width: 120px;
   }
 }

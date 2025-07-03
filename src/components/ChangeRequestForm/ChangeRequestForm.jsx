@@ -1,4 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
+import { Form, Input, Button, Switch, Upload, message } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { API_URL } from "../../config";
 import { useParams } from "react-router-dom";
@@ -15,6 +17,9 @@ const ChangeRequestForm = () => {
   const { spaetiId } = useParams();
   const { currentUser } = useContext(AuthContext);
   const [oneSpaeti, setOneSpaeti] = useState(null);
+  const [preview, setPreview] = useState(null);
+  const [file, setFile] = useState(null);
+  const [form] = Form.useForm();
 
   // Fetch the spaeti data
   useEffect(() => {
@@ -25,7 +30,7 @@ const ChangeRequestForm = () => {
     fetchSpaeti();
   }, [spaetiId]);
 
-  // Initialize changes state when oneSpaeti loads
+  // Initialize form values when oneSpaeti loads
   useEffect(() => {
     if (oneSpaeti) {
       setChanges({
@@ -34,8 +39,16 @@ const ChangeRequestForm = () => {
         seats: oneSpaeti.seats || false,
         wc: oneSpaeti.wc || false,
       });
+      
+      // Set form values
+      form.setFieldsValue({
+        name: oneSpaeti.name || "",
+        proposedSterni: oneSpaeti.sternAvg || 0,
+        seats: oneSpaeti.seats || false,
+        wc: oneSpaeti.wc || false,
+      });
     }
-  }, [oneSpaeti]);
+  }, [oneSpaeti, form]);
 
   if (!currentUser) {
     return <p>Loading user info...</p>;
@@ -43,6 +56,21 @@ const ChangeRequestForm = () => {
   if (!oneSpaeti) {
     return <p>Loading spaeti data...</p>;
   }
+
+  const handleFileChange = (info) => {
+    const fileList = info.fileList;
+    if (fileList.length > 0) {
+      const fileObj = fileList[0].originFileObj;
+      if (fileObj) {
+        setFile(fileObj);
+        setPreview(URL.createObjectURL(fileObj));
+      }
+    } else {
+      // when deleted or empty
+      setFile(null);
+      setPreview(null);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -52,68 +80,100 @@ const ChangeRequestForm = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const onFinish = async (values) => {
     try {
       const token = localStorage.getItem("authToken");
-      await axios.post(
-        `${API_URL}/tickets`,
-        { spaetiId, changes, userId: currentUser._id },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      alert("Change request submitted!");
+      
+      const formData = new FormData();
+      formData.append("spaetiId", spaetiId);
+      formData.append("userId", currentUser._id);
+      formData.append("changes", JSON.stringify(values));
+      
+      if (file) {
+        formData.append("image", file);
+      }
+
+      console.log("Submitting change request:", {
+        spaetiId,
+        userId: currentUser._id,
+        changes: values,
+        hasImage: !!file
+      });
+
+      await axios.post(`${API_URL}/tickets`, formData, {
+        headers: { 
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data"
+        }
+      });
+      
+      message.success("Change request submitted successfully!");
+      form.resetFields();
+      setPreview(null);
+      setFile(null);
     } catch (err) {
-      alert("Error submitting change request");
+      console.error("Error submitting change request:", err);
+      message.error("Error submitting change request");
     }
   };
 
   return (
-    <form className="change-request-form" onSubmit={handleSubmit}>
-      <h2>Change Request</h2>
-
-      <label>
-        Name of the Späti:
-        <input
-          type="text"
+    <div className="change-request-form">
+      <h2>Change Request for {oneSpaeti?.name}</h2>
+      
+      <Form 
+        form={form}
+        layout="vertical" 
+        onFinish={onFinish} 
+        className="spaeti-form"
+      >
+        <Form.Item
           name="name"
-          value={changes.name}
-          onChange={handleChange}
-        />
-      </label>
+          label="Name of the Späti"
+          rules={[{ required: true, message: "Please enter a name" }]}
+        >
+          <Input placeholder="Späti Name" />
+        </Form.Item>
 
-      <label>
-        Proposed Sterni-Index (€):
-        <input
-          type="number"
+        <Form.Item label="New Image (optional)">
+          <Upload
+            name="image"
+            beforeUpload={() => false}
+            onChange={handleFileChange}
+            maxCount={1}
+            accept="image/jpeg,image/png"
+          >
+            <Button icon={<UploadOutlined />}>Select Image</Button>
+          </Upload>
+
+          {preview && (
+            <img src={preview} alt="Preview" className="image-preview" />
+          )}
+        </Form.Item>
+
+        <Form.Item
           name="proposedSterni"
-          value={changes.proposedSterni}
-          step="0.1"
-          onChange={handleChange}
-        />
-      </label>
+          label="Proposed Sterni-Index (€)"
+          rules={[{ required: true, message: "Please enter a price" }]}
+        >
+          <Input type="number" step="0.1" placeholder="e.g. 1.20" />
+        </Form.Item>
 
-      <label>
-        <input
-          type="checkbox"
-          name="seats"
-          checked={changes.seats}
-          onChange={handleChange}
-        />
-        Seats
-      </label>
+        <Form.Item name="wc" label="Toilet" valuePropName="checked">
+          <Switch checkedChildren="Yes" unCheckedChildren="No" />
+        </Form.Item>
 
-      <label>
-        <input
-          type="checkbox"
-          name="wc"
-          checked={changes.wc}
-          onChange={handleChange}
-        />
-        WC
-      </label>
+        <Form.Item name="seats" label="Seating" valuePropName="checked">
+          <Switch checkedChildren="Yes" unCheckedChildren="No" />
+        </Form.Item>
 
-      <button type="submit">Submit</button>
-    </form>
+        <Form.Item>
+          <Button type="primary" htmlType="submit" block>
+            Submit Change Request
+          </Button>
+        </Form.Item>
+      </Form>
+    </div>
   );
 };
 

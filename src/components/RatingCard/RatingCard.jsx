@@ -143,17 +143,21 @@ const RatingCard = ({ onNewRating }) => {
             ) : (
               <>
                 <div id="rating-content">
-                  <h4>User: {oneRating.user.username}</h4>
-                  <h4>Rating: {renderStars(oneRating.stars)}</h4>
-                  <h4>Created: {getCreationDate(oneRating.date)}</h4>
-                  {currentUser && (
-                    <div id="likes">
-                      <LikeOutlined
-                        onClick={() => handleLike(oneRating._id)}
-                      />
-                      <span id="likes-num">{likes[oneRating._id]}</span>
+                  <div id="rating-top-row">
+                    <div id="rating-left">
+                      <h4>User: {oneRating.user.username}</h4>
+                      <h4>Rating: {renderStars(oneRating.stars)}</h4>
                     </div>
-                  )}
+                    {currentUser && (
+                      <div id="likes">
+                        <LikeOutlined
+                          onClick={() => handleLike(oneRating._id)}
+                        />
+                        <span id="likes-num">{likes[oneRating._id]}</span>
+                      </div>
+                    )}
+                  </div>
+                  <h4>Created: {getCreationDate(oneRating.date)}</h4>
                 </div>
 
                 {/* only show non-empty comments */}

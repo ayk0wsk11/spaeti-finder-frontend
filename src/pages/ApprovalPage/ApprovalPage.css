@@ -1,57 +1,119 @@
-/* Overall container for the approval page */
+/*
+  Refactored for mobile-first, using global variables and unified design.
+  Only page-specific overrides here.
+*/
 #approval-page {
-  padding: 20px;
-  background-color: #f9f9f9;
+  padding: 1.2em;
+  background-color: var(--color-bg);
+  min-height: 100vh;
 }
 
-/* Container for the Späti cards */
-#spaeti-cards {
+#approval-page h1 {
+  text-align: center;
+  color: var(--color-text);
+  margin-bottom: 1.5em;
+}
+
+#spaeti-cards,
+#ticket-cards {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 1.2em;
 }
 
-/* Container for each Späti card and buttons */
-.spaeti-card-container {
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: #fff;
-  padding: 15px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: calc(50% - 20px); /* Adjust width based on layout */
+.spaeti-card-container,
+.ticket-card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  background-color: var(--color-bg-card);
+  padding: 1em;
+  box-shadow: var(--box-shadow);
+  width: 100%;
 }
 
-/* Action buttons container */
+.ticket-card {
+  margin-bottom: 1.2em;
+}
+
+.ticket-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.change-details h4 {
+  margin: 0 0 0.5em 0;
+  color: var(--color-text);
+}
+
+.change-details ul {
+  margin: 0;
+  padding-left: 1.2em;
+  color: var(--color-text);
+}
+
+.change-details li {
+  margin-bottom: 0.3em;
+}
+
+.proposed-image {
+  margin-top: 1em;
+}
+
+.proposed-image h4 {
+  margin-bottom: 0.5em;
+}
+
 .action-buttons {
   display: flex;
-  gap: 10px;
-  margin-top: 15px;
+  gap: 0.7em;
+  margin-top: 1em;
 }
 
-/* Style for approve button */
 .approve-btn {
-  background-color: #28a745;
+  background-color: var(--color-success);
   color: #fff;
   border: none;
-  border-radius: 4px;
-  padding: 10px 20px;
+  border-radius: var(--border-radius);
+  padding: 0.7em 1.2em;
   cursor: pointer;
+  font-weight: 600;
+  transition: background var(--transition);
 }
 
 .approve-btn:hover {
   background-color: #218838;
 }
 
-/* Style for reject button */
 .reject-btn {
-  background-color: #dc3545;
+  background-color: var(--color-danger);
   color: #fff;
   border: none;
-  border-radius: 4px;
-  padding: 10px 20px;
+  border-radius: var(--border-radius);
+  padding: 0.7em 1.2em;
   cursor: pointer;
+  font-weight: 600;
+  transition: background var(--transition);
 }
 
 .reject-btn:hover {
   background-color: #c82333;
+}
+
+@media (min-width: 600px) {
+  .spaeti-card-container {
+    width: calc(50% - 0.6em);
+  }
+}
+
+@media (min-width: 900px) {
+  #approval-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2em;
+  }
+  
+  .spaeti-card-container {
+    width: calc(33.333% - 0.8em);
+  }
 }

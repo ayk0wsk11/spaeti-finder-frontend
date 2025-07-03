@@ -105,6 +105,57 @@ button:hover {
   color: var(--color-text) !important;
 }
 
+[data-theme="dark"] .ant-input:focus,
+[data-theme="dark"] .ant-input:hover {
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 2px rgba(64, 169, 255, 0.2) !important;
+}
+
+[data-theme="dark"] .ant-input-affix-wrapper {
+  background: var(--color-bg-card) !important;
+  border-color: var(--color-border) !important;
+}
+
+[data-theme="dark"] .ant-input-affix-wrapper:focus,
+[data-theme="dark"] .ant-input-affix-wrapper:hover {
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 2px rgba(64, 169, 255, 0.2) !important;
+}
+
+[data-theme="dark"] .ant-input-prefix {
+  color: var(--color-muted) !important;
+}
+
+[data-theme="dark"] .ant-input::placeholder,
+[data-theme="dark"] .ant-input-affix-wrapper input::placeholder {
+  color: var(--color-muted) !important;
+  opacity: 0.7;
+}
+
+/* Dark mode form labels and text */
+[data-theme="dark"] .ant-form-item-label > label,
+[data-theme="dark"] .login-title,
+[data-theme="dark"] .login-footer,
+[data-theme="dark"] .ant-typography {
+  color: var(--color-text) !important;
+}
+
+[data-theme="dark"] .ant-form-item-explain-error {
+  color: var(--color-danger) !important;
+}
+
+/* Dark mode for custom titles and text elements */
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] h4,
+[data-theme="dark"] h5,
+[data-theme="dark"] h6,
+[data-theme="dark"] p,
+[data-theme="dark"] span:not(.ant-rate-star):not(.ant-rate-star-first):not(.ant-rate-star-second) {
+  color: var(--color-text) !important;
+}
+
 @media (min-width: 600px) {
   html {
     font-size: 17px;
