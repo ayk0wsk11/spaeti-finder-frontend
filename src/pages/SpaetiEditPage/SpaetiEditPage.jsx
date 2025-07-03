@@ -3,6 +3,7 @@ import axios from "axios";
 import { API_URL } from "../../config";
 import { AuthContext } from "../../context/auth.context";
 import { useNavigate, useParams } from "react-router-dom";
+import BackButton from "../../components/BackButton/BackButton";
 
 const SpaetiEditPage = () => {
   const [name, setName] = useState("");
@@ -76,6 +77,7 @@ const SpaetiEditPage = () => {
 
   return (
     <div>
+      <BackButton to={`/spaeti/details/${spaetiId}`}>Zurück zu Details</BackButton>
       <form id="add-form" onSubmit={handleEditSpaeti}>
         <label>
           Name:

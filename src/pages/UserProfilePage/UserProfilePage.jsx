@@ -14,6 +14,7 @@ import { UserOutlined } from "@ant-design/icons";
 import { AuthContext } from "../../context/auth.context";
 import { API_URL } from "../../config";
 import { Link } from "react-router-dom";
+import BackButton from "../../components/BackButton/BackButton";
 import avatar1 from "../../assets/avatar1.png";
 import avatar2 from "../../assets/avatar2.png";
 import avatar3 from "../../assets/avatar3.png";
@@ -122,6 +123,7 @@ const UserProfilePage = () => {
 
   return (
     <div id="user-profile-page">
+      <BackButton to="/">Zurück zur Startseite</BackButton>
       <Card className="profile-card">
         <div className="profile-header">
           <Avatar

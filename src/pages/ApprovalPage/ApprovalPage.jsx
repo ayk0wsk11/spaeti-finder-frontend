@@ -4,6 +4,7 @@ import axios from "axios";
 import { API_URL } from "../../config";
 import { AuthContext } from "../../context/auth.context";
 import { message, Tabs, Card, Button, Image } from "antd";
+import BackButton from "../../components/BackButton/BackButton";
 import "./ApprovalPage.css";
 
 const { TabPane } = Tabs;
@@ -104,6 +105,8 @@ const ApprovalPage = () => {
 
   return (
     <div id="approval-page">
+      <BackButton to="/">Zurück zur Startseite</BackButton>
+      
       <h1>Admin Dashboard</h1>
       
       <Tabs defaultActiveKey="spaetis" size="large">

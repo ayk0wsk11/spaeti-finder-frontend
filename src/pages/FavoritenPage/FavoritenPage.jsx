@@ -5,6 +5,7 @@ import { AuthContext } from "../../context/auth.context";
 import { API_URL } from "../../config";
 import SpaetiCard from "../../components/SpaetiCard/SpaetiCard";
 import { Row, Col, Spin } from "antd";
+import BackButton from "../../components/BackButton/BackButton";
 import "./FavoritenPage.css";
 
 const FavoritenPage = () => {
@@ -37,6 +38,7 @@ const FavoritenPage = () => {
 
   return (
     <div className="favorites-page">
+      <BackButton />
       <h2>Meine Favoriten</h2>
 
       {favorites.length === 0 ? (

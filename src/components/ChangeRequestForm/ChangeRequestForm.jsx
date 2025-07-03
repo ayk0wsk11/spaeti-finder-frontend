@@ -5,6 +5,7 @@ import axios from "axios";
 import { API_URL } from "../../config";
 import { useParams } from "react-router-dom";
 import { AuthContext } from "../../context/auth.context";
+import BackButton from "../BackButton/BackButton";
 import "./ChangeRequestForm.css";
 
 const ChangeRequestForm = () => {
@@ -119,6 +120,8 @@ const ChangeRequestForm = () => {
 
   return (
     <div className="change-request-form">
+      <BackButton to={`/spaeti/details/${spaetiId}`}>Zurück zu Details</BackButton>
+      
       <h2>Change Request for {oneSpaeti?.name}</h2>
       
       <Form 

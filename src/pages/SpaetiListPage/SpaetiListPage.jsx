@@ -1,7 +1,8 @@
 // src/pages/SpaetiListPage.jsx
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Input, Alert } from "antd";
+import { Input, Modal, Button } from "antd";
+import { InfoCircleOutlined } from "@ant-design/icons";
 import SpaetiCard from "../../components/SpaetiCard/SpaetiCard";
 import FilterComponent from "../../components/FilterComponent/FilterComponent";
 import { AuthContext } from "../../context/auth.context";
@@ -187,23 +188,39 @@ const SpaetiListPage = () => {
           className="mb-4"
         />
 
-        {showNoResults && (
-          <Alert
-            type="info"
-            showIcon
-            closable
-            onClose={() => setShowNoResults(false)}
-            message="Kein Späti gefunden :("
-            description={
-              <span>
-                Leider gibt es in dieser PLZ keinen Späti. Falls du einen
-                gefunden hast, füge ihn bitte{" "}
-                <Link to="/spaeti/create">hier</Link> hinzu.
-              </span>
-            }
-            style={{ marginBottom: 16, borderRadius: 8 }}
-          />
-        )}
+        <Modal
+          title={
+            <div className="no-results-modal-header">
+              <InfoCircleOutlined style={{ marginRight: 8, fontSize: '16px' }} />
+              Kein Späti gefunden :(
+            </div>
+          }
+          open={showNoResults}
+          onCancel={() => setShowNoResults(false)}
+          footer={[
+            <Button 
+              key="add" 
+              type="primary" 
+              onClick={() => setShowNoResults(false)}
+            >
+              <Link to="/spaeti/create" style={{ color: 'inherit', textDecoration: 'none' }}>
+                Späti hinzufügen
+              </Link>
+            </Button>,
+            <Button key="close" onClick={() => setShowNoResults(false)}>
+              Schließen
+            </Button>
+          ]}
+          className="no-results-modal"
+          centered
+        >
+          <div className="no-results-modal-content">
+            <p>
+              Leider gibt es in dieser PLZ keinen Späti. Falls du einen 
+              gefunden hast, kannst du ihn gerne hinzufügen!
+            </p>
+          </div>
+        </Modal>
 
         <div id="spaeti-cards-column">
           {filteredAndSearched.map(

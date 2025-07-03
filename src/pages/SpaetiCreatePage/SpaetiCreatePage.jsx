@@ -6,6 +6,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/auth.context";
 import { API_URL } from "../../config";
+import BackButton from "../../components/BackButton/BackButton";
 import "./SpaetiCreatePage.css";
 
 const SpaetiCreatePage = () => {
@@ -83,6 +84,8 @@ const SpaetiCreatePage = () => {
 
   return (
     <div id="add-container">
+      <BackButton to="/spaeti/list">Zurück zur Liste</BackButton>
+
       <Modal
         title="Späti erfolgreich erstellt!"
         open={isModalVisible}
@@ -99,6 +102,8 @@ const SpaetiCreatePage = () => {
           erscheint er auf der Karte.
         </p>
       </Modal>
+
+      <BackButton />
 
       <Form layout="vertical" onFinish={onFinish} className="spaeti-form">
         <Form.Item
