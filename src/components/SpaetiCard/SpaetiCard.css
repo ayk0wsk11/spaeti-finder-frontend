@@ -41,6 +41,7 @@
   cursor: pointer;
   display: inline-flex;
   align-items: center;
+  color: #e74c3c;
 }
 .fav-icon svg {
   color: #e74c3c;
