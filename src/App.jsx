@@ -27,6 +27,7 @@ import AboutPage from "./pages/AboutPage/AboutPage";
 import AdminDashboard from "./pages/AdminDashboard/AdminDashboard";
 import ChangeRequestForm from "./components/ChangeRequestForm/ChangeRequestForm";
 import FavoritenPage from "./pages/FavoritenPage/FavoritenPage";
+import TopRatedPage from "./pages/TopRatedPage/TopRatedPage";
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -65,6 +66,7 @@ function App() {
             }
           />
           <Route path="/spaeti/list" element={<SpaetiListPage />} />
+          <Route path="/top-rated" element={<TopRatedPage />} />
           <Route
             path="/profile"
             element={
