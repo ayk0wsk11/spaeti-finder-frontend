@@ -28,6 +28,8 @@ import AdminDashboard from "./pages/AdminDashboard/AdminDashboard";
 import ChangeRequestForm from "./components/ChangeRequestForm/ChangeRequestForm";
 import FavoritenPage from "./pages/FavoritenPage/FavoritenPage";
 import TopRatedPage from "./pages/TopRatedPage/TopRatedPage";
+import ImpressumPage from "./pages/ImpressumPage/ImpressumPage";
+import DatenschutzPage from "./pages/DatenschutzPage/DatenschutzPage";
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -100,8 +102,10 @@ function App() {
             }
           />
 
-          <Route path="*" element={<NotFoundPage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/impressum" element={<ImpressumPage />} />
+          <Route path="/datenschutz" element={<DatenschutzPage />} />
+          <Route path="*" element={<NotFoundPage />} />
           <Route
             path="/favorites"
             element={
