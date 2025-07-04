@@ -15,6 +15,7 @@ import { AuthContext } from "../../context/auth.context";
 import { API_URL } from "../../config";
 import { Link } from "react-router-dom";
 import BackButton from "../../components/BackButton/BackButton";
+import XPDisplay from "../../components/XPDisplay/XPDisplay";
 import avatar1 from "../../assets/avatar1.png";
 import avatar2 from "../../assets/avatar2.png";
 import avatar3 from "../../assets/avatar3.png";
@@ -50,14 +51,31 @@ const UserProfilePage = () => {
     if (!currentUser) return;
     const fetchData = async () => {
       try {
-        const [{ data: userData }, { data: ratingsData }] = await Promise.all([
-          axios.get(`${API_URL}/users/${currentUser._id}`),
-          axios.get(`${API_URL}/ratings/user/${currentUser._id}`),
-        ]);
+        // Get user data (which should include ratings if populated)
+        const { data: userData } = await axios.get(`${API_URL}/users/${currentUser._id}`);
+        console.log("User data:", userData);
         setUser(userData.data);
-        setUserRatings(ratingsData.data);
+        
+        // Try to get ratings from user data first (if populated)
+        if (userData.data && userData.data.ratings) {
+          console.log("Ratings from user data:", userData.data.ratings);
+          setUserRatings(Array.isArray(userData.data.ratings) ? userData.data.ratings : []);
+        } else {
+          // Fallback: try the ratings endpoint
+          try {
+            const { data: ratingsData } = await axios.get(`${API_URL}/ratings/user/${currentUser._id}`);
+            console.log("Ratings data from API:", ratingsData);
+            const ratings = ratingsData.data || ratingsData || [];
+            setUserRatings(Array.isArray(ratings) ? ratings : []);
+          } catch (ratingsError) {
+            console.warn("Could not fetch ratings from API:", ratingsError);
+            setUserRatings([]);
+          }
+        }
       } catch (err) {
-        console.error(err);
+        console.error("Error fetching data:", err);
+        // Ensure userRatings is always an array even on error
+        setUserRatings([]);
       }
     };
     fetchData();
@@ -103,14 +121,14 @@ const UserProfilePage = () => {
   const contentList = {
     ratings: (
       <div className="activity-list">
-        {userRatings.length > 0 ? (
+        {userRatings && userRatings.length > 0 ? (
           userRatings.map((r) => (
             <div className="one-rating" key={r._id}>
               <Link to={`/spaeti/details/${r.spaeti._id}`}>
                 <h3>{r.spaeti.name}</h3>
               </Link>
               {r.comment && <p>{r.comment}</p>}
-              <h4>Rating: {renderStars(r.stars)}</h4>
+              <h4>Rating: {renderStars(r.rating)}</h4>
             </div>
           ))
         ) : (
@@ -124,6 +142,9 @@ const UserProfilePage = () => {
   return (
     <div id="user-profile-page">
       <BackButton to="/">Zurück zur Startseite</BackButton>
+      
+      <XPDisplay user={user} />
+      
       <Card className="profile-card">
         <div className="profile-header">
           <Avatar

@@ -1,0 +1,127 @@
+/* src/components/XPDisplay/XPDisplay.css */
+.xp-display-card {
+  margin-bottom: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+}
+
+.xp-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.level-badge {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.trophy-icon {
+  font-size: 32px;
+}
+
+.level-number {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  z-index: 2;
+}
+
+.level-info {
+  flex: 1;
+}
+
+.level-title {
+  margin: 0 0 4px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.level-icon {
+  font-size: 20px;
+}
+
+.xp-text {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.xp-progress {
+  margin-top: 12px;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.level-progress-bar {
+  margin-bottom: 8px;
+}
+
+.level-progress-bar .ant-progress-bg {
+  border-radius: 10px;
+}
+
+.level-progress-bar .ant-progress-inner {
+  border-radius: 10px;
+  background-color: var(--surface-color);
+}
+
+.xp-next-level {
+  margin: 0;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .xp-display-card {
+  background: var(--card-bg);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .level-title {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .xp-text,
+[data-theme="dark"] .progress-header,
+[data-theme="dark"] .xp-next-level {
+  color: var(--text-secondary);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .xp-header {
+    gap: 12px;
+  }
+  
+  .level-title {
+    font-size: 16px;
+  }
+  
+  .trophy-icon {
+    font-size: 28px;
+  }
+  
+  .level-icon {
+    font-size: 18px;
+  }
+}

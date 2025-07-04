@@ -6,12 +6,13 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/auth.context";
 import { useSpaetiContext } from "../../context/spaeti.context";
+import { awardXP, XP_REWARDS } from "../../utils/xpSystem";
 import { API_URL } from "../../config";
 import BackButton from "../../components/BackButton/BackButton";
 import "./SpaetiCreatePage.css";
 
 const SpaetiCreatePage = () => {
-  const { currentUser, setIsOnProfile } = useContext(AuthContext);
+  const { currentUser, setIsOnProfile, authenticateUser } = useContext(AuthContext);
   const { addSpaeti, refreshSpaetis } = useSpaetiContext();
   const [preview, setPreview] = useState(null);
   const [file, setFile] = useState(null);
@@ -78,6 +79,19 @@ const SpaetiCreatePage = () => {
     try {
       const response = await axios.post(`${API_URL}/spaetis`, formData);
       addSpaeti(response.data.data); // Add the new Späti to context
+      
+      // Award XP based on whether an image was uploaded
+      const xpAmount = file ? XP_REWARDS.CREATE_SPAETI_WITH_IMAGE : XP_REWARDS.CREATE_SPAETI_WITHOUT_IMAGE;
+      const reason = file ? "Created Späti with image" : "Created Späti without image";
+      
+      try {
+        await awardXP(currentUser._id, xpAmount, reason, authenticateUser);
+        message.success(`Späti created! You earned ${xpAmount} XP!`);
+      } catch (xpError) {
+        console.error("Error awarding XP:", xpError);
+        message.success("Späti created successfully!");
+      }
+      
       setIsModalVisible(true);
     } catch (err) {
       console.error(err);

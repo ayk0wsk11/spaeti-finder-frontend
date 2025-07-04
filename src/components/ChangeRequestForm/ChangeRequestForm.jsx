@@ -6,7 +6,8 @@ import { API_URL } from "../../config";
 import { useParams } from "react-router-dom";
 import { AuthContext } from "../../context/auth.context";
 import { useSpaetiContext } from "../../context/spaeti.context";
-import BackButton from "../BackButton/BackButton";
+import { awardXP, XP_REWARDS } from "../../utils/xpSystem";
+import BackButton from "../../components/BackButton/BackButton";
 import "./ChangeRequestForm.css";
 
 const ChangeRequestForm = () => {
@@ -116,7 +117,8 @@ const ChangeRequestForm = () => {
         }
       });
       
-      message.success("Change request submitted successfully!");
+      // Note: XP will be awarded when the change request is approved, not when submitted
+      message.success("Change request submitted successfully! XP will be awarded when approved.");
       form.resetFields();
       setPreview(null);
       setFile(null);

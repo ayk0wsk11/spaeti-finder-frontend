@@ -1,14 +1,15 @@
 import { useContext, useState } from "react";
 import { useParams } from "react-router-dom";
 import { AuthContext } from "../../context/auth.context";
+import { awardXP, XP_REWARDS } from "../../utils/xpSystem";
 import axios from "axios";
-import { Rate, Button, Card, Input, Alert } from "antd";
+import { Rate, Button, Card, Input, Alert, message } from "antd";
 import { API_URL } from "../../config";
 import "./CreateRatingComponent.css";
 const { TextArea } = Input;
 
 const CreateRatingComp = ({ onNewRating }) => {
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser, authenticateUser } = useContext(AuthContext);
   const [stars, setStars] = useState(0);
   const [comment, setComment] = useState("");
   const [error, setError] = useState(null);
@@ -22,13 +23,25 @@ const CreateRatingComp = ({ onNewRating }) => {
     }
     setError(null);
     try {
+      const token = localStorage.getItem("authToken");
       await axios.post(`${API_URL}/ratings`, {
-        stars,
+        rating: stars, // Changed from 'stars' to 'rating' to match backend
         user: currentUser._id,
         comment: comment.trim(),
-        date: new Date().toISOString(),
         spaeti: spaetiId,
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
       });
+      
+      // Award XP for creating a rating
+      try {
+        await awardXP(currentUser._id, XP_REWARDS.CREATE_RATING, "Created a rating", authenticateUser);
+        message.success(`Rating submitted! You earned ${XP_REWARDS.CREATE_RATING} XP!`);
+      } catch (xpError) {
+        console.error("Error awarding XP:", xpError);
+        message.success("Rating submitted successfully!");
+      }
+      
       setStars(0);
       setComment("");
       onNewRating();

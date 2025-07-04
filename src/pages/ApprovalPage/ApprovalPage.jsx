@@ -37,9 +37,15 @@ const ApprovalPage = () => {
 
   const handleApproval = async (id) => {
     try {
-      await axios.patch(`${API_URL}/spaetis/update/${id}`, { approved: true });
+      const response = await axios.patch(`${API_URL}/spaetis/update/${id}`, { approved: true });
       updateSpaeti(id, { approved: true }); // Update in context
-      message.success("Späti approved successfully!");
+      
+      // Check if response contains XP information
+      if (response.data && response.data.xpAwarded) {
+        message.success(`Späti approved successfully! ${response.data.xpAwarded} XP awarded to creator.`);
+      } else {
+        message.success("Späti approved successfully!");
+      }
     } catch (error) {
       console.log(error);
       message.error("Failed to approve Späti");
@@ -60,14 +66,20 @@ const ApprovalPage = () => {
   const handleTicketApproval = async (ticketId) => {
     try {
       const token = localStorage.getItem("authToken");
-      await axios.post(`${API_URL}/tickets/${ticketId}/approve`, {}, {
+      const response = await axios.post(`${API_URL}/tickets/${ticketId}/approve`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setTickets((prevTickets) =>
         prevTickets.filter((ticket) => ticket._id !== ticketId)
       );
       refreshSpaetis(); // Refresh Spätis from server after ticket approval
-      message.success("Change request approved successfully!");
+      
+      // Check if response contains XP information
+      if (response.data && response.data.xpAwarded) {
+        message.success(`Change request approved successfully! ${response.data.xpAwarded} XP awarded to user.`);
+      } else {
+        message.success("Change request approved successfully!");
+      }
     } catch (error) {
       console.log(error);
       message.error("Failed to approve change request");

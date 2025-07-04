@@ -56,6 +56,7 @@ const AuthContextWrapper = ({ children }) => {
         isOnProfile,
         setIsOnProfile,
         authenticateUser,
+        refreshUser: authenticateUser, // Alias for external use
       }}
     >
       {children}
