@@ -92,26 +92,32 @@
   bottom: 0;
   width: 100%;
   padding: 16px;
-  background: linear-gradient(transparent, rgba(0,0,0,0.6));
+  background: linear-gradient(transparent, rgba(0,0,0,0.8));
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
 }
 .spaeti-name {
   color: #fff;
-  font-size: 2rem;
+  font-size: 2.2rem;
+  font-weight: 700;
   margin: 0;
-  line-height: 1;
+  line-height: 1.1;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+  letter-spacing: -0.02em;
 }
 .hero-rating {
   margin-right: 25px;
   color: #FFD369;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
+  font-weight: 600;
   display: flex;
   align-items: center;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
 }
 .hero-rating .star-icon {
-  margin-left: 4px;
+  margin-left: 6px;
+  font-size: 1.2rem;
 }
 
 /* Info Section */

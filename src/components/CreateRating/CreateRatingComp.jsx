@@ -25,7 +25,7 @@ const CreateRatingComp = ({ onNewRating }) => {
     try {
       const token = localStorage.getItem("authToken");
       await axios.post(`${API_URL}/ratings`, {
-        rating: stars, // Changed from 'stars' to 'rating' to match backend
+        stars: stars, // Use 'stars' to match the model
         user: currentUser._id,
         comment: comment.trim(),
         spaeti: spaetiId,
@@ -47,7 +47,12 @@ const CreateRatingComp = ({ onNewRating }) => {
       onNewRating();
     } catch (err) {
       console.error(err);
-      setError("Failed to submit rating. Please try again.");
+      // Check if it's a duplicate rating error
+      if (err.response?.data?.message?.includes("already rated")) {
+        setError("Already rated this Späti! You can update your rating, but can't add a 2nd one");
+      } else {
+        setError("Failed to submit rating. Please try again.");
+      }
     }
   };
 

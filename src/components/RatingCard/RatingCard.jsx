@@ -23,16 +23,19 @@ const RatingCard = ({ onNewRating }) => {
         const { data } = await axios.get(
           `${API_URL}/spaetis/ratings/${spaetiId}`
         );
-        setRatings(data.rating);
+        const ratingsData = data.rating || [];
+        setRatings(ratingsData);
 
-        const initialLikes = data.rating.reduce((acc, rating) => {
-          acc[rating._id] = rating.likes.length;
+        const initialLikes = ratingsData.reduce((acc, rating) => {
+          acc[rating._id] = (rating.likes && rating.likes.length) || 0;
           return acc;
         }, {});
 
         setLikes(initialLikes);
       } catch (error) {
-        console.log(error);
+        console.error("Error fetching ratings:", error);
+        setRatings([]);
+        setLikes({});
       }
     };
 
@@ -55,32 +58,40 @@ const RatingCard = ({ onNewRating }) => {
         setLikes((prev) => ({ ...prev, [id]: prev[id] - 1 }));
       }
     } catch (error) {
-      console.error(error);
+      console.error("Error handling like:", error);
     }
   };
 
   const handleDeleteComment = async (id) => {
-    await axios.delete(`${API_URL}/ratings/delete/${id}`);
-    setRatings(ratings.filter((e) => e._id !== id));
+    try {
+      const token = localStorage.getItem("authToken");
+      await axios.delete(`${API_URL}/ratings/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setRatings(ratings.filter((e) => e._id !== id));
+    } catch (error) {
+      console.error("Error deleting rating:", error);
+    }
   };
 
   const getCreationDate = (date) => date.split("T")[0];
 
   const handleEdit = (rating) => {
     setEditMode(rating._id);
-    setEditStars(rating.stars);
+    setEditStars(rating.stars || rating.rating || 0); // Use 'stars' first, then 'rating' as fallback
     setEditComment(rating.comment);
   };
 
   const handleUpdate = async (id) => {
     try {
+      const token = localStorage.getItem("authToken");
       const updatedRating = {
-        stars: editStars,
+        stars: editStars, // Use 'stars' to match the model
         comment: editComment,
-        user: currentUser,
-        spaeti: spaetiId,
       };
-      await axios.put(`${API_URL}/ratings/update/${id}`, updatedRating);
+      await axios.put(`${API_URL}/ratings/${id}`, updatedRating, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       setRatings((prev) =>
         prev.map((r) =>
           r._id === id ? { ...r, stars: editStars, comment: editComment } : r
@@ -146,7 +157,7 @@ const RatingCard = ({ onNewRating }) => {
                   <div id="rating-top-row">
                     <div id="rating-left">
                       <h4>User: {oneRating.user.username}</h4>
-                      <h4>Rating: {renderStars(oneRating.stars)}</h4>
+                      <h4>Rating: {renderStars(oneRating.stars || oneRating.rating || 0)}</h4>
                     </div>
                     {currentUser && (
                       <div id="likes">

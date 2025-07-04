@@ -48,6 +48,10 @@ const SpaetiDetailsPage = () => {
     const spaetiFromContext = getSpaeti(spaetiId);
     if (spaetiFromContext) {
       setOneSpaeti(spaetiFromContext);
+      // If context has ratings, calculate average immediately
+      if (spaetiFromContext.rating && spaetiFromContext.rating.length > 0) {
+        setAverageRating(calculateAverageRating(spaetiFromContext.rating));
+      }
     } else {
       // Fallback: fetch from API if not in context yet
       fetchData();
@@ -104,7 +108,7 @@ const SpaetiDetailsPage = () => {
   const calculateAverageRating = (ratings) =>
     ratings && ratings.length
       ? (
-          ratings.reduce((sum, r) => sum + Number(r.stars), 0) / ratings.length
+          ratings.reduce((sum, r) => sum + Number(r.rating || r.stars || 0), 0) / ratings.length
         ).toFixed(1)
       : 0;
 
@@ -175,7 +179,7 @@ const SpaetiDetailsPage = () => {
         <div className="hero-overlay">
           <h1 className="spaeti-name">{oneSpaeti.name}</h1>
           <div className="hero-rating">
-            <span>{averageRating}</span>
+            <span>{averageRating || '0.0'}</span>
             <StarFilled className="star-icon" />
           </div>
         </div>

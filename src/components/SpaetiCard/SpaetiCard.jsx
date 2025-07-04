@@ -29,7 +29,7 @@ const SpaetiCard = ({ spaeti, distance }) => {
 
   const calculateAverageRating = (ratings) => {
     if (!ratings || ratings.length === 0) return 0;
-    const total = ratings.reduce((sum, r) => sum + Number(r.stars), 0);
+    const total = ratings.reduce((sum, r) => sum + Number(r.rating || r.stars || 0), 0);
     return (total / ratings.length).toFixed(1);
   };
 

@@ -1,182 +1,354 @@
-[See the App!](https://spaetify.netlify.app/) Spätify
+# 🏪 Spätify - Berlin's Ultimate Späti Finder
 
-## Spätify
+**[🚀 Live Demo](https://spaetify.netlify.app/)** | **[📱 Try it now!](https://spaetify.netlify.app/)**
 
-## Description
+---
 
-Welcome to Spätify! <br/>
-            We are two web developers, Ayko and Jonathan, working on an exciting project called "Spätify", for our final project of our Ironhack bootcamp. Our web app aims to help Berlin residents and visitors easily find and rate Spätis, the beloved late-night convenience stores unique to the city. With Spätify, users can discover the best Spätis based on community reviews, ensuring they always find the perfect spot for their late-night needs.
+## 📖 Description
 
-## User Stories
+Welcome to **Spätify**! 🎉
 
-- **homepage** - Our homepage shows a map, with markers for all our spätis
-![alt text](![alt text](image.png))
-- **sign up** - A page, where you can setup a user profile with a username and password, to enjoy all our features
-- **login** - The possibility to login to your profile and verify 
-- **All Spätis page** - A page where we show all our Spätis and have the possibility to filter for certain things
-- **Späti detail page** - Our detailed page for every Späti, showing the average rating, address, comments, seating possibility and wether the Späti has a toilet
-- **Späti create page** - If your Späti is missing, you can add it here. After you add it, it needs to be approved by an admin
-- **Späti edit page** - You will be able to update or delete a Späti you added, in case the prices change for example. Only accessible for admins and the user who created the Späti
-- **Approval page** - A page only for the admins. We can approve or decline a Späti from here, without going into the database. Of course the page is not accessible for everybody
-- **User profile page** - Here we list all of your ratings and all the ratings you liked
-- **404** - A page, showing that the URL does not exist
-- **about** - This page is showing our intentions with the web app and has the links to our Github
+We are Ayko and Jonathan, two passionate web developers who created this project as our **final capstone** for the Ironhack Web Development Bootcamp. 
 
-## Backlog Functionalities
+**Spätify** helps Berlin residents and visitors easily discover, rate, and find the best **Spätis** (late-night convenience stores) throughout the city. Whether you need a cold beer at 2 AM or forgot to buy groceries, we've got you covered! 🍺🥨
 
+![Homepage Screenshot](./screenshots/homepage.png)
+*Interactive map showing all Spätis in Berlin*
 
-- **XP and Batch system** - we already have a system in mind. Adding Spätis, leaving ratings will earn you xp-points. Depending on your xp, you will gain a batch
-- **Pictures for Spätis** - for now we decided against, since we only using the free version of cloudinary and rather have a profile picture for the user. In the future we wan't to add the possibility to add pictures to your ratings
+---
 
-## Routes
+## ✨ Key Features
 
-- GET /
-  - fetching users, spätis and ratings
-- PATCH
-  - update spätis and ratings
-- POST
-  - sign up, add spätis and ratings 
-- DELETE
-  - delete ratings and Spätis
+### 🗺️ **Interactive Map**
+- **Real-time Späti locations** with custom markers
+- **Click markers** to see Späti details instantly
+- **Responsive design** for mobile and desktop
 
-## Models
-- **User model:**
+![Map Feature](./screenshots/map-feature.png)
 
-  user:
-    {
-    email: {
-      type: String,
-      required: [true, "Email is required."],
-      unique: true,
-      lowercase: true,
-      trim: true,
-    },
-    password: {
-      type: String,
-      required: [true, "Password is required."],
-    },
-    username: {
-      type: String,
-      required: [true, "Username is required"],
-      unique: true,
-    },
-    image: {
-      type: String,
-      default: "https://pbs.twimg.com/media/EM5IQXcVUAERaFN.jpg",
-    },
-    xp: {
-      type: Number,
-      default: 0,
-    },
-    ratings: {
-      type: [Schema.Types.ObjectId],
-      ref: "Rating",
-    },
-    likes: {
-      type: [Schema.Types.ObjectId],
-      ref: "Rating",
-    },
-    dislikes: {
-      type: [Schema.Types.ObjectId],
-      ref: "Rating",
-    },
-    admin: { type: Boolean, default: false },
-  },
-  {
-    timestamps: true,
-  }
+### ⭐ **Rating & Review System**
+- **5-star rating system** for each Späti
+- **Detailed comments** from the community
+- **Like/Unlike reviews** from other users
+- **Average rating calculation** displayed on cards
 
+### 🏆 **XP & Level System** (NEW!)
+- **Earn XP points** for contributing to the community:
+  - 🏪 **Create a Späti**: 50 XP (with image) / 40 XP (without image)
+  - 📝 **Submit updates**: 30 XP (when approved)
+  - ⭐ **Leave a rating**: 10 XP
+- **Level progression**: Every 100 XP = 1 Level
+- **XP tracking** on your profile page
 
+![User Profile](./screenshots/user-profile.png)
+*User profile showing XP, level, and rating history*
 
-- **Rating Model:**
+### 🔍 **Advanced Search & Filtering**
+- **Filter by amenities**: Seating, Toilets, Beer prices
+- **Search by location** or Späti name
+- **Sort by rating** or distance
 
-user: {
-    type: Schema.Types.ObjectId,
-    required: true,
-    ref: "User",
-  },
-  stars: {
-    type: Number,
-    enum: [1, 2, 3, 4, 5],
-  },
-  comment: {
-    type: String,
-  },
-  likes: {
-    type: [Schema.Types.ObjectId],
-    ref: "User",
-  },
-  date: {
-    type: Date,
-    default: Date.now,
-  },
-  spaeti: {
-    type: Schema.Types.ObjectId,
-    ref: "Spaeti",
-  }
+### 👑 **Admin Management**
+- **Approval system** for new Spätis and updates
+- **Admin dashboard** for content moderation
+- **Quality control** to maintain accurate data
 
-- **Späti model:**
+![Admin Dashboard](./screenshots/admin-dashboard.png)
+*Admin approval interface*
 
-  name: {
-    type: String,
-    required: true,
-  },
-  street: {
-    type: String,
-    required: true,
-  },
-  zip: {
-    type: Number,
-    required: true,
-  },
-  city: {
-    type: String,
-    required: true,
-  },
-  rating: {
-    type: [Schema.Types.ObjectId],
-    ref: "Rating",
-  },
-  sterni: {
-    type: Number,
-  },
-  seats: {
-    type: Boolean,
-  },
-  wc: {
-    type: Boolean,
-  },
-  creator: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
-  },
-  approved: {
-    type: Boolean,
-  },
-  image: {
-    type: String,
-    default:
-      "https://www.berlin-live.de/wp-content/uploads/sites/10/2024/03/imago0105469791h-e1710357404842.jpg",
-  }
+---
 
+## 🎯 User Stories
 
+### 🏠 **Homepage**
+Our interactive homepage displays a beautiful map with markers for all approved Spätis in Berlin.
 
+### 👤 **User Authentication**
+- **Sign up** with username, email, and profile picture
+- **Secure login** with JWT authentication
+- **Profile management** with XP tracking
 
+### 🏪 **Späti Management**
+- **Browse all Spätis** with filtering options
+- **Detailed Späti pages** showing ratings, amenities, and location
+- **Add new Spätis** (subject to admin approval)
+- **Edit your own Spätis** with update requests
 
-## Collaborators
+### ⭐ **Rating System**
+- **Rate Spätis** from 1-5 stars with comments
+- **Edit/delete** your own ratings
+- **Like other users' reviews**
+- **Earn XP** for every rating you create
 
-[Ayko](https://github.com/ayk0wsk11)
+### 👑 **Admin Features**
+- **Approve/reject** new Späti submissions
+- **Moderate content** and manage users
+- **Admin-only** approval dashboard
 
-[Jonathan](https://github.com/Senfjo)
+---
 
-### Project
+## 🛠️ Technical Implementation
 
-- [Frontend](https://github.com/ayk0wsk11/spaeti-finder-frontend)
-- [Backend](https://github.com/Senfjo/spaeti-finder-backend)
-- [Deployed Page](https://spaetify.netlify.app/)
+### 🎨 **Frontend (React)**
+- **React 18** with functional components and hooks
+- **Ant Design** for beautiful UI components
+- **React Router** for seamless navigation
+- **Axios** for API communication
+- **Interactive maps** with custom markers
+- **Responsive design** for all screen sizes
 
+### ⚙️ **Backend (Node.js + Express)**
+- **Express.js** RESTful API
+- **MongoDB** with Mongoose ODM
+- **JWT authentication** with middleware
+- **Cloudinary** for image uploads
+- **XP system** with automatic point calculation
+- **Admin role-based** access control
 
+### 🔐 **Security Features**
+- **JWT token** authentication
+- **Password hashing** with bcrypt
+- **Protected routes** and middleware
+- **Input validation** and sanitization
+- **Role-based access** control
 
-### Slides
+---
 
-[Slides Link]()
+## 📱 Screenshots
+
+![Späti Details](./screenshots/spaeti-details.png)
+*Detailed Späti page with ratings, amenities, and map*
+
+---
+
+## 🗂️ Data Models
+
+### 👤 **User Model**
+```javascript
+{
+  email: String (required, unique),
+  password: String (required, hashed),
+  username: String (required, unique),
+  image: String (profile picture URL),
+  xp: Number (default: 0),
+  ratings: [ObjectId] (ref: "Rating"),
+  favorites: [ObjectId] (ref: "Spaeti"),
+  admin: Boolean (default: false)
+}
+```
+
+### ⭐ **Rating Model**
+```javascript
+{
+  user: ObjectId (ref: "User", required),
+  stars: Number (1-5, required),
+  comment: String,
+  likes: [ObjectId] (ref: "User"),
+  spaeti: ObjectId (ref: "Spaeti", required),
+  date: Date (default: now)
+}
+```
+
+### 🏪 **Späti Model**
+```javascript
+{
+  name: String (required),
+  street: String (required),
+  zip: Number (required),
+  city: String (required),
+  rating: [ObjectId] (ref: "Rating"),
+  averageRating: Number,
+  sterni: Number (beer price),
+  seats: Boolean,
+  wc: Boolean,
+  creator: ObjectId (ref: "User"),
+  approved: Boolean,
+  image: String
+}
+```
+
+### 🎫 **Ticket Model** (Change Requests)
+```javascript
+{
+  spaeti: ObjectId (ref: "Spaeti", required),
+  user: ObjectId (ref: "User", required),
+  changes: Object (proposed changes),
+  reason: String,
+  status: String (pending/approved/rejected),
+  admin: ObjectId (ref: "User")
+}
+```
+
+---
+
+## 🛣️ API Routes
+
+### 🔐 **Authentication**
+- `POST /auth/signup` - User registration
+- `POST /auth/login` - User login
+- `GET /auth/verify` - Token verification
+
+### 👤 **Users**
+- `GET /users` - Get all users
+- `GET /users/:id` - Get user profile
+- `PUT /users/:id` - Update user profile
+- `PATCH /users/:id/xp` - Award XP to user
+- `GET /users/:id/xp` - Get user XP info
+- `GET /users/:id/favorites` - Get user favorites
+- `PATCH /users/:id/favorite/:spaetiId` - Add/remove favorite
+
+### 🏪 **Spätis**
+- `GET /spaetis` - Get all approved Spätis
+- `GET /spaetis/:id` - Get Späti details
+- `POST /spaetis` - Create new Späti (awaits approval)
+- `PUT /spaetis/:id` - Update Späti
+- `DELETE /spaetis/:id` - Delete Späti
+- `PATCH /spaetis/:id/approve` - Approve Späti (admin only)
+
+### ⭐ **Ratings**
+- `GET /ratings` - Get all ratings
+- `GET /ratings/spaeti/:id` - Get ratings for specific Späti
+- `GET /ratings/user/:id` - Get user's ratings
+- `POST /ratings` - Create rating (awards 10 XP)
+- `PUT /ratings/:id` - Update rating
+- `DELETE /ratings/:id` - Delete rating
+- `PUT /ratings/add-like/:id` - Like a rating
+- `PUT /ratings/remove-like/:id` - Unlike a rating
+
+### 🎫 **Tickets** (Change Requests)
+- `GET /tickets` - Get all tickets (admin)
+- `POST /tickets` - Submit change request
+- `PATCH /tickets/:id/approve` - Approve ticket (awards 30 XP)
+- `PATCH /tickets/:id/reject` - Reject ticket
+
+---
+
+## 🏆 XP & Level System
+
+Our gamification system encourages community participation:
+
+### 🎯 **XP Rewards**
+| Action | XP Awarded | When |
+|--------|------------|------|
+| Create Späti (with image) | 50 XP | When approved by admin |
+| Create Späti (no image) | 40 XP | When approved by admin |
+| Submit update request | 30 XP | When approved by admin |
+| Leave a rating | 10 XP | Immediately |
+
+### 📊 **Level Calculation**
+- **Level = (Total XP ÷ 100) + 1**
+- **XP to next level = 100 - (Total XP % 100)**
+
+### 📈 **Profile Display**
+- Current XP and level shown on profile
+- Progress bar to next level
+- XP history and achievements
+
+---
+
+## 🚀 Getting Started
+
+### 📋 **Prerequisites**
+- Node.js 18+
+- MongoDB
+- Cloudinary account (for images)
+
+### ⚡ **Installation**
+
+1. **Clone the repositories**
+```bash
+# Frontend
+git clone https://github.com/ayk0wsk11/spaeti-finder-frontend.git
+cd spaeti-finder-frontend
+npm install
+
+# Backend
+git clone https://github.com/Senfjo/spaeti-finder-backend.git
+cd spaeti-finder-backend
+npm install
+```
+
+2. **Environment Setup**
+```bash
+# Frontend (.env)
+REACT_APP_API_URL=http://localhost:5005
+REACT_APP_CLOUDINARY_UPLOAD_PRESET=your_preset
+
+# Backend (.env)
+PORT=5005
+ORIGIN=http://localhost:3000
+TOKEN_SECRET=your_jwt_secret
+CLOUDINARY_NAME=your_cloud_name
+CLOUDINARY_KEY=your_api_key
+CLOUDINARY_SECRET=your_api_secret
+MONGODB_URI=your_mongodb_uri
+```
+
+3. **Start Development**
+```bash
+# Backend
+npm run dev
+
+# Frontend (new terminal)
+npm start
+```
+
+---
+
+## 🎨 Tech Stack
+
+### 🖥️ **Frontend**
+- ⚛️ **React 18** - Modern UI library
+- 🎨 **Ant Design** - Professional UI components
+- 🗺️ **Leaflet Maps** - Interactive mapping
+- 📡 **Axios** - HTTP client
+- 🛣️ **React Router** - Navigation
+- 🎯 **Context API** - State management
+
+### ⚙️ **Backend**
+- 🚀 **Node.js** - JavaScript runtime
+- 🌐 **Express.js** - Web framework
+- 🍃 **MongoDB** - NoSQL database
+- 🔗 **Mongoose** - ODM
+- 🔐 **JWT** - Authentication
+- ☁️ **Cloudinary** - Image hosting
+- 🔒 **bcrypt** - Password hashing
+
+### 🛠️ **Development Tools**
+- 📦 **npm** - Package management
+- 🔄 **Git** - Version control
+- 🚀 **Netlify** - Frontend deployment
+- ☁️ **Render** - Backend deployment
+
+---
+
+## 👥 Team
+
+### 👨‍💻 **Ayko**
+- **GitHub**: [@ayk0wsk11](https://github.com/ayk0wsk11)
+- **Role**: Frontend Development, UI/UX Design
+
+### 👨‍💻 **Jonathan** 
+- **GitHub**: [@Senfjo](https://github.com/Senfjo)
+- **Role**: Backend Development, Database Design
+
+---
+
+## 🔗 Links
+
+- 🌐 **[Live Application](https://spaetify.netlify.app/)**
+- 💻 **[Frontend Repository](https://github.com/ayk0wsk11/spaeti-finder-frontend)**
+- ⚙️ **[Backend Repository](https://github.com/Senfjo/spaeti-finder-backend)**
+- 📊 **[Project Slides]()**
+
+---
+
+## 🙏 Acknowledgments
+
+- **Ironhack Berlin** for the amazing bootcamp experience
+- **Berlin's Späti culture** for the inspiration
+- **The open-source community** for the incredible tools and libraries
+
+---
+
+**Made with ❤️ in Berlin** 🐻
